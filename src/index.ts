@@ -1,40 +1,82 @@
 import { ApolloServer } from "@apollo/server";
-import { startStandaloneServer } from "@apollo/server/standalone";
-const books = [
-  {
-    title: "The Awakening",
-    author: "Kate Chopin",
-  },
-  {
-    title: "City of Glass",
-    author: "Paul Auster",
-  },
-];
+import { config } from "dotenv";
+config();
+import http from "http";
+import express from "express";
+import { WebSocketServer } from "ws";
+import { makeExecutableSchema } from "@graphql-tools/schema";
+import { useServer } from "graphql-ws/dist/use/ws";
+import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
+import { expressMiddleware } from "@apollo/server/express4";
+import cors from "cors";
+import { typeDefs } from "./typedefs";
+import { createContext } from "./utils";
+import { resolvers } from "./resolvers";
 
-const resolvers = {
-  Query: {
-    books: () => books,
-  },
+const app = express();
+const httpServer = http.createServer(app);
+const PORT = Number(process.env.PORT) || 8000;
+const options = {
+  origin: [
+    process.env.WEB_DOMAIN as string,
+    "http://192.168.20.8:5173",
+    "http://localhost:5173",
+  ],
+  methods: ["GET", "PUT", "PATCH", "DELETE", "POST"],
+  allowedHeaders: ["Authorization", "refreshjwt", "Content-Type"],
+  credentials: true,
 };
 
-const typeDefs = `#graphql
-  
-  type Book {
-    title: String
-    author: String
-  }
-  type Query {
-    books: [Book]
-  }
-`;
-
-const server = new ApolloServer({
-  typeDefs,
+const schema = makeExecutableSchema({
   resolvers,
+  typeDefs,
 });
 
-const { url } = await startStandaloneServer(server, {
-  listen: { port: 4000 },
+const wsServer = new WebSocketServer({
+  server: httpServer,
+  path: "/graphql",
 });
+const wsServerCleanup = useServer(
+  {
+    schema,
+    onConnect: async (ctx) => {
+      // Check authentication every time a client connects.
+      if (!ctx.connectionParams) {
+        // You can return false to close the connection  or throw an explicit error
+        throw new Error("Auth token missing!");
+      }
+    },
+  },
+  wsServer
+);
 
-console.log(`🚀  Server ready at: ${url}`);
+async function main() {
+  const server = new ApolloServer({
+    schema,
+    status400ForVariableCoercionErrors: true,
+    plugins: [
+      ApolloServerPluginDrainHttpServer({ httpServer }),
+      {
+        async serverWillStart() {
+          return {
+            async drainServer() {
+              await wsServerCleanup.dispose();
+            },
+          };
+        },
+      },
+    ],
+  });
+  await server.start();
+
+  app.use(
+    "/graphql",
+    express.json(),
+    cors<cors.CorsRequest>(options),
+    expressMiddleware(server, { context: (arg) => createContext(arg, server) })
+  );
+}
+main();
+httpServer.listen(PORT, () => {
+  console.log(`Server is now running on http://localhost:${PORT}/graphql`);
+});
