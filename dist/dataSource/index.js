@@ -9,7 +9,7 @@ class BaseAPI extends datasource_rest_1.RESTDataSource {
         this.token = token || "";
     }
     willSendRequest(_path, request) {
-        request.headers["authorization"] = `Bearer ${this.token}`;
+        request.headers["authorization"] = `${this.token}`;
     }
     didEncounterError(_error) { }
     handleError(error) {

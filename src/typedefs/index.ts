@@ -18,6 +18,7 @@ export const typeDefs = mergeTypeDefs([
     "comment",
     "message",
     "post",
+    "subscription",
     "request",
     "response",
     "user",

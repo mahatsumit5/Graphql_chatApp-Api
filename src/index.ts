@@ -12,7 +12,7 @@ import cors from "cors";
 import { typeDefs } from "./typedefs";
 import { createContext } from "./utils";
 import { resolvers } from "./resolvers";
-
+import { ApolloServerErrorCode } from "@apollo/server/errors";
 const app = express();
 const httpServer = http.createServer(app);
 const PORT = Number(process.env.PORT) || 8000;
@@ -66,6 +66,19 @@ async function main() {
         },
       },
     ],
+    formatError(formattedError, error) {
+      console.log("formattedError", formattedError);
+      console.log("error", error);
+      if (
+        formattedError.extensions.code === ApolloServerErrorCode.BAD_USER_INPUT
+      ) {
+        return {
+          code: formattedError.extensions.code,
+          message: "Invalid input",
+        };
+      }
+      return formattedError;
+    },
   });
   await server.start();
 

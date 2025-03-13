@@ -17,6 +17,7 @@ const cors_1 = __importDefault(require("cors"));
 const typedefs_1 = require("./typedefs");
 const utils_1 = require("./utils");
 const resolvers_1 = require("./resolvers");
+const errors_1 = require("@apollo/server/errors");
 const app = (0, express_1.default)();
 const httpServer = http_1.default.createServer(app);
 const PORT = Number(process.env.PORT) || 8000;
@@ -62,6 +63,17 @@ async function main() {
                 },
             },
         ],
+        formatError(formattedError, error) {
+            console.log("formattedError", formattedError);
+            console.log("error", error);
+            if (formattedError.extensions.code === errors_1.ApolloServerErrorCode.BAD_USER_INPUT) {
+                return {
+                    code: formattedError.extensions.code,
+                    message: "Invalid input",
+                };
+            }
+            return formattedError;
+        },
     });
     await server.start();
     app.use("/graphql", express_1.default.json(), (0, cors_1.default)(options), (0, express4_1.expressMiddleware)(server, { context: (arg) => (0, utils_1.createContext)(arg, server) }));

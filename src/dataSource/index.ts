@@ -9,7 +9,7 @@ export class BaseAPI extends RESTDataSource {
   }
 
   override willSendRequest(_path: string, request: AugmentedRequest) {
-    request.headers["authorization"] = `Bearer ${this.token}`;
+    request.headers["authorization"] = `${this.token}`;
   }
 
   protected didEncounterError(_error: Error): void {}

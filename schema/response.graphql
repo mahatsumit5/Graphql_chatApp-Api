@@ -59,3 +59,9 @@ type GetAllPostsResponse {
   posts: [Post!]
   totalNumberOfPosts: Int
 }
+
+type UploadAPostResponse {
+  status: Boolean!
+  message: String!
+  result: Post
+}

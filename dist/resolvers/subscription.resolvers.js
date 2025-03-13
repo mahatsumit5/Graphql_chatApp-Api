@@ -1,12 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.subscriptionsResolvers = void 0;
-const graphql_subscriptions_1 = require("graphql-subscriptions");
-const pubsub = new graphql_subscriptions_1.PubSub();
-exports.subscriptionsResolvers = {
+exports.subscriptionResolvers = void 0;
+const _1 = require(".");
+exports.subscriptionResolvers = {
     Subscription: {
-        postCreated: {
-            subscribe: () => pubsub.asyncIterableIterator(["POST_CREATED"]),
+        newPost: {
+            subscribe: () => {
+                return _1.pubsub.asyncIterableIterator(["POST_CREATED"]);
+            },
         },
     },
 };

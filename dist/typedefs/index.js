@@ -16,6 +16,7 @@ exports.typeDefs = (0, merge_1.mergeTypeDefs)([
         "comment",
         "message",
         "post",
+        "subscription",
         "request",
         "response",
         "user",

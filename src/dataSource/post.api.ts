@@ -1,6 +1,10 @@
+import { PubSub } from "graphql-subscriptions";
 import { BaseAPI } from ".";
-import { GetAllPostsResponse } from "../types/types";
-
+import {
+  GetAllPostsResponse,
+  PostInput,
+  UploadAPostResponse,
+} from "../types/types";
 export class PostAPI extends BaseAPI {
   override baseURL = `${process.env.BASE_URL}/post/`;
 
@@ -9,8 +13,15 @@ export class PostAPI extends BaseAPI {
    * @async
    * @returns {Promise<any>}
    */
-  async createAPost() {
-    // TO DO: implement post creation logic
+  async createAPost(body: PostInput): Promise<UploadAPostResponse> {
+    try {
+      const response = await this.post<UploadAPostResponse>("", {
+        body,
+      });
+      return response;
+    } catch (error) {
+      return this.handleError(error);
+    }
   }
 
   /**
@@ -23,6 +34,7 @@ export class PostAPI extends BaseAPI {
 
     try {
       const response = await this.get<GetAllPostsResponse>("");
+
       return response;
     } catch (error) {
       return this.handleError(error);

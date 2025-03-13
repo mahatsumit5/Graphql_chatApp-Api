@@ -4,7 +4,16 @@ exports.PostAPI = void 0;
 const _1 = require(".");
 class PostAPI extends _1.BaseAPI {
     baseURL = `${process.env.BASE_URL}/post/`;
-    async createAPost() {
+    async createAPost(body) {
+        try {
+            const response = await this.post("", {
+                body,
+            });
+            return response;
+        }
+        catch (error) {
+            return this.handleError(error);
+        }
     }
     async getAllPost() {
         try {
