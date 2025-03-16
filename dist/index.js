@@ -39,15 +39,18 @@ const wsServer = new ws_1.WebSocketServer({
     server: httpServer,
     path: "/graphql",
 });
-const wsServerCleanup = (0, ws_2.useServer)({
-    schema,
-    onConnect: async (ctx) => {
-        if (!ctx.connectionParams) {
-            throw new Error("Auth token missing!");
-        }
-    },
-}, wsServer);
 async function main() {
+    const wsServerCleanup = (0, ws_2.useServer)({
+        schema,
+        onConnect: async (ctx) => {
+            if (!ctx.connectionParams?.authorization) {
+                throw new Error("Auth token missing!");
+            }
+        },
+        onDisconnect(ctx, code, reason) {
+            console.log("Disconnected!");
+        },
+    }, wsServer);
     const server = new server_1.ApolloServer({
         schema,
         status400ForVariableCoercionErrors: true,

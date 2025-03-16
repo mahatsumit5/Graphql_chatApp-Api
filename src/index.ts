@@ -36,21 +36,24 @@ const wsServer = new WebSocketServer({
   server: httpServer,
   path: "/graphql",
 });
-const wsServerCleanup = useServer(
-  {
-    schema,
-    onConnect: async (ctx) => {
-      // Check authentication every time a client connects.
-      if (!ctx.connectionParams) {
-        // You can return false to close the connection  or throw an explicit error
-        throw new Error("Auth token missing!");
-      }
-    },
-  },
-  wsServer
-);
 
 async function main() {
+  const wsServerCleanup = useServer(
+    {
+      schema,
+      onConnect: async (ctx) => {
+        // Check authentication every time a client connects.
+        if (!ctx.connectionParams?.authorization) {
+          // You can return false to close the connection  or throw an explicit error
+          throw new Error("Auth token missing!");
+        }
+      },
+      onDisconnect(ctx, code, reason) {
+        console.log("Disconnected!");
+      },
+    },
+    wsServer
+  );
   const server = new ApolloServer({
     schema,
     status400ForVariableCoercionErrors: true,
