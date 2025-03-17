@@ -120,6 +120,13 @@ export type GetMessageByUserResponse = {
   status: Scalars['Boolean']['output'];
 };
 
+export type GetPostByUserIdResponse = {
+  __typename?: 'GetPostByUserIdResponse';
+  message: Scalars['String']['output'];
+  posts?: Maybe<Post>;
+  status: Scalars['Boolean']['output'];
+};
+
 export type LogInResponse = {
   __typename?: 'LogInResponse';
   data?: Maybe<User>;
@@ -146,6 +153,8 @@ export type Mutation = {
   /** Delete Friend Request */
   deleteFriendRequest?: Maybe<SentRequestResponse>;
   deleteMessage?: Maybe<Response>;
+  deletePost: GetPostByUserIdResponse;
+  likePost: GetPostByUserIdResponse;
   logout?: Maybe<Response>;
   newJwt?: Maybe<Response>;
   resetPassword?: Maybe<Response>;
@@ -156,6 +165,7 @@ export type Mutation = {
   signIn?: Maybe<SignInResponse>;
   /** Create a new user */
   signUp?: Maybe<Response>;
+  unlikePost: GetPostByUserIdResponse;
   updateUser?: Maybe<Response>;
   uploadPost: UploadAPostResponse;
   uploadProfile?: Maybe<Response>;
@@ -174,6 +184,16 @@ export type MutationDeleteFriendRequestArgs = {
 
 export type MutationDeleteMessageArgs = {
   messageId: Scalars['String']['input'];
+};
+
+
+export type MutationDeletePostArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationLikePostArgs = {
+  postId: Scalars['String']['input'];
 };
 
 
@@ -199,6 +219,11 @@ export type MutationSignInArgs = {
 
 export type MutationSignUpArgs = {
   input?: InputMaybe<SignUpUser>;
+};
+
+
+export type MutationUnlikePostArgs = {
+  postId: Scalars['String']['input'];
 };
 
 
@@ -249,6 +274,7 @@ export type Query = {
   /** Get all incoming request */
   getFriendRequest?: Maybe<FriendRequestResponse>;
   getMessagesByUsers?: Maybe<GetMessageByUserResponse>;
+  getPostByUserId?: Maybe<GetPostByUserIdResponse>;
   /** Get list of ALL SENT request */
   getSentFriendRequest?: Maybe<FriendRequestResponse>;
   /** a list of all the users */
@@ -269,6 +295,11 @@ export type QueryGetAllPostsArgs = {
 
 export type QueryGetMessagesByUsersArgs = {
   input?: InputMaybe<GetMessageByUser>;
+};
+
+
+export type QueryGetPostByUserIdArgs = {
+  userId: Scalars['String']['input'];
 };
 
 
@@ -472,6 +503,7 @@ export type ResolversTypes = {
   GetAllPostsResponse: ResolverTypeWrapper<GetAllPostsResponse>;
   GetMessageByUser: GetMessageByUser;
   GetMessageByUserResponse: ResolverTypeWrapper<GetMessageByUserResponse>;
+  GetPostByUserIdResponse: ResolverTypeWrapper<GetPostByUserIdResponse>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   LogInResponse: ResolverTypeWrapper<LogInResponse>;
@@ -516,6 +548,7 @@ export type ResolversParentTypes = {
   GetAllPostsResponse: GetAllPostsResponse;
   GetMessageByUser: GetMessageByUser;
   GetMessageByUserResponse: GetMessageByUserResponse;
+  GetPostByUserIdResponse: GetPostByUserIdResponse;
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
   LogInResponse: LogInResponse;
@@ -634,6 +667,13 @@ export type GetMessageByUserResponseResolvers<ContextType = DataSourceContext, P
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GetPostByUserIdResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['GetPostByUserIdResponse'] = ResolversParentTypes['GetPostByUserIdResponse']> = {
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  posts?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type LogInResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['LogInResponse'] = ResolversParentTypes['LogInResponse']> = {
   data?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -657,6 +697,8 @@ export type MutationResolvers<ContextType = DataSourceContext, ParentType extend
   acceptFriendRequest?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, Partial<MutationAcceptFriendRequestArgs>>;
   deleteFriendRequest?: Resolver<Maybe<ResolversTypes['SentRequestResponse']>, ParentType, ContextType, Partial<MutationDeleteFriendRequestArgs>>;
   deleteMessage?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationDeleteMessageArgs, 'messageId'>>;
+  deletePost?: Resolver<ResolversTypes['GetPostByUserIdResponse'], ParentType, ContextType, RequireFields<MutationDeletePostArgs, 'id'>>;
+  likePost?: Resolver<ResolversTypes['GetPostByUserIdResponse'], ParentType, ContextType, RequireFields<MutationLikePostArgs, 'postId'>>;
   logout?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType>;
   newJwt?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType>;
   resetPassword?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationResetPasswordArgs, 'newPassword'>>;
@@ -664,6 +706,7 @@ export type MutationResolvers<ContextType = DataSourceContext, ParentType extend
   sendRequest?: Resolver<Maybe<ResolversTypes['SentRequestResponse']>, ParentType, ContextType, RequireFields<MutationSendRequestArgs, 'toID'>>;
   signIn?: Resolver<Maybe<ResolversTypes['SignInResponse']>, ParentType, ContextType, Partial<MutationSignInArgs>>;
   signUp?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, Partial<MutationSignUpArgs>>;
+  unlikePost?: Resolver<ResolversTypes['GetPostByUserIdResponse'], ParentType, ContextType, RequireFields<MutationUnlikePostArgs, 'postId'>>;
   updateUser?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType>;
   uploadPost?: Resolver<ResolversTypes['UploadAPostResponse'], ParentType, ContextType, Partial<MutationUploadPostArgs>>;
   uploadProfile?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType>;
@@ -697,6 +740,7 @@ export type QueryResolvers<ContextType = DataSourceContext, ParentType extends R
   getAllPosts?: Resolver<Maybe<ResolversTypes['GetAllPostsResponse']>, ParentType, ContextType, RequireFields<QueryGetAllPostsArgs, 'page' | 'take'>>;
   getFriendRequest?: Resolver<Maybe<ResolversTypes['FriendRequestResponse']>, ParentType, ContextType>;
   getMessagesByUsers?: Resolver<Maybe<ResolversTypes['GetMessageByUserResponse']>, ParentType, ContextType, Partial<QueryGetMessagesByUsersArgs>>;
+  getPostByUserId?: Resolver<Maybe<ResolversTypes['GetPostByUserIdResponse']>, ParentType, ContextType, RequireFields<QueryGetPostByUserIdArgs, 'userId'>>;
   getSentFriendRequest?: Resolver<Maybe<ResolversTypes['FriendRequestResponse']>, ParentType, ContextType, Partial<QueryGetSentFriendRequestArgs>>;
   loggedInUser?: Resolver<Maybe<ResolversTypes['LogInResponse']>, ParentType, ContextType>;
 };
@@ -786,6 +830,7 @@ export type Resolvers<ContextType = DataSourceContext> = {
   FriendRequests?: FriendRequestsResolvers<ContextType>;
   GetAllPostsResponse?: GetAllPostsResponseResolvers<ContextType>;
   GetMessageByUserResponse?: GetMessageByUserResponseResolvers<ContextType>;
+  GetPostByUserIdResponse?: GetPostByUserIdResponseResolvers<ContextType>;
   LogInResponse?: LogInResponseResolvers<ContextType>;
   Message?: MessageResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;

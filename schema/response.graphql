@@ -65,3 +65,8 @@ type UploadAPostResponse {
   message: String!
   result: Post
 }
+type GetPostByUserIdResponse {
+  status: Boolean!
+  message: String!
+  posts: Post
+}
