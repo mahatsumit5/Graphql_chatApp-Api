@@ -238,14 +238,13 @@ export enum Order {
 
 export type Post = {
   __typename?: 'Post';
+  _count?: Maybe<_Count>;
   author?: Maybe<User>;
-  authorId: Scalars['String']['output'];
-  comments?: Maybe<Array<Maybe<Comment>>>;
   content: Scalars['String']['output'];
   createdAt: Scalars['String']['output'];
+  hasLiked: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
   images: Array<Scalars['String']['output']>;
-  likes: Array<PostLike>;
   title: Scalars['String']['output'];
   updatedAt: Scalars['String']['output'];
 };
@@ -405,6 +404,12 @@ export type User = {
   session: Array<Session>;
 };
 
+export type _Count = {
+  __typename?: '_count';
+  comments: Scalars['Int']['output'];
+  likes: Scalars['Int']['output'];
+};
+
 export type AllUser = {
   order: Order;
   page: Scalars['Int']['input'];
@@ -528,6 +533,7 @@ export type ResolversTypes = {
   Token: ResolverTypeWrapper<Token>;
   UploadAPostResponse: ResolverTypeWrapper<UploadAPostResponse>;
   User: ResolverTypeWrapper<User>;
+  _count: ResolverTypeWrapper<_Count>;
   allUser: AllUser;
   queryParamsSentReq: QueryParamsSentReq;
 };
@@ -571,6 +577,7 @@ export type ResolversParentTypes = {
   Token: Token;
   UploadAPostResponse: UploadAPostResponse;
   User: User;
+  _count: _Count;
   allUser: AllUser;
   queryParamsSentReq: QueryParamsSentReq;
 };
@@ -713,14 +720,13 @@ export type MutationResolvers<ContextType = DataSourceContext, ParentType extend
 };
 
 export type PostResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = {
+  _count?: Resolver<Maybe<ResolversTypes['_count']>, ParentType, ContextType>;
   author?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  authorId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  comments?: Resolver<Maybe<Array<Maybe<ResolversTypes['Comment']>>>, ParentType, ContextType>;
   content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  hasLiked?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   images?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
-  likes?: Resolver<Array<ResolversTypes['PostLike']>, ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -818,6 +824,12 @@ export type UserResolvers<ContextType = DataSourceContext, ParentType extends Re
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type _CountResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['_count'] = ResolversParentTypes['_count']> = {
+  comments?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  likes?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = DataSourceContext> = {
   AllUsersResponse?: AllUsersResponseResolvers<ContextType>;
   ChatRoom?: ChatRoomResolvers<ContextType>;
@@ -846,5 +858,6 @@ export type Resolvers<ContextType = DataSourceContext> = {
   Token?: TokenResolvers<ContextType>;
   UploadAPostResponse?: UploadAPostResponseResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
+  _count?: _CountResolvers<ContextType>;
 };
 
