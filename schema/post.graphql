@@ -20,6 +20,7 @@ type PostLike {
   post: Post!
   user: User!
 }
+
 type Mutation {
   uploadPost(body: PostInput): UploadAPostResponse!
   deletePost(id: String!): GetPostByUserIdResponse!
@@ -31,6 +32,7 @@ type Query {
   getAllPosts(page: Int!, take: Int!): GetAllPostsResponse
   getPostByUserId(userId: String!): GetPostByUserIdResponse
 }
+
 input PostInput {
   title: String!
   content: String!
