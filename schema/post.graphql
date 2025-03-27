@@ -35,7 +35,7 @@ type Mutation {
 }
 
 type Query {
-  getAllPosts(page: Int!, take: Int!): GetAllPostsResponse
+  getAllPosts(args: GetAllPostsQueryVariables): GetAllPostsQuery
   getPostByUserId(userId: String!): GetPostByUserIdResponse
 }
 
@@ -44,4 +44,9 @@ input PostInput {
   content: String!
   images: [String]
   id: String!
+}
+
+input GetAllPostsQueryVariables {
+  page: Int!
+  take: Int!
 }

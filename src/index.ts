@@ -79,6 +79,14 @@ async function main() {
           code: formattedError.extensions.code,
           message: "Invalid input",
         };
+      } else if (
+        formattedError.extensions.code ===
+        ApolloServerErrorCode.INTERNAL_SERVER_ERROR
+      ) {
+        return {
+          code: formattedError.extensions.code,
+          message: "Internal server error",
+        };
       }
       return formattedError;
     },

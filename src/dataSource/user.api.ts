@@ -4,8 +4,8 @@ import {
   AllUsersResponse,
   LogInResponse,
   Response,
-  SignInResponse,
-  SignInUser,
+  SignInMutation,
+  SignInMutationVariables,
   SignUpUser,
 } from "../types/types";
 import { BaseAPI } from ".";
@@ -22,10 +22,10 @@ export class UserAPI extends BaseAPI {
       return this.handleError(error);
     }
   }
-  async signIn(input: SignInUser): Promise<SignInResponse> {
+  async signIn(input: SignInMutationVariables): Promise<SignInMutation> {
     try {
       console.log(input, "input in data source");
-      return await this.post<SignInResponse>("sign-in", {
+      return await this.post<SignInMutation>("sign-in", {
         body: input,
       });
     } catch (error) {

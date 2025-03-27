@@ -37,7 +37,7 @@ type Mutation {
   "Create a new user"
   signUp(input: SignUpUser): Response
   "login to your account"
-  signIn(input: SignInUser): SignInResponse
+  signIn(input: SignInMutationVariables): SignInMutation
   logout: Response
   resetPassword(newPassword: String!): Response
   newJwt: Response
@@ -51,7 +51,7 @@ input SignUpUser {
   email: String!
   password: String!
 }
-input SignInUser {
+input SignInMutationVariables {
   email: String!
   password: String!
 }

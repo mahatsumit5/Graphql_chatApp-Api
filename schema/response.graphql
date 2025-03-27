@@ -5,7 +5,7 @@ type Response {
 type Token {
   accessJWT: String!
 }
-type SignInResponse {
+type SignInMutation {
   status: Boolean!
   message: String!
   token: Token
@@ -53,7 +53,7 @@ type GetMessageByUserResponse {
   result: [Message!]!
 }
 
-type GetAllPostsResponse {
+type GetAllPostsQuery {
   status: Boolean!
   message: String!
   posts: [Post!]

@@ -1,5 +1,5 @@
 import { GraphQLError } from "graphql";
-import { Resolvers, SignInUser, SignUpUser } from "../types/types";
+import { Resolvers, SignInMutationVariables, SignUpUser } from "../types/types";
 export const userResolvers: Resolvers = {
   Mutation: {
     signUp: (parent, { input }, { dataSources }) => {
@@ -9,7 +9,7 @@ export const userResolvers: Resolvers = {
       return dataSources.userAPI.signUp(input as SignUpUser);
     },
     signIn: (parent, { input }, { dataSources }) => {
-      return dataSources.userAPI.signIn(input as SignInUser);
+      return dataSources.userAPI.signIn(input as SignInMutationVariables);
     },
     logout: (_, __, { dataSources }) => {
       return dataSources.userAPI.logout();
