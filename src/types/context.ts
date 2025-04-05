@@ -7,5 +7,6 @@ export type DataSourceContext = {
     userAPI: UserAPI;
     friendReqAPI: FriendRequestAPI;
     postAPI: PostAPI;
+    isAuthenticated: boolean;
   };
 };

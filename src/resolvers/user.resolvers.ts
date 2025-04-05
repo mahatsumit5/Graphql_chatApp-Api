@@ -1,12 +1,16 @@
 import { GraphQLError } from "graphql";
-import { Resolvers, SignInMutationVariables, SignUpUser } from "../types/types";
+import {
+  Resolvers,
+  SignInMutationVariables,
+  SignUpUserParams,
+} from "../types/types";
 export const userResolvers: Resolvers = {
   Mutation: {
     signUp: (parent, { input }, { dataSources }) => {
       if (!input?.email || !input.password) {
         throw new GraphQLError("Email and password are required");
       }
-      return dataSources.userAPI.signUp(input as SignUpUser);
+      return dataSources.userAPI.signUp(input as SignUpUserParams);
     },
     signIn: (parent, { input }, { dataSources }) => {
       return dataSources.userAPI.signIn(input as SignInMutationVariables);

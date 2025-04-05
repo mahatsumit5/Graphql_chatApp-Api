@@ -1,7 +1,7 @@
 import { ApolloServer } from "@apollo/server";
 import { config } from "dotenv";
 config();
-import http from "http";
+import http, { request } from "http";
 import express from "express";
 import { WebSocketServer } from "ws";
 import { makeExecutableSchema } from "@graphql-tools/schema";
@@ -13,6 +13,8 @@ import { typeDefs } from "./typedefs";
 import { createContext } from "./utils";
 import { resolvers } from "./resolvers";
 import { ApolloServerErrorCode } from "@apollo/server/errors";
+import axios from "axios";
+
 const app = express();
 const httpServer = http.createServer(app);
 const PORT = Number(process.env.PORT) || 8000;
@@ -56,6 +58,7 @@ async function main() {
   );
   const server = new ApolloServer({
     schema,
+
     status400ForVariableCoercionErrors: true,
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer }),
@@ -70,8 +73,6 @@ async function main() {
       },
     ],
     formatError(formattedError, error) {
-      console.log("formattedError", formattedError);
-      console.log("error", error);
       if (
         formattedError.extensions.code === ApolloServerErrorCode.BAD_USER_INPUT
       ) {
