@@ -4,19 +4,9 @@ type User {
   fName: String!
   lName: String!
   isActive: Boolean!
-  password: String!
   profile: String
   bio: String
   coverPicture: String
-  chatRoom: [ChatRoom!]!
-  session: [Session!]!
-  friendRequests: [FriendRequests!]!
-  sentRequests: [FriendRequests!]!
-  messages: [Message!]!
-  post: [Post!]!
-  likedPosts: [PostLike!]!
-  likedComments: [CommentLikes!]!
-  comment: [Comment!]!
 }
 # Session model
 type Session {
@@ -35,7 +25,7 @@ type Query {
 
 type Mutation {
   "Create a new user"
-  signUp(input: SignUpUser): Response
+  signUp(input: SignUpUserParams): SignUpResponse
   "login to your account"
   signIn(input: SignInMutationVariables): SignInMutation
   logout: Response
@@ -45,7 +35,7 @@ type Mutation {
   uploadProfile: Response
 }
 
-input SignUpUser {
+input SignUpUserParams {
   fName: String!
   lName: String!
   email: String!

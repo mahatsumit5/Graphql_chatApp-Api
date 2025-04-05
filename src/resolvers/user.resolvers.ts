@@ -4,13 +4,11 @@ import {
   SignInMutationVariables,
   SignUpUserParams,
 } from "../types/types";
+import { authoriseUser } from "../middleware";
 export const userResolvers: Resolvers = {
   Mutation: {
-    signUp: (parent, { input }, { dataSources }) => {
-      if (!input?.email || !input.password) {
-        throw new GraphQLError("Email and password are required");
-      }
-      return dataSources.userAPI.signUp(input as SignUpUserParams);
+    signUp: async (parent, { input }, { dataSources }) => {
+      return await dataSources.userAPI.signUp(input as SignUpUserParams);
     },
     signIn: (parent, { input }, { dataSources }) => {
       return dataSources.userAPI.signIn(input as SignInMutationVariables);

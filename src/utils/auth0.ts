@@ -1,4 +1,3 @@
-import { auth } from "express-oauth2-jwt-bearer";
 import { JwksClient } from "jwks-rsa";
 import jwt, { JwtHeader, JwtPayload, SigningKeyCallback } from "jsonwebtoken";
 type token = { access_token: string };
@@ -8,7 +7,6 @@ export const createAuth0Token: () => Promise<token> = async () => {
     client_secret: process.env.client_secret,
     audience: process.env.audience,
     grant_type: "client_credentials",
-    metadata: "mahatsumit5@gmail.com",
   };
 
   const res = await fetch(process.env.Request_Token_URL, {
@@ -41,7 +39,7 @@ export const verifyToken: (
       getJwtsClientKey,
       {
         audience: process.env.audience,
-        issuer: "https://dev-fkp34f1yfajuoqj7.au.auth0.com/",
+        issuer: process.env.issuerBaseURL,
         algorithms: ["RS256"],
       },
       (error, decoded) => {

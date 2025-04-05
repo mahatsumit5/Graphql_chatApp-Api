@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { getSession } from "../database/session.query";
+import { DataSourceContext } from "../types/context";
+import { GraphQLError } from "graphql";
 
 export const loggedInUserAuth = async (
   req: Request,
@@ -24,5 +26,20 @@ export const loggedInUserAuth = async (
     return next();
   } catch (error: Error | any) {
     next(error);
+  }
+};
+
+export const authoriseUser = (isAuthorised: boolean) => {
+  switch (isAuthorised) {
+    case true:
+      return true;
+    case false:
+      throw new GraphQLError("You are not authorised", {
+        extensions: { code: "UNAUTHENTICATED" },
+      });
+    default:
+      throw new GraphQLError("You are not authorised", {
+        extensions: { code: "UNAUTHENTICATED" },
+      });
   }
 };

@@ -1,0 +1,125 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model with fields like id, email, first name, last name, isActive, password, profile, refreshJWT
+model User {
+  id             String           @id @default(uuid())
+  email          String           @unique
+  fName          String
+  lName          String
+  isActive       Boolean          @default(true)
+  password       String
+  profile        String?
+  bio            String?          
+  coverPicture   String?
+  chatRoom       ChatRoom[]
+  session        Session[]
+  friendRequests FriendRequests[] @relation("receiver")
+  sentRequests   FriendRequests[] @relation("sender")
+  messages       Message[]
+  post           Post[]           @relation("createdPost")
+  likedPosts     PostLike[]       @relation("likes")
+  likedComments  CommentLikes[]   @relation("Commentlikes")
+  comment        Comment[]
+}
+
+model PostLike {
+  id     String @id @default(uuid())
+  postId String
+  userId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user   User   @relation("likes", fields: [userId], references: [id],onDelete: Cascade)
+
+  @@unique([postId, userId])
+}
+
+model CommentLikes {
+  commentId String
+  userId    String
+  comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade,onUpdate: Cascade)
+  user      User    @relation("Commentlikes", fields: [userId], references: [id],onDelete: Cascade,onUpdate: Cascade)
+
+  @@id([commentId, userId]) 
+}
+
+model Post {
+  id        String     @id @default(uuid())
+  title     String     @db.VarChar(255)
+  content   String
+  author    User       @relation("createdPost", fields: [authorId], references: [id])
+  authorId  String
+  comments  Comment[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  likes     PostLike[]
+  images    String[]   @default([])
+}
+
+model Comment {
+  id        String         @id @default(uuid())
+  content   String
+  post      Post           @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String
+  author    User           @relation(fields: [authorId], references: [id],onDelete: SetDefault,onUpdate: Cascade) 
+  authorId  String
+  likes     CommentLikes[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  replies CommentReply[]
+}
+model CommentReply{
+  reply Comment @relation(fields: [replyId],references: [id])
+  replyId String
+  @@id([replyId])
+}
+
+model ChatRoom {
+  id       String    @id @default(uuid())
+  messages Message[]
+  user     User[]
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  content    String
+  createdAt  DateTime @default(now())
+  isSeen     Boolean  @default(false)
+  chat       ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+  chatRoomId String
+  creatorId  User     @relation(fields: [author], references: [id],onDelete: SetDefault,onUpdate: Cascade)
+  author     String
+}
+
+model Session {
+  associate  User     @relation(fields: [userEmail], references: [email])
+  userEmail  String
+  timeStamps DateTime @default(now())
+  token      String
+
+  @@id([userEmail, token])
+}
+
+model FriendRequests {
+  from   User   @relation("sender", fields: [fromId], references: [id],onDelete: Cascade,onUpdate: Cascade)
+  fromId String
+  to     User   @relation("receiver", fields: [toId], references: [id],onDelete: Cascade,onUpdate: Cascade)
+  toId   String
+  status Status @default(PENDING)
+
+  @@id([fromId, toId])
+}
+
+enum Status {
+  ACCEPTED
+  REJECTED
+  PENDING
+}

@@ -23,7 +23,6 @@ export class UserAPI extends BaseAPI {
     try {
       input.password = hashPass(input.password);
       const response = await createUser(input);
-
       if (
         !response?.id &&
         response?.message?.includes("Unique constraint failed")

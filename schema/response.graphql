@@ -6,13 +6,11 @@ type Token {
   accessJWT: String!
 }
 type SignInMutation {
-  status: Boolean!
-  message: String!
-  token: Token
+  response: Response
+  data: Token
 }
 type LogInResponse {
-  status: Boolean!
-  message: String!
+  response: Response
   data: User
 }
 type AllUsersResponse {
@@ -69,4 +67,9 @@ type GetPostByUserIdResponse {
   status: Boolean!
   message: String!
   posts: Post
+}
+
+type SignUpResponse {
+  response: Response
+  data: User
 }

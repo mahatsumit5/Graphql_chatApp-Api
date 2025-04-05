@@ -21,10 +21,9 @@ export const createContext: (
     const token = headerToken.split(" ")[1];
     const { cache } = server;
     // if there is a token verify it,
+    const payload = (await verifyToken(token || " ")) as JwtPayload;
 
-    const payload = (await verifyToken(token)) as JwtPayload;
-    console.log(payload);
-    isAuthenticated = payload ? true : false;
+    isAuthenticated = payload?.exp ? true : false;
     return {
       dataSources: {
         userAPI: new UserAPI({ cache }, token),
@@ -34,7 +33,6 @@ export const createContext: (
       },
     };
   } catch (error) {
-    console.log(error);
     return {
       dataSources: { isAuthenticated },
     };

@@ -21,7 +21,6 @@ export class BaseAPI extends RESTDataSource {
   }
   // Catching errors globally for all the requests and responses
   protected handleError(error: any) {
-    console.log("Error", error);
     // You can log the error or send it to a monitoring service like Sentry, etc.
     // console.error("Error occurred:", error);
 
