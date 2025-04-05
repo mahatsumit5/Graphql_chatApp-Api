@@ -51,6 +51,7 @@ declare global {
       client_id: string;
       client_secret: string;
       BASE_URL: string;
+      jwksUri: string;
     }
   }
 }

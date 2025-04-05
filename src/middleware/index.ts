@@ -30,6 +30,7 @@ export const loggedInUserAuth = async (
 };
 
 export const authoriseUser = (isAuthorised: boolean) => {
+  console.log(isAuthorised, "isAuthorised");
   switch (isAuthorised) {
     case true:
       return true;

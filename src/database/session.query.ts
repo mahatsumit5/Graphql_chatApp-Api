@@ -41,7 +41,18 @@ export async function getSession(token: string) {
         token,
       },
       select: {
-        associate: true,
+        associate: {
+          select: {
+            email: true,
+            fName: true,
+            lName: true,
+            bio: true,
+            id: true,
+            coverPicture: true,
+            profile: true,
+            isActive: true,
+          },
+        },
       },
     })
   );

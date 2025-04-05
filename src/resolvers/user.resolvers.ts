@@ -37,6 +37,7 @@ export const userResolvers: Resolvers = {
       return dataSources.userAPI.allUsers(params!);
     },
     loggedInUser: (__, args, { dataSources }) => {
+      authoriseUser(dataSources.isAuthenticated);
       return dataSources.userAPI.loggedInUser();
     },
   },

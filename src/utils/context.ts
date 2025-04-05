@@ -22,8 +22,9 @@ export const createContext: (
     const { cache } = server;
     // if there is a token verify it,
     const payload = (await verifyToken(token || " ")) as JwtPayload;
-
-    isAuthenticated = payload?.exp ? true : false;
+    console.log(payload, "payload from context");
+    // if there is no payload, it means the token is invalid or expired
+    isAuthenticated = payload?.decoded ? true : false;
     return {
       dataSources: {
         userAPI: new UserAPI({ cache }, token),

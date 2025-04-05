@@ -84,7 +84,6 @@ export class UserAPI extends BaseAPI {
     try {
       const token = this.getToken();
       const response = await getSession(token);
-      console.log(response?.associate);
       if (!response?.associate) throw new Error("User not found");
       return sendResponse(true, "Welcome back", response.associate);
     } catch (error) {

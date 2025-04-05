@@ -24,7 +24,7 @@ export const verifyToken: (
   token: string
 ) => Promise<JwtPayload | unknown> = async (token: string) => {
   const client = new JwksClient({
-    jwksUri: "https://dev-fkp34f1yfajuoqj7.au.auth0.com/.well-known/jwks.json",
+    jwksUri: process.env.jwksUri,
   });
   const getJwtsClientKey = (header: JwtHeader, cb: SigningKeyCallback) => {
     client.getSigningKey(header.kid, (err, key) => {
@@ -39,7 +39,7 @@ export const verifyToken: (
       getJwtsClientKey,
       {
         audience: process.env.audience,
-        issuer: process.env.issuerBaseURL,
+        issuer: `${process.env.issuerBaseURL}`,
         algorithms: ["RS256"],
       },
       (error, decoded) => {
