@@ -9,7 +9,7 @@ type SignInMutation {
   response: Response
   data: Token
 }
-type LogInResponse {
+type LoggedInUserResponse {
   response: Response
   data: User
 }

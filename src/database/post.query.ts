@@ -6,6 +6,7 @@ const SELECT_USER_PROFILE = {
   lName: true,
   id: true,
   profile: true,
+  isActive: true,
 };
 
 export const createPost = ({ id, ...rest }: CreatePostParams) => {
@@ -52,11 +53,15 @@ export const createPost = ({ id, ...rest }: CreatePostParams) => {
   );
 };
 
-export const getAllPost = async (
-  page: number,
-  take: number,
-  userId: string
-) => {
+export const getAllPost = async ({
+  page,
+  take,
+  userId,
+}: {
+  page: number;
+  take: number;
+  userId: string;
+}) => {
   const skip = (page - 1) * take;
   const data = await executeQuery(
     prisma.post.findMany({
@@ -71,25 +76,6 @@ export const getAllPost = async (
         author: {
           select: SELECT_USER_PROFILE,
         },
-        // likes: {
-        //   select: {
-        //     id: true,
-        //     user: {
-        //       select: SELECT_USER_PROFILE,
-        //     },
-        //   },
-        // },
-        // comments: {
-        //   select: {
-        //     id: true,
-        //     content: true,
-        //     author: {
-        //       select: SELECT_USER_PROFILE,
-        //     },
-        //     createdAt: true,
-        //     likes: true,
-        //   },
-        // },
 
         _count: {
           select: {
@@ -108,7 +94,7 @@ export const getAllPost = async (
   const count = await executeQuery(prisma.post.count());
 
   // Check if the logged-in user has liked each post
-  const postIds = data.map((post: { id: string }) => post.id); // Extracting the post ids
+  const postIds = data?.map((post: { id: string }) => post.id); // Extracting the post ids
   // Query the PostLike table to see if the user has liked any posts
   const userLikes = await prisma.postLike.findMany({
     where: {

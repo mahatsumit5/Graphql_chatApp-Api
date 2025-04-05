@@ -1,9 +1,4 @@
-import { GraphQLError } from "graphql";
-import {
-  Resolvers,
-  SignInMutationVariables,
-  SignUpUserParams,
-} from "../types/types";
+import { Resolvers, SignInParams, SignUpUserParams } from "../types/types";
 import { authoriseUser } from "../middleware";
 export const userResolvers: Resolvers = {
   Mutation: {
@@ -11,21 +6,29 @@ export const userResolvers: Resolvers = {
       return await dataSources.userAPI.signUp(input as SignUpUserParams);
     },
     signIn: (parent, { input }, { dataSources }) => {
-      return dataSources.userAPI.signIn(input as SignInMutationVariables);
+      return dataSources.userAPI.signIn(input as SignInParams);
     },
     logout: (_, __, { dataSources }) => {
       return dataSources.userAPI.logout();
     },
     resetPassword: (_, { newPassword }, { dataSources }) => {
+      authoriseUser(dataSources.isAuthenticated);
+
       return dataSources.userAPI.resetPassword(newPassword);
     },
     newJwt: (_, __, { dataSources }) => {
+      authoriseUser(dataSources.isAuthenticated);
+
       return dataSources.userAPI.newJwt();
     },
     updateUser: (_, __, { dataSources }) => {
+      authoriseUser(dataSources.isAuthenticated);
+
       return dataSources.userAPI.updateUser();
     },
-    uploadProfile: () => {
+    uploadProfile: (_, __, { dataSources }) => {
+      authoriseUser(dataSources.isAuthenticated);
+
       return {
         status: true,
         message: "Todo complete this functino",
@@ -34,6 +37,8 @@ export const userResolvers: Resolvers = {
   },
   Query: {
     allUsers: (__, { params }, { dataSources }) => {
+      authoriseUser(dataSources.isAuthenticated);
+
       return dataSources.userAPI.allUsers(params!);
     },
     loggedInUser: (__, args, { dataSources }) => {

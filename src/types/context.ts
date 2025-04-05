@@ -1,6 +1,7 @@
 import { FriendRequestAPI } from "../dataSource/friendRequest.api";
 import { PostAPI } from "../dataSource/post.api";
 import { UserAPI } from "../dataSource/user.api";
+import { User } from "./types";
 
 export type DataSourceContext = {
   dataSources: {
@@ -8,5 +9,6 @@ export type DataSourceContext = {
     friendReqAPI: FriendRequestAPI;
     postAPI: PostAPI;
     isAuthenticated: boolean;
+    user: User;
   };
 };

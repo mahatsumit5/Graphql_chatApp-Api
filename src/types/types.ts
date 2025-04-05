@@ -99,17 +99,17 @@ export type FriendRequests = {
   toId: Scalars['String']['output'];
 };
 
+export type GetAllPostArgs = {
+  page: Scalars['Int']['input'];
+  take: Scalars['Int']['input'];
+};
+
 export type GetAllPostsQuery = {
   __typename?: 'GetAllPostsQuery';
   message: Scalars['String']['output'];
   posts?: Maybe<Array<Post>>;
   status: Scalars['Boolean']['output'];
   totalNumberOfPosts?: Maybe<Scalars['Int']['output']>;
-};
-
-export type GetAllPostsQueryVariables = {
-  page: Scalars['Int']['input'];
-  take: Scalars['Int']['input'];
 };
 
 export type GetMessageByUser = {
@@ -132,8 +132,8 @@ export type GetPostByUserIdResponse = {
   status: Scalars['Boolean']['output'];
 };
 
-export type LogInResponse = {
-  __typename?: 'LogInResponse';
+export type LoggedInUserResponse = {
+  __typename?: 'LoggedInUserResponse';
   data?: Maybe<User>;
   response?: Maybe<Response>;
 };
@@ -217,7 +217,7 @@ export type MutationSendRequestArgs = {
 
 
 export type MutationSignInArgs = {
-  input?: InputMaybe<SignInMutationVariables>;
+  input?: InputMaybe<SignInParams>;
 };
 
 
@@ -281,7 +281,7 @@ export type Query = {
   /** Get list of ALL SENT request */
   getSentFriendRequest?: Maybe<FriendRequestResponse>;
   /** a list of all the users */
-  loggedInUser?: Maybe<LogInResponse>;
+  loggedInUser?: Maybe<LoggedInUserResponse>;
 };
 
 
@@ -291,7 +291,7 @@ export type QueryAllUsersArgs = {
 
 
 export type QueryGetAllPostsArgs = {
-  args?: InputMaybe<GetAllPostsQueryVariables>;
+  args?: InputMaybe<GetAllPostArgs>;
 };
 
 
@@ -349,7 +349,7 @@ export type SignInMutation = {
   response?: Maybe<Response>;
 };
 
-export type SignInMutationVariables = {
+export type SignInParams = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
 };
@@ -503,14 +503,14 @@ export type ResolversTypes = {
   FriendRequest: ResolverTypeWrapper<FriendRequest>;
   FriendRequestResponse: ResolverTypeWrapper<FriendRequestResponse>;
   FriendRequests: ResolverTypeWrapper<FriendRequests>;
+  GetAllPostArgs: GetAllPostArgs;
   GetAllPostsQuery: ResolverTypeWrapper<GetAllPostsQuery>;
-  GetAllPostsQueryVariables: GetAllPostsQueryVariables;
   GetMessageByUser: GetMessageByUser;
   GetMessageByUserResponse: ResolverTypeWrapper<GetMessageByUserResponse>;
   GetPostByUserIdResponse: ResolverTypeWrapper<GetPostByUserIdResponse>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
-  LogInResponse: ResolverTypeWrapper<LogInResponse>;
+  LoggedInUserResponse: ResolverTypeWrapper<LoggedInUserResponse>;
   Message: ResolverTypeWrapper<Message>;
   Mutation: ResolverTypeWrapper<{}>;
   Order: Order;
@@ -524,7 +524,7 @@ export type ResolversTypes = {
   SentRequestResponse: ResolverTypeWrapper<SentRequestResponse>;
   Session: ResolverTypeWrapper<Session>;
   SignInMutation: ResolverTypeWrapper<SignInMutation>;
-  SignInMutationVariables: SignInMutationVariables;
+  SignInParams: SignInParams;
   SignUpResponse: ResolverTypeWrapper<SignUpResponse>;
   SignUpUserParams: SignUpUserParams;
   Status: Status;
@@ -551,14 +551,14 @@ export type ResolversParentTypes = {
   FriendRequest: FriendRequest;
   FriendRequestResponse: FriendRequestResponse;
   FriendRequests: FriendRequests;
+  GetAllPostArgs: GetAllPostArgs;
   GetAllPostsQuery: GetAllPostsQuery;
-  GetAllPostsQueryVariables: GetAllPostsQueryVariables;
   GetMessageByUser: GetMessageByUser;
   GetMessageByUserResponse: GetMessageByUserResponse;
   GetPostByUserIdResponse: GetPostByUserIdResponse;
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
-  LogInResponse: LogInResponse;
+  LoggedInUserResponse: LoggedInUserResponse;
   Message: Message;
   Mutation: {};
   Post: Post;
@@ -571,7 +571,7 @@ export type ResolversParentTypes = {
   SentRequestResponse: SentRequestResponse;
   Session: Session;
   SignInMutation: SignInMutation;
-  SignInMutationVariables: SignInMutationVariables;
+  SignInParams: SignInParams;
   SignUpResponse: SignUpResponse;
   SignUpUserParams: SignUpUserParams;
   String: Scalars['String']['output'];
@@ -683,7 +683,7 @@ export type GetPostByUserIdResponseResolvers<ContextType = DataSourceContext, Pa
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type LogInResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['LogInResponse'] = ResolversParentTypes['LogInResponse']> = {
+export type LoggedInUserResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['LoggedInUserResponse'] = ResolversParentTypes['LoggedInUserResponse']> = {
   data?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   response?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -749,7 +749,7 @@ export type QueryResolvers<ContextType = DataSourceContext, ParentType extends R
   getMessagesByUsers?: Resolver<Maybe<ResolversTypes['GetMessageByUserResponse']>, ParentType, ContextType, Partial<QueryGetMessagesByUsersArgs>>;
   getPostByUserId?: Resolver<Maybe<ResolversTypes['GetPostByUserIdResponse']>, ParentType, ContextType, RequireFields<QueryGetPostByUserIdArgs, 'userId'>>;
   getSentFriendRequest?: Resolver<Maybe<ResolversTypes['FriendRequestResponse']>, ParentType, ContextType, Partial<QueryGetSentFriendRequestArgs>>;
-  loggedInUser?: Resolver<Maybe<ResolversTypes['LogInResponse']>, ParentType, ContextType>;
+  loggedInUser?: Resolver<Maybe<ResolversTypes['LoggedInUserResponse']>, ParentType, ContextType>;
 };
 
 export type ResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Response'] = ResolversParentTypes['Response']> = {
@@ -839,7 +839,7 @@ export type Resolvers<ContextType = DataSourceContext> = {
   GetAllPostsQuery?: GetAllPostsQueryResolvers<ContextType>;
   GetMessageByUserResponse?: GetMessageByUserResponseResolvers<ContextType>;
   GetPostByUserIdResponse?: GetPostByUserIdResponseResolvers<ContextType>;
-  LogInResponse?: LogInResponseResolvers<ContextType>;
+  LoggedInUserResponse?: LoggedInUserResponseResolvers<ContextType>;
   Message?: MessageResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Post?: PostResolvers<ContextType>;

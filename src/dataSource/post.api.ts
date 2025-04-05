@@ -5,6 +5,7 @@ import {
   PostInput,
   UploadAPostResponse,
 } from "../types/types";
+import { getAllPost } from "../database/post.query";
 export class PostAPI extends BaseAPI {
   override baseURL = `${process.env.BASE_URL}/post/`;
 
@@ -29,13 +30,23 @@ export class PostAPI extends BaseAPI {
    * @async
    * @returns {Promise<any>}
    */
-  async getAllPost(): Promise<GetAllPostsQuery> {
+  async getAllPost(arg: {
+    page: number;
+    take: number;
+    userId: string;
+  }): Promise<GetAllPostsQuery> {
     // TO DO: implement logic to fetch all posts
 
     try {
-      const response = await this.get<GetAllPostsQuery>("");
-
-      return response;
+      const response = await getAllPost(arg);
+      console.log(response, "response from getAllPost");
+      if (!response) throw new Error("No posts found");
+      return {
+        posts: response.postsWithHasLiked,
+        message: "Posts retrieved successfully",
+        status: true,
+        totalNumberOfPosts: response.count,
+      };
     } catch (error) {
       return this.handleError(error);
     }

@@ -72,25 +72,25 @@ async function main() {
         },
       },
     ],
-    // formatError(formattedError, error) {
-    //   if (
-    //     formattedError.extensions.code === ApolloServerErrorCode.BAD_USER_INPUT
-    //   ) {
-    //     return {
-    //       code: formattedError.extensions.code,
-    //       message: "Invalid input",
-    //     };
-    //   } else if (
-    //     formattedError.extensions.code ===
-    //     ApolloServerErrorCode.INTERNAL_SERVER_ERROR
-    //   ) {
-    //     return {
-    //       code: formattedError.extensions.code,
-    //       message: "Internal server error",
-    //     };
-    //   }
-    //   return formattedError;
-    // },
+    formatError(formattedError, error) {
+      if (
+        formattedError.extensions.code === ApolloServerErrorCode.BAD_USER_INPUT
+      ) {
+        return {
+          code: formattedError.extensions.code,
+          message: "Invalid input",
+        };
+      } else if (
+        formattedError.extensions.code ===
+        ApolloServerErrorCode.INTERNAL_SERVER_ERROR
+      ) {
+        return {
+          code: formattedError.extensions.code,
+          message: "Internal server error",
+        };
+      }
+      return formattedError;
+    },
   });
   await server.start();
 

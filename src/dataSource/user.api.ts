@@ -2,10 +2,10 @@ import { AugmentedRequest, RESTDataSource } from "@apollo/datasource-rest";
 import {
   AllUser,
   AllUsersResponse,
-  LogInResponse,
+  LoggedInUserResponse,
   Response,
   SignInMutation,
-  SignInMutationVariables,
+  SignInParams,
   SignUpResponse,
   SignUpUserParams,
 } from "../types/types";
@@ -43,7 +43,7 @@ export class UserAPI extends BaseAPI {
       };
     }
   }
-  async signIn(input: SignInMutationVariables): Promise<SignInMutation> {
+  async signIn(input: SignInParams): Promise<SignInMutation> {
     try {
       const user = await getUserByEmail(input.email);
       if (!user?.id) throw new Error("User not found with this email");
@@ -80,7 +80,7 @@ export class UserAPI extends BaseAPI {
     }
   }
 
-  async loggedInUser(): Promise<LogInResponse> {
+  async loggedInUser(): Promise<LoggedInUserResponse> {
     try {
       const token = this.getToken();
       const response = await getSession(token);

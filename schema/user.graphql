@@ -18,7 +18,7 @@ type Session {
 
 type Query {
   "a list of all the users"
-  loggedInUser: LogInResponse
+  loggedInUser: LoggedInUserResponse
   "a list of all the users"
   allUsers(params: allUser): AllUsersResponse
 }
@@ -27,7 +27,7 @@ type Mutation {
   "Create a new user"
   signUp(input: SignUpUserParams): SignUpResponse
   "login to your account"
-  signIn(input: SignInMutationVariables): SignInMutation
+  signIn(input: SignInParams): SignInMutation
   logout: Response
   resetPassword(newPassword: String!): Response
   newJwt: Response
@@ -41,7 +41,7 @@ input SignUpUserParams {
   email: String!
   password: String!
 }
-input SignInMutationVariables {
+input SignInParams {
   email: String!
   password: String!
 }
