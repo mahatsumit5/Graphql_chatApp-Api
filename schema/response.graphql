@@ -2,23 +2,6 @@ type Response {
   status: Boolean!
   message: String!
 }
-type Token {
-  accessJWT: String!
-}
-type SignInMutation {
-  response: Response
-  data: Token
-}
-type LoggedInUserResponse {
-  response: Response
-  data: User
-}
-type AllUsersResponse {
-  status: Boolean!
-  message: String!
-  data: [Friend!]
-  totalUsers: Int
-}
 
 type Friend {
   id: ID!
@@ -67,9 +50,4 @@ type GetPostByUserIdResponse {
   status: Boolean!
   message: String!
   posts: Post
-}
-
-type SignUpResponse {
-  response: Response
-  data: User
 }

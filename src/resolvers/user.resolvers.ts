@@ -8,8 +8,10 @@ export const userResolvers: Resolvers = {
     signIn: (parent, { input }, { dataSources }) => {
       return dataSources.userAPI.signIn(input as SignInParams);
     },
-    logout: (_, __, { dataSources }) => {
-      return dataSources.userAPI.logout();
+    logout: (_, { email }, { dataSources }) => {
+      authoriseUser(dataSources.isAuthenticated);
+
+      return dataSources.userAPI.logout(email);
     },
     resetPassword: (_, { newPassword }, { dataSources }) => {
       authoriseUser(dataSources.isAuthenticated);

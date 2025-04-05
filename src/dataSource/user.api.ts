@@ -4,7 +4,7 @@ import {
   AllUsersResponse,
   LoggedInUserResponse,
   Response,
-  SignInMutation,
+  SignInResponse,
   SignInParams,
   SignUpResponse,
   SignUpUserParams,
@@ -17,7 +17,11 @@ import {
   hashPass,
   sendResponse,
 } from "../utils";
-import { createSession, getSession } from "../database/session.query";
+import {
+  createSession,
+  findSessionAndDelete,
+  getSession,
+} from "../database/session.query";
 export class UserAPI extends BaseAPI {
   async signUp(input: SignUpUserParams): Promise<SignUpResponse> {
     try {
@@ -30,20 +34,17 @@ export class UserAPI extends BaseAPI {
         throw new Error("Email already exist");
       } else {
         return {
-          response: {
-            status: true,
-            message: "Account Created",
-          },
+          status: true,
+          message: "Account Created",
+
           data: response,
         };
       }
     } catch (error) {
-      return {
-        response: this.handleError(error),
-      };
+      return this.handleError(error);
     }
   }
-  async signIn(input: SignInParams): Promise<SignInMutation> {
+  async signIn(input: SignInParams): Promise<SignInResponse> {
     try {
       const user = await getUserByEmail(input.email);
       if (!user?.id) throw new Error("User not found with this email");
@@ -59,9 +60,7 @@ export class UserAPI extends BaseAPI {
         throw new Error("Password incorrect");
       }
     } catch (error) {
-      return {
-        response: this.handleError(error),
-      };
+      return this.handleError(error);
     }
   }
 
@@ -87,14 +86,18 @@ export class UserAPI extends BaseAPI {
       if (!response?.associate) throw new Error("User not found");
       return sendResponse(true, "Welcome back", response.associate);
     } catch (error) {
-      return {
-        response: this.handleError(error),
-      };
+      return this.handleError(error);
     }
   }
-  async logout(): Promise<Response> {
+  async logout(email: string): Promise<Response> {
     try {
-      return await this.post("logout");
+      const token = this.getToken();
+      const response = await findSessionAndDelete(token, email);
+      if (!response?.userEmail) throw new Error("Unable to logout");
+      return {
+        status: true,
+        message: "Logged out successfully",
+      };
     } catch (error) {
       return this.handleError(error);
     }

@@ -1,9 +1,8 @@
 function sendResponse(status: boolean, message: string, data?: any) {
   return {
-    response: {
-      status,
-      message,
-    },
+    status,
+    message,
+
     data,
   };
 }

@@ -135,7 +135,8 @@ export type GetPostByUserIdResponse = {
 export type LoggedInUserResponse = {
   __typename?: 'LoggedInUserResponse';
   data?: Maybe<User>;
-  response?: Maybe<Response>;
+  message: Scalars['String']['output'];
+  status: Scalars['Boolean']['output'];
 };
 
 export type Message = {
@@ -159,14 +160,16 @@ export type Mutation = {
   deleteMessage?: Maybe<Response>;
   deletePost: GetPostByUserIdResponse;
   likePost: GetPostByUserIdResponse;
+  /** logout from your account */
   logout?: Maybe<Response>;
   newJwt?: Maybe<Response>;
+  /** Rest your password */
   resetPassword?: Maybe<Response>;
   sendMessage?: Maybe<SendMessageResponse>;
   /** Send friend request to other user */
   sendRequest?: Maybe<SentRequestResponse>;
   /** login to your account */
-  signIn?: Maybe<SignInMutation>;
+  signIn?: Maybe<SignInResponse>;
   /** Create a new user */
   signUp?: Maybe<SignUpResponse>;
   unlikePost: GetPostByUserIdResponse;
@@ -198,6 +201,11 @@ export type MutationDeletePostArgs = {
 
 export type MutationLikePostArgs = {
   postId: Scalars['String']['input'];
+};
+
+
+export type MutationLogoutArgs = {
+  email: Scalars['String']['input'];
 };
 
 
@@ -343,21 +351,23 @@ export type Session = {
   userEmail: Scalars['String']['output'];
 };
 
-export type SignInMutation = {
-  __typename?: 'SignInMutation';
-  data?: Maybe<Token>;
-  response?: Maybe<Response>;
-};
-
 export type SignInParams = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
 };
 
+export type SignInResponse = {
+  __typename?: 'SignInResponse';
+  data?: Maybe<Token>;
+  message: Scalars['String']['output'];
+  status: Scalars['Boolean']['output'];
+};
+
 export type SignUpResponse = {
   __typename?: 'SignUpResponse';
   data?: Maybe<User>;
-  response?: Maybe<Response>;
+  message: Scalars['String']['output'];
+  status: Scalars['Boolean']['output'];
 };
 
 export type SignUpUserParams = {
@@ -523,8 +533,8 @@ export type ResolversTypes = {
   SendMessageResponse: ResolverTypeWrapper<SendMessageResponse>;
   SentRequestResponse: ResolverTypeWrapper<SentRequestResponse>;
   Session: ResolverTypeWrapper<Session>;
-  SignInMutation: ResolverTypeWrapper<SignInMutation>;
   SignInParams: SignInParams;
+  SignInResponse: ResolverTypeWrapper<SignInResponse>;
   SignUpResponse: ResolverTypeWrapper<SignUpResponse>;
   SignUpUserParams: SignUpUserParams;
   Status: Status;
@@ -570,8 +580,8 @@ export type ResolversParentTypes = {
   SendMessageResponse: SendMessageResponse;
   SentRequestResponse: SentRequestResponse;
   Session: Session;
-  SignInMutation: SignInMutation;
   SignInParams: SignInParams;
+  SignInResponse: SignInResponse;
   SignUpResponse: SignUpResponse;
   SignUpUserParams: SignUpUserParams;
   String: Scalars['String']['output'];
@@ -685,7 +695,8 @@ export type GetPostByUserIdResponseResolvers<ContextType = DataSourceContext, Pa
 
 export type LoggedInUserResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['LoggedInUserResponse'] = ResolversParentTypes['LoggedInUserResponse']> = {
   data?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  response?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -707,12 +718,12 @@ export type MutationResolvers<ContextType = DataSourceContext, ParentType extend
   deleteMessage?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationDeleteMessageArgs, 'messageId'>>;
   deletePost?: Resolver<ResolversTypes['GetPostByUserIdResponse'], ParentType, ContextType, RequireFields<MutationDeletePostArgs, 'id'>>;
   likePost?: Resolver<ResolversTypes['GetPostByUserIdResponse'], ParentType, ContextType, RequireFields<MutationLikePostArgs, 'postId'>>;
-  logout?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType>;
+  logout?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationLogoutArgs, 'email'>>;
   newJwt?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType>;
   resetPassword?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationResetPasswordArgs, 'newPassword'>>;
   sendMessage?: Resolver<Maybe<ResolversTypes['SendMessageResponse']>, ParentType, ContextType, Partial<MutationSendMessageArgs>>;
   sendRequest?: Resolver<Maybe<ResolversTypes['SentRequestResponse']>, ParentType, ContextType, RequireFields<MutationSendRequestArgs, 'toID'>>;
-  signIn?: Resolver<Maybe<ResolversTypes['SignInMutation']>, ParentType, ContextType, Partial<MutationSignInArgs>>;
+  signIn?: Resolver<Maybe<ResolversTypes['SignInResponse']>, ParentType, ContextType, Partial<MutationSignInArgs>>;
   signUp?: Resolver<Maybe<ResolversTypes['SignUpResponse']>, ParentType, ContextType, Partial<MutationSignUpArgs>>;
   unlikePost?: Resolver<ResolversTypes['GetPostByUserIdResponse'], ParentType, ContextType, RequireFields<MutationUnlikePostArgs, 'postId'>>;
   updateUser?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType>;
@@ -780,15 +791,17 @@ export type SessionResolvers<ContextType = DataSourceContext, ParentType extends
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type SignInMutationResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['SignInMutation'] = ResolversParentTypes['SignInMutation']> = {
+export type SignInResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['SignInResponse'] = ResolversParentTypes['SignInResponse']> = {
   data?: Resolver<Maybe<ResolversTypes['Token']>, ParentType, ContextType>;
-  response?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type SignUpResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['SignUpResponse'] = ResolversParentTypes['SignUpResponse']> = {
   data?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  response?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -849,7 +862,7 @@ export type Resolvers<ContextType = DataSourceContext> = {
   SendMessageResponse?: SendMessageResponseResolvers<ContextType>;
   SentRequestResponse?: SentRequestResponseResolvers<ContextType>;
   Session?: SessionResolvers<ContextType>;
-  SignInMutation?: SignInMutationResolvers<ContextType>;
+  SignInResponse?: SignInResponseResolvers<ContextType>;
   SignUpResponse?: SignUpResponseResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
   Token?: TokenResolvers<ContextType>;

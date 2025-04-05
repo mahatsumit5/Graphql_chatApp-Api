@@ -27,14 +27,24 @@ type Mutation {
   "Create a new user"
   signUp(input: SignUpUserParams): SignUpResponse
   "login to your account"
-  signIn(input: SignInParams): SignInMutation
-  logout: Response
+  signIn(input: SignInParams): SignInResponse
+  "logout from your account"
+  logout(email: String!): Response
+  "Rest your password"
   resetPassword(newPassword: String!): Response
   newJwt: Response
   updateUser: Response
   uploadProfile: Response
 }
-
+# Input types
+# Input types
+# Input types
+# Input types
+# Input types
+# Input types
+# Input types
+# Input types
+# Input types
 input SignUpUserParams {
   fName: String!
   lName: String!
@@ -53,6 +63,37 @@ input allUser {
   search: String!
 }
 
+# user Response
+# user Response
+# user Response
+# user Response
+# user Response
+# user Response
+type SignInResponse {
+  status: Boolean!
+  message: String!
+  data: Token
+}
+type SignUpResponse {
+  status: Boolean!
+  message: String!
+  data: User
+}
+type LoggedInUserResponse {
+  status: Boolean!
+  message: String!
+  data: User
+}
+
+type AllUsersResponse {
+  status: Boolean!
+  message: String!
+  data: [Friend!]
+  totalUsers: Int
+}
+type Token {
+  accessJWT: String!
+}
 enum Order {
   asc
   desc
