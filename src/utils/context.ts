@@ -3,7 +3,6 @@ import { UserAPI } from "../dataSource/user.api";
 import { ApolloServer, BaseContext } from "@apollo/server";
 import { FriendRequestAPI } from "../dataSource/friendRequest.api";
 import { PostAPI } from "../dataSource/post.api";
-import { GraphQLError } from "graphql";
 
 export const createContext: (
   args: ExpressContextFunctionArgument,

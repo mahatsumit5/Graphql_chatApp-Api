@@ -1,13 +1,8 @@
-import { AugmentedRequest, RESTDataSource } from "@apollo/datasource-rest";
 import {
   AllUser,
   AllUsersResponse,
   LoggedInUserResponse,
   Response,
-  SignInResponse,
-  SignInParams,
-  SignUpResponse,
-  SignUpUserParams,
 } from "../types/types";
 import { BaseAPI } from ".";
 import { createUser, getUserByEmail } from "../database/user.query";
@@ -23,47 +18,6 @@ import {
   getSession,
 } from "../database/session.query";
 export class UserAPI extends BaseAPI {
-  async signUp(input: SignUpUserParams): Promise<SignUpResponse> {
-    try {
-      input.password = hashPass(input.password);
-      const response = await createUser(input);
-      if (
-        !response?.id &&
-        response?.message?.includes("Unique constraint failed")
-      ) {
-        throw new Error("Email already exist");
-      } else {
-        return {
-          status: true,
-          message: "Account Created",
-
-          data: response,
-        };
-      }
-    } catch (error) {
-      return this.handleError(error);
-    }
-  }
-  async signIn(input: SignInParams): Promise<SignInResponse> {
-    try {
-      const user = await getUserByEmail(input.email);
-      if (!user?.id) throw new Error("User not found with this email");
-      const doesPasswordMatch = comparePassword(input.password, user.password);
-      if (doesPasswordMatch) {
-        const token = await createAuth0Token();
-        if (!token?.access_token) throw new Error("Unable to create token");
-        await createSession({ email: user.email, token: token.access_token });
-        return sendResponse(true, "Welcome back", {
-          accessJWT: token.access_token,
-        });
-      } else {
-        throw new Error("Password incorrect");
-      }
-    } catch (error) {
-      return this.handleError(error);
-    }
-  }
-
   async allUsers({
     order,
     page,
@@ -99,16 +53,7 @@ export class UserAPI extends BaseAPI {
       return this.handleError(error);
     }
   }
-  async resetPassword(password: string): Promise<Response> {
-    try {
-      return await this.put("reset-password", {
-        body: { password },
-      });
-    } catch (error) {
-      return this.handleError(error);
-      throw error;
-    }
-  }
+
   async updateUser(): Promise<Response> {
     try {
       return await this.post("logout");

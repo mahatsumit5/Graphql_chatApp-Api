@@ -160,18 +160,11 @@ export type Mutation = {
   deleteMessage?: Maybe<Response>;
   deletePost: GetPostByUserIdResponse;
   likePost: GetPostByUserIdResponse;
-  /** logout from your account */
   logout?: Maybe<Response>;
   newJwt?: Maybe<Response>;
-  /** Rest your password */
-  resetPassword?: Maybe<Response>;
   sendMessage?: Maybe<SendMessageResponse>;
   /** Send friend request to other user */
   sendRequest?: Maybe<SentRequestResponse>;
-  /** login to your account */
-  signIn?: Maybe<SignInResponse>;
-  /** Create a new user */
-  signUp?: Maybe<SignUpResponse>;
   unlikePost: GetPostByUserIdResponse;
   updateUser?: Maybe<Response>;
   uploadPost: UploadAPostResponse;
@@ -209,11 +202,6 @@ export type MutationLogoutArgs = {
 };
 
 
-export type MutationResetPasswordArgs = {
-  newPassword: Scalars['String']['input'];
-};
-
-
 export type MutationSendMessageArgs = {
   input?: InputMaybe<SendMessageParams>;
 };
@@ -221,16 +209,6 @@ export type MutationSendMessageArgs = {
 
 export type MutationSendRequestArgs = {
   toID: Scalars['String']['input'];
-};
-
-
-export type MutationSignInArgs = {
-  input?: InputMaybe<SignInParams>;
-};
-
-
-export type MutationSignUpArgs = {
-  input?: InputMaybe<SignUpUserParams>;
 };
 
 
@@ -351,25 +329,6 @@ export type Session = {
   userEmail: Scalars['String']['output'];
 };
 
-export type SignInParams = {
-  email: Scalars['String']['input'];
-  password: Scalars['String']['input'];
-};
-
-export type SignInResponse = {
-  __typename?: 'SignInResponse';
-  data?: Maybe<Token>;
-  message: Scalars['String']['output'];
-  status: Scalars['Boolean']['output'];
-};
-
-export type SignUpResponse = {
-  __typename?: 'SignUpResponse';
-  data?: Maybe<User>;
-  message: Scalars['String']['output'];
-  status: Scalars['Boolean']['output'];
-};
-
 export type SignUpUserParams = {
   email: Scalars['String']['input'];
   fName: Scalars['String']['input'];
@@ -386,11 +345,6 @@ export enum Status {
 export type Subscription = {
   __typename?: 'Subscription';
   newPost?: Maybe<Post>;
-};
-
-export type Token = {
-  __typename?: 'Token';
-  accessJWT: Scalars['String']['output'];
 };
 
 export type UploadAPostResponse = {
@@ -533,14 +487,10 @@ export type ResolversTypes = {
   SendMessageResponse: ResolverTypeWrapper<SendMessageResponse>;
   SentRequestResponse: ResolverTypeWrapper<SentRequestResponse>;
   Session: ResolverTypeWrapper<Session>;
-  SignInParams: SignInParams;
-  SignInResponse: ResolverTypeWrapper<SignInResponse>;
-  SignUpResponse: ResolverTypeWrapper<SignUpResponse>;
   SignUpUserParams: SignUpUserParams;
   Status: Status;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Subscription: ResolverTypeWrapper<{}>;
-  Token: ResolverTypeWrapper<Token>;
   UploadAPostResponse: ResolverTypeWrapper<UploadAPostResponse>;
   User: ResolverTypeWrapper<User>;
   _count: ResolverTypeWrapper<_Count>;
@@ -580,13 +530,9 @@ export type ResolversParentTypes = {
   SendMessageResponse: SendMessageResponse;
   SentRequestResponse: SentRequestResponse;
   Session: Session;
-  SignInParams: SignInParams;
-  SignInResponse: SignInResponse;
-  SignUpResponse: SignUpResponse;
   SignUpUserParams: SignUpUserParams;
   String: Scalars['String']['output'];
   Subscription: {};
-  Token: Token;
   UploadAPostResponse: UploadAPostResponse;
   User: User;
   _count: _Count;
@@ -720,11 +666,8 @@ export type MutationResolvers<ContextType = DataSourceContext, ParentType extend
   likePost?: Resolver<ResolversTypes['GetPostByUserIdResponse'], ParentType, ContextType, RequireFields<MutationLikePostArgs, 'postId'>>;
   logout?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationLogoutArgs, 'email'>>;
   newJwt?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType>;
-  resetPassword?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationResetPasswordArgs, 'newPassword'>>;
   sendMessage?: Resolver<Maybe<ResolversTypes['SendMessageResponse']>, ParentType, ContextType, Partial<MutationSendMessageArgs>>;
   sendRequest?: Resolver<Maybe<ResolversTypes['SentRequestResponse']>, ParentType, ContextType, RequireFields<MutationSendRequestArgs, 'toID'>>;
-  signIn?: Resolver<Maybe<ResolversTypes['SignInResponse']>, ParentType, ContextType, Partial<MutationSignInArgs>>;
-  signUp?: Resolver<Maybe<ResolversTypes['SignUpResponse']>, ParentType, ContextType, Partial<MutationSignUpArgs>>;
   unlikePost?: Resolver<ResolversTypes['GetPostByUserIdResponse'], ParentType, ContextType, RequireFields<MutationUnlikePostArgs, 'postId'>>;
   updateUser?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType>;
   uploadPost?: Resolver<ResolversTypes['UploadAPostResponse'], ParentType, ContextType, Partial<MutationUploadPostArgs>>;
@@ -791,27 +734,8 @@ export type SessionResolvers<ContextType = DataSourceContext, ParentType extends
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type SignInResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['SignInResponse'] = ResolversParentTypes['SignInResponse']> = {
-  data?: Resolver<Maybe<ResolversTypes['Token']>, ParentType, ContextType>;
-  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  status?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type SignUpResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['SignUpResponse'] = ResolversParentTypes['SignUpResponse']> = {
-  data?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  status?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type SubscriptionResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
   newPost?: SubscriptionResolver<Maybe<ResolversTypes['Post']>, "newPost", ParentType, ContextType>;
-};
-
-export type TokenResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Token'] = ResolversParentTypes['Token']> = {
-  accessJWT?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type UploadAPostResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['UploadAPostResponse'] = ResolversParentTypes['UploadAPostResponse']> = {
@@ -862,10 +786,7 @@ export type Resolvers<ContextType = DataSourceContext> = {
   SendMessageResponse?: SendMessageResponseResolvers<ContextType>;
   SentRequestResponse?: SentRequestResponseResolvers<ContextType>;
   Session?: SessionResolvers<ContextType>;
-  SignInResponse?: SignInResponseResolvers<ContextType>;
-  SignUpResponse?: SignUpResponseResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
-  Token?: TokenResolvers<ContextType>;
   UploadAPostResponse?: UploadAPostResponseResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   _count?: _CountResolvers<ContextType>;

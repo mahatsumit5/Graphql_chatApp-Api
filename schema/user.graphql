@@ -24,14 +24,8 @@ type Query {
 }
 
 type Mutation {
-  "Create a new user"
-  signUp(input: SignUpUserParams): SignUpResponse
-  "login to your account"
-  signIn(input: SignInParams): SignInResponse
-  "logout from your account"
   logout(email: String!): Response
-  "Rest your password"
-  resetPassword(newPassword: String!): Response
+
   newJwt: Response
   updateUser: Response
   uploadProfile: Response
@@ -51,10 +45,6 @@ input SignUpUserParams {
   email: String!
   password: String!
 }
-input SignInParams {
-  email: String!
-  password: String!
-}
 
 input allUser {
   order: Order!
@@ -69,16 +59,7 @@ input allUser {
 # user Response
 # user Response
 # user Response
-type SignInResponse {
-  status: Boolean!
-  message: String!
-  data: Token
-}
-type SignUpResponse {
-  status: Boolean!
-  message: String!
-  data: User
-}
+
 type LoggedInUserResponse {
   status: Boolean!
   message: String!
@@ -91,9 +72,7 @@ type AllUsersResponse {
   data: [Friend!]
   totalUsers: Int
 }
-type Token {
-  accessJWT: String!
-}
+
 enum Order {
   asc
   desc

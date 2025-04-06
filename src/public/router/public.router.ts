@@ -33,12 +33,10 @@ router.post(
   validateUserLogin,
   async (req: Request, res: Response, next) => {
     try {
-      console.log(req.body);
       const user = await getUserByEmail(req.body.email);
       if (!user) {
         throw new Error("User does not exist with that email");
       }
-      console.log(user);
       const isPasswordCorrect = comparePassword(
         req.body.password,
         user.password
