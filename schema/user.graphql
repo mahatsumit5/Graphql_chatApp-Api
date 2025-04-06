@@ -8,6 +8,15 @@ type User {
   bio: String
   coverPicture: String
 }
+
+type Friend {
+  id: ID!
+  fName: String!
+  lName: String!
+  email: String!
+  profile: String
+  isActive: Boolean!
+}
 # Session model
 type Session {
   associate: User!
@@ -25,10 +34,14 @@ type Query {
 
 type Mutation {
   logout(email: String!): Response
-
-  newJwt: Response
-  updateUser: Response
-  uploadProfile: Response
+  updateUser(
+    password: String
+    profile: String
+    coverPicture: String
+    bio: String
+    fName: String
+    lName: String
+  ): UpdateUserResponse
 }
 # Input types
 # Input types
@@ -76,4 +89,10 @@ type AllUsersResponse {
 enum Order {
   asc
   desc
+}
+
+type UpdateUserResponse {
+  status: Boolean!
+  message: String!
+  data: User
 }

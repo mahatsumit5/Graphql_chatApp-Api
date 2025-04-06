@@ -1,5 +1,5 @@
 import { executeQuery, prisma } from "../script";
-import { SignUpUserParams } from "../types/types";
+import { AllUser, SignUpUserParams } from "../types/types";
 
 export function createUser(obj: SignUpUserParams) {
   return executeQuery(
@@ -8,7 +8,16 @@ export function createUser(obj: SignUpUserParams) {
     })
   );
 }
-
+export function updateUser(userId: string, data: unknown) {
+  return executeQuery(
+    prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data,
+    })
+  );
+}
 export function changePassword({
   email,
   newPassword,
@@ -69,13 +78,10 @@ export function getUserById(id: string) {
   );
 }
 
-export async function getAllUsers(
-  email: string,
-  take: number,
-  page: number,
-  order: "asc" | "desc",
-  contains: string
-) {
+type args = AllUser & {
+  email: string;
+};
+export async function getAllUsers({ order, page, take, search, email }: args) {
   const skipAmount = (page - 1) * take;
   const users: [] = await executeQuery(
     prisma.user.findMany({
@@ -104,7 +110,7 @@ export async function getAllUsers(
           ],
         },
         email: {
-          contains: contains.toLowerCase(),
+          contains: search.toLowerCase(),
         },
       },
       select: {
@@ -113,6 +119,7 @@ export async function getAllUsers(
         email: true,
         profile: true,
         id: true,
+        isActive: true,
       },
       take: take,
       orderBy: { fName: order },
@@ -135,7 +142,7 @@ export async function getAllUsers(
           },
         },
         email: {
-          contains: contains || "",
+          contains: search || "",
         },
       },
     })
@@ -164,15 +171,4 @@ export function deleteUserByEmail(email: string) {
     })
   );
   return data;
-}
-
-export function updateUser(userId: string, data: any) {
-  return executeQuery(
-    prisma.user.update({
-      where: {
-        id: userId,
-      },
-      data,
-    })
-  );
 }

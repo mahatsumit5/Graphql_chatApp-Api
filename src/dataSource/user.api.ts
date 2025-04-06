@@ -3,9 +3,15 @@ import {
   AllUsersResponse,
   LoggedInUserResponse,
   Response,
+  UpdateUserResponse,
 } from "../types/types";
 import { BaseAPI } from ".";
-import { createUser, getUserByEmail } from "../database/user.query";
+import {
+  createUser,
+  getAllUsers,
+  getUserByEmail,
+  updateUser,
+} from "../database/user.query";
 import {
   comparePassword,
   createAuth0Token,
@@ -18,16 +24,16 @@ import {
   getSession,
 } from "../database/session.query";
 export class UserAPI extends BaseAPI {
-  async allUsers({
-    order,
-    page,
-    take,
-    search,
-  }: AllUser): Promise<AllUsersResponse> {
+  async allUsers(arg: AllUser & { email: string }): Promise<AllUsersResponse> {
     try {
-      return await this.get<AllUsersResponse>(
-        `all-users?order=${order}&page=${page}&take=${take}&search=${search}`
-      );
+      arg;
+      const { totalUsers, users } = await getAllUsers(arg);
+      return {
+        status: true,
+        message: "List of users",
+        data: users,
+        totalUsers,
+      };
     } catch (error) {
       return this.handleError(error);
     }
@@ -54,9 +60,14 @@ export class UserAPI extends BaseAPI {
     }
   }
 
-  async updateUser(): Promise<Response> {
+  async updateUser(id: string, body: unknown): Promise<UpdateUserResponse> {
     try {
-      return await this.post("logout");
+      const data = await updateUser(id, body);
+      return {
+        status: true,
+        message: "User updated successfully",
+        data,
+      };
     } catch (error) {
       return this.handleError(error);
     }

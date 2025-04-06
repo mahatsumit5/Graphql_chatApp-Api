@@ -1,28 +1,27 @@
 import { GraphQLError } from "graphql";
 import { Resolvers } from "../types/types";
 import { ServerErrorCode } from "../utils/formatError";
+import { hashPass } from "../utils";
 export const userResolvers: Resolvers = {
   Mutation: {
     logout: (_, { email }, { dataSources }) => {
       return dataSources.userAPI.logout(email);
     },
 
-    newJwt: (_, __, { dataSources }) => {
-      return dataSources.userAPI.newJwt();
-    },
-    updateUser: (_, __, { dataSources }) => {
-      return dataSources.userAPI.updateUser();
-    },
-    uploadProfile: (_, __, { dataSources }) => {
-      return {
-        status: true,
-        message: "Todo complete this functino",
-      };
+    updateUser: (_, args, { dataSources }) => {
+      const id = dataSources.user.id;
+      if (args?.password) {
+        args.password = hashPass(args.password);
+      }
+      return dataSources.userAPI.updateUser(id, args);
     },
   },
   Query: {
     allUsers: (__, { params }, { dataSources }) => {
-      return dataSources.userAPI.allUsers(params!);
+      return dataSources.userAPI.allUsers({
+        email: dataSources.user.email,
+        ...params,
+      });
     },
     loggedInUser: (__, args, { dataSources }) => {
       if (!dataSources.user.id)

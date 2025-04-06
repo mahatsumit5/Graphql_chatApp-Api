@@ -78,8 +78,8 @@ declare interface CreatePostParams {
 }
 declare type UpdataPostParams = {
   id: string;
-  title: string;
-  content: string;
+  title?: string;
+  content?: string;
   images?: string[];
 };
 

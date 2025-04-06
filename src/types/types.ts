@@ -77,6 +77,7 @@ export type Friend = {
   email: Scalars['String']['output'];
   fName: Scalars['String']['output'];
   id: Scalars['ID']['output'];
+  isActive: Scalars['Boolean']['output'];
   lName: Scalars['String']['output'];
   profile?: Maybe<Scalars['String']['output']>;
 };
@@ -135,7 +136,7 @@ export type GetMessageByUserResponse = {
 export type GetPostByUserIdResponse = {
   __typename?: 'GetPostByUserIdResponse';
   message: Scalars['String']['output'];
-  posts?: Maybe<Post>;
+  posts?: Maybe<Array<Post>>;
   status: Scalars['Boolean']['output'];
 };
 
@@ -168,14 +169,13 @@ export type Mutation = {
   deletePost: GetPostByUserIdResponse;
   likePost: GetPostByUserIdResponse;
   logout?: Maybe<Response>;
-  newJwt?: Maybe<Response>;
   sendMessage?: Maybe<SendMessageResponse>;
   /** Send friend request to other user */
   sendRequest?: Maybe<SentRequestResponse>;
   unlikePost: GetPostByUserIdResponse;
-  updateUser?: Maybe<Response>;
+  updatePost?: Maybe<UploadAPostResponse>;
+  updateUser?: Maybe<UpdateUserResponse>;
   uploadPost: UploadAPostResponse;
-  uploadProfile?: Maybe<Response>;
 };
 
 
@@ -221,6 +221,24 @@ export type MutationSendRequestArgs = {
 
 export type MutationUnlikePostArgs = {
   postId: Scalars['String']['input'];
+};
+
+
+export type MutationUpdatePostArgs = {
+  content?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
+  images?: InputMaybe<Array<Scalars['String']['input']>>;
+  title?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type MutationUpdateUserArgs = {
+  bio?: InputMaybe<Scalars['String']['input']>;
+  coverPicture?: InputMaybe<Scalars['String']['input']>;
+  fName?: InputMaybe<Scalars['String']['input']>;
+  lName?: InputMaybe<Scalars['String']['input']>;
+  password?: InputMaybe<Scalars['String']['input']>;
+  profile?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -352,6 +370,13 @@ export enum Status {
 export type Subscription = {
   __typename?: 'Subscription';
   newPost?: Maybe<Post>;
+};
+
+export type UpdateUserResponse = {
+  __typename?: 'UpdateUserResponse';
+  data?: Maybe<User>;
+  message: Scalars['String']['output'];
+  status: Scalars['Boolean']['output'];
 };
 
 export type UploadAPostResponse = {
@@ -499,6 +524,7 @@ export type ResolversTypes = {
   Status: Status;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Subscription: ResolverTypeWrapper<{}>;
+  UpdateUserResponse: ResolverTypeWrapper<UpdateUserResponse>;
   UploadAPostResponse: ResolverTypeWrapper<UploadAPostResponse>;
   User: ResolverTypeWrapper<User>;
   _count: ResolverTypeWrapper<_Count>;
@@ -542,6 +568,7 @@ export type ResolversParentTypes = {
   SignUpUserParams: SignUpUserParams;
   String: Scalars['String']['output'];
   Subscription: {};
+  UpdateUserResponse: UpdateUserResponse;
   UploadAPostResponse: UploadAPostResponse;
   User: User;
   _count: _Count;
@@ -603,6 +630,7 @@ export type FriendResolvers<ContextType = DataSourceContext, ParentType extends 
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   fName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  isActive?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   lName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   profile?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -650,7 +678,7 @@ export type GetMessageByUserResponseResolvers<ContextType = DataSourceContext, P
 
 export type GetPostByUserIdResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['GetPostByUserIdResponse'] = ResolversParentTypes['GetPostByUserIdResponse']> = {
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  posts?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType>;
+  posts?: Resolver<Maybe<Array<ResolversTypes['Post']>>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -681,13 +709,12 @@ export type MutationResolvers<ContextType = DataSourceContext, ParentType extend
   deletePost?: Resolver<ResolversTypes['GetPostByUserIdResponse'], ParentType, ContextType, RequireFields<MutationDeletePostArgs, 'id'>>;
   likePost?: Resolver<ResolversTypes['GetPostByUserIdResponse'], ParentType, ContextType, RequireFields<MutationLikePostArgs, 'postId'>>;
   logout?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationLogoutArgs, 'email'>>;
-  newJwt?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType>;
   sendMessage?: Resolver<Maybe<ResolversTypes['SendMessageResponse']>, ParentType, ContextType, Partial<MutationSendMessageArgs>>;
   sendRequest?: Resolver<Maybe<ResolversTypes['SentRequestResponse']>, ParentType, ContextType, RequireFields<MutationSendRequestArgs, 'toID'>>;
   unlikePost?: Resolver<ResolversTypes['GetPostByUserIdResponse'], ParentType, ContextType, RequireFields<MutationUnlikePostArgs, 'postId'>>;
-  updateUser?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType>;
+  updatePost?: Resolver<Maybe<ResolversTypes['UploadAPostResponse']>, ParentType, ContextType, RequireFields<MutationUpdatePostArgs, 'id'>>;
+  updateUser?: Resolver<Maybe<ResolversTypes['UpdateUserResponse']>, ParentType, ContextType, Partial<MutationUpdateUserArgs>>;
   uploadPost?: Resolver<ResolversTypes['UploadAPostResponse'], ParentType, ContextType, Partial<MutationUploadPostArgs>>;
-  uploadProfile?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType>;
 };
 
 export type PostResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = {
@@ -754,6 +781,13 @@ export type SubscriptionResolvers<ContextType = DataSourceContext, ParentType ex
   newPost?: SubscriptionResolver<Maybe<ResolversTypes['Post']>, "newPost", ParentType, ContextType>;
 };
 
+export type UpdateUserResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['UpdateUserResponse'] = ResolversParentTypes['UpdateUserResponse']> = {
+  data?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type UploadAPostResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['UploadAPostResponse'] = ResolversParentTypes['UploadAPostResponse']> = {
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   result?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType>;
@@ -804,6 +838,7 @@ export type Resolvers<ContextType = DataSourceContext> = {
   SentRequestResponse?: SentRequestResponseResolvers<ContextType>;
   Session?: SessionResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
+  UpdateUserResponse?: UpdateUserResponseResolvers<ContextType>;
   UploadAPostResponse?: UploadAPostResponseResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   _count?: _CountResolvers<ContextType>;
