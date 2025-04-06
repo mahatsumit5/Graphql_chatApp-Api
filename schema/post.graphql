@@ -5,7 +5,6 @@ type _count {
 }
 
 # # Post model
-
 type Post {
   id: ID!
   title: String!
@@ -35,7 +34,7 @@ type Mutation {
 }
 
 type Query {
-  getAllPosts(args: GetAllPostArgs): GetAllPostsQuery
+  getAllPosts(args: GetAllPostArgs): GetAllPostResponse
   getPostByUserId(userId: String!): GetPostByUserIdResponse
 }
 
@@ -49,4 +48,35 @@ input PostInput {
 input GetAllPostArgs {
   page: Int!
   take: Int!
+}
+
+# Response types
+# Response types
+# Response types
+# Response types
+# Response types
+# Response types
+# Response types
+# Response types
+# Response types
+# Response types
+# Response types
+# Response types
+
+type GetAllPostResponse {
+  status: Boolean!
+  message: String!
+  posts: [Post!]
+  totalNumberOfPosts: Int
+}
+
+type UploadAPostResponse {
+  status: Boolean!
+  message: String!
+  result: Post
+}
+type GetPostByUserIdResponse {
+  status: Boolean!
+  message: String!
+  posts: Post
 }

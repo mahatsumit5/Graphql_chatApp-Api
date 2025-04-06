@@ -1,7 +1,7 @@
 import { PubSub } from "graphql-subscriptions";
 import { BaseAPI } from ".";
 import {
-  GetAllPostsQuery,
+  GetAllPostResponse,
   PostInput,
   UploadAPostResponse,
 } from "../types/types";
@@ -28,13 +28,13 @@ export class PostAPI extends BaseAPI {
   /**
    * Retrieves all posts.
    * @async
-   * @returns {Promise<any>}
+   * @returns {Promise<GetAllPostResponse>}
    */
   async getAllPost(arg: {
     page: number;
     take: number;
     userId: string;
-  }): Promise<GetAllPostsQuery> {
+  }): Promise<GetAllPostResponse> {
     // TO DO: implement logic to fetch all posts
 
     try {

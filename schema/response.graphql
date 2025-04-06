@@ -33,21 +33,3 @@ type GetMessageByUserResponse {
   message: String!
   result: [Message!]!
 }
-
-type GetAllPostsQuery {
-  status: Boolean!
-  message: String!
-  posts: [Post!]
-  totalNumberOfPosts: Int
-}
-
-type UploadAPostResponse {
-  status: Boolean!
-  message: String!
-  result: Post
-}
-type GetPostByUserIdResponse {
-  status: Boolean!
-  message: String!
-  posts: Post
-}

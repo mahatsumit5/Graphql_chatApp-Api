@@ -13,8 +13,7 @@ import { typeDefs } from "./typedefs";
 import { createContext } from "./utils";
 import { resolvers } from "./resolvers";
 import { ApolloServerErrorCode } from "@apollo/server/errors";
-import axios from "axios";
-
+import { applyMiddleware } from "graphql-middleware";
 const app = express();
 const httpServer = http.createServer(app);
 const PORT = Number(process.env.PORT) || 8000;
@@ -33,6 +32,8 @@ const schema = makeExecutableSchema({
   resolvers,
   typeDefs,
 });
+const middleware = [];
+const schemaWithMiddleware = applyMiddleware(schema, ...middleware);
 
 const wsServer = new WebSocketServer({
   server: httpServer,
@@ -57,7 +58,7 @@ async function main() {
     wsServer
   );
   const server = new ApolloServer({
-    schema,
+    schema: schemaWithMiddleware,
 
     status400ForVariableCoercionErrors: true,
     plugins: [

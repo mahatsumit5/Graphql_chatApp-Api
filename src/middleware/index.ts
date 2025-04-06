@@ -2,7 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import { getSession } from "../database/session.query";
 import { DataSourceContext } from "../types/context";
 import { GraphQLError } from "graphql";
-
+import {} from "graphql-ws";
+import { Resolver, ResolverFn } from "../types/types";
 export const loggedInUserAuth = async (
   req: Request,
   res: Response,
@@ -44,3 +45,20 @@ export const authoriseUser = (isAuthorised: boolean) => {
       });
   }
 };
+// Define the HOF
+// export const requireAuth = ({}: ResolverFn<TResult, TParent, TContext, TArgs>) => {
+//   // Return the new resolver function
+//   return (parent, args, context, info) => {
+//     // --- Authentication Check ---
+//     // Assuming authentication status is attached to the context
+//     // Adjust 'context.isAuthenticated' based on your actual context setup
+//     if (!context.dataSources.isAuthenticated && !context.user) {
+//       // Check common patterns
+//       throw new Error("You must be logged in to perform this action.");
+//     }
+//     // --- End Authentication Check ---
+
+//     // If authenticated, call the original resolver function
+//     return resolverFunction(parent, args, context, info);
+//   };
+// };
