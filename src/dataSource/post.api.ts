@@ -39,7 +39,6 @@ export class PostAPI extends BaseAPI {
 
     try {
       const response = await getAllPost(arg);
-      console.log(response, "response from getAllPost");
       if (!response) throw new Error("No posts found");
       return {
         posts: response.postsWithHasLiked,

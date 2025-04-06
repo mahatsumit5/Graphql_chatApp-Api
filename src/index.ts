@@ -1,7 +1,7 @@
 import { ApolloServer } from "@apollo/server";
 import { config } from "dotenv";
 config();
-import http, { request } from "http";
+import http from "http";
 import express from "express";
 import { WebSocketServer } from "ws";
 import { makeExecutableSchema } from "@graphql-tools/schema";
@@ -10,13 +10,13 @@ import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHt
 import { expressMiddleware } from "@apollo/server/express4";
 import cors from "cors";
 import { typeDefs } from "./typedefs";
-import { createContext } from "./utils";
+import { createContext, ErrorHandler } from "./utils";
 import { resolvers } from "./resolvers";
 import { ApolloServerErrorCode } from "@apollo/server/errors";
 import publicApi from "./public/router/public.router";
 import { auth } from "express-oauth2-jwt-bearer";
 import { loggedInUserAuth } from "./middleware";
-import { ErrorHandler } from "./utils/errorHandler";
+import { formatError } from "./utils/formatError";
 // import { applyMiddleware } from "graphql-middleware";
 const app = express();
 const httpServer = http.createServer(app);
@@ -68,7 +68,6 @@ async function main() {
   );
   const server = new ApolloServer({
     schema,
-
     status400ForVariableCoercionErrors: true,
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer }),
@@ -82,25 +81,7 @@ async function main() {
         },
       },
     ],
-    formatError(formattedError, error) {
-      if (
-        formattedError.extensions.code === ApolloServerErrorCode.BAD_USER_INPUT
-      ) {
-        return {
-          code: formattedError.extensions.code,
-          message: "Invalid input",
-        };
-      } else if (
-        formattedError.extensions.code ===
-        ApolloServerErrorCode.INTERNAL_SERVER_ERROR
-      ) {
-        return {
-          code: formattedError.extensions.code,
-          message: "Internal server error",
-        };
-      }
-      return formattedError;
-    },
+    formatError: (err) => formatError(err.extensions, err.message),
   });
   await server.start();
 
@@ -108,7 +89,6 @@ async function main() {
     "/graphql",
     auth0Middleware,
     loggedInUserAuth,
-
     expressMiddleware(server, { context: (arg) => createContext(arg, server) })
   );
 }

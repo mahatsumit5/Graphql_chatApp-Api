@@ -79,16 +79,6 @@ export class UserAPI extends BaseAPI {
     }
   }
 
-  async loggedInUser(): Promise<LoggedInUserResponse> {
-    try {
-      const token = this.getToken();
-      const response = await getSession(token);
-      if (!response?.associate) throw new Error("User not found");
-      return sendResponse(true, "Welcome back", response.associate);
-    } catch (error) {
-      return this.handleError(error);
-    }
-  }
   async logout(email: string): Promise<Response> {
     try {
       const token = this.getToken();
