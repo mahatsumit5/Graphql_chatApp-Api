@@ -14,7 +14,7 @@ export const createContext: (
   let isAuthenticated = false;
 
   try {
-    // Make sure you are not exposing it in prod.
+    const user = req.userInfo;
 
     // get the request from the request
     const headerToken = req.headers.authorization || "";

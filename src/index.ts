@@ -13,6 +13,10 @@ import { typeDefs } from "./typedefs";
 import { createContext } from "./utils";
 import { resolvers } from "./resolvers";
 import { ApolloServerErrorCode } from "@apollo/server/errors";
+import publicApi from "./public/router/public.router";
+import { auth } from "express-oauth2-jwt-bearer";
+import { loggedInUserAuth } from "./middleware";
+import { ErrorHandler } from "./utils/errorHandler";
 // import { applyMiddleware } from "graphql-middleware";
 const app = express();
 const httpServer = http.createServer(app);
@@ -27,7 +31,10 @@ const options = {
   allowedHeaders: ["Authorization", "refreshjwt", "Content-Type"],
   credentials: true,
 };
-
+export const auth0Middleware = auth({
+  audience: process.env.audience,
+  issuerBaseURL: process.env.issuerBaseURL,
+});
 const schema = makeExecutableSchema({
   resolvers,
   typeDefs,
@@ -37,7 +44,11 @@ const wsServer = new WebSocketServer({
   server: httpServer,
   path: "/graphql",
 });
-
+app.use(express.json());
+app.use(cors<cors.CorsRequest>(options));
+// public route
+app.use("/api/v1/user", publicApi);
+app.use(ErrorHandler);
 async function main() {
   const wsServerCleanup = useServer(
     {
@@ -95,12 +106,14 @@ async function main() {
 
   app.use(
     "/graphql",
-    express.json(),
-    cors<cors.CorsRequest>(options),
+    auth0Middleware,
+    loggedInUserAuth,
+
     expressMiddleware(server, { context: (arg) => createContext(arg, server) })
   );
 }
 main();
+
 httpServer.listen(PORT, () => {
   console.log(`Server is now running on http://localhost:${PORT}/graphql`);
 });

@@ -1,9 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { getSession } from "../database/session.query";
-import { DataSourceContext } from "../types/context";
 import { GraphQLError } from "graphql";
-import {} from "graphql-ws";
-import { Resolver, ResolverFn } from "../types/types";
 export const loggedInUserAuth = async (
   req: Request,
   res: Response,
@@ -13,12 +10,14 @@ export const loggedInUserAuth = async (
     const token = req.headers.authorization;
     if (!token) {
       return res.status(500).json({
-        message: "You are not loggssed in",
+        status: false,
+        code: 401,
+        message: "Please login and provide a token to continue",
       });
     }
     const user = await getSession(`${token}`);
-    if (!user) {
-      return res.status(401).json({ message: "You are not loaaaagged in" });
+    if (!user?.associate) {
+      return res.status(401).json({ message: "You are not logged in" });
     }
     user.associate.password = undefined;
     user.associate.refreshJWT = undefined;
