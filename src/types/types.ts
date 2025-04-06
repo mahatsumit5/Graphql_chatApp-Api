@@ -65,6 +65,13 @@ export type DeleteRequestParams = {
   toId: Scalars['String']['input'];
 };
 
+export type File = {
+  __typename?: 'File';
+  encoding: Scalars['String']['output'];
+  fileName: Scalars['String']['output'];
+  mimeType: Scalars['String']['output'];
+};
+
 export type Friend = {
   __typename?: 'Friend';
   email: Scalars['String']['output'];
@@ -463,6 +470,7 @@ export type ResolversTypes = {
   CommentLikes: ResolverTypeWrapper<CommentLikes>;
   CommentReply: ResolverTypeWrapper<CommentReply>;
   DeleteRequestParams: DeleteRequestParams;
+  File: ResolverTypeWrapper<File>;
   Friend: ResolverTypeWrapper<Friend>;
   FriendRequest: ResolverTypeWrapper<FriendRequest>;
   FriendRequestResponse: ResolverTypeWrapper<FriendRequestResponse>;
@@ -507,6 +515,7 @@ export type ResolversParentTypes = {
   CommentLikes: CommentLikes;
   CommentReply: CommentReply;
   DeleteRequestParams: DeleteRequestParams;
+  File: File;
   Friend: Friend;
   FriendRequest: FriendRequest;
   FriendRequestResponse: FriendRequestResponse;
@@ -580,6 +589,13 @@ export type CommentLikesResolvers<ContextType = DataSourceContext, ParentType ex
 export type CommentReplyResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['CommentReply'] = ResolversParentTypes['CommentReply']> = {
   reply?: Resolver<ResolversTypes['Comment'], ParentType, ContextType>;
   replyId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type FileResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['File'] = ResolversParentTypes['File']> = {
+  encoding?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  fileName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  mimeType?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -769,6 +785,7 @@ export type Resolvers<ContextType = DataSourceContext> = {
   Comment?: CommentResolvers<ContextType>;
   CommentLikes?: CommentLikesResolvers<ContextType>;
   CommentReply?: CommentReplyResolvers<ContextType>;
+  File?: FileResolvers<ContextType>;
   Friend?: FriendResolvers<ContextType>;
   FriendRequest?: FriendRequestResolvers<ContextType>;
   FriendRequestResponse?: FriendRequestResponseResolvers<ContextType>;

@@ -4,6 +4,12 @@ type _count {
   comments: Int!
 }
 
+type File {
+  fileName: String!
+  mimeType: String!
+  encoding: String!
+}
+
 # # Post model
 type Post {
   id: ID!

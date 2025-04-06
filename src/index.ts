@@ -12,8 +12,8 @@ import cors from "cors";
 import { typeDefs } from "./typedefs";
 import { createContext, ErrorHandler } from "./utils";
 import { resolvers } from "./resolvers";
-import { ApolloServerErrorCode } from "@apollo/server/errors";
-import publicApi from "./public/router/public.router";
+import publicApi from "./restApi/router/public.router";
+import fileUploadApi from "./restApi/router/file.upload.router";
 import { auth } from "express-oauth2-jwt-bearer";
 import { loggedInUserAuth } from "./middleware";
 import { formatError } from "./utils/formatError";
@@ -48,7 +48,9 @@ app.use(express.json());
 app.use(cors<cors.CorsRequest>(options));
 // public route
 app.use("/api/v1/user", publicApi);
+app.use("/api/v1/post", auth0Middleware, loggedInUserAuth, fileUploadApi);
 app.use(ErrorHandler);
+
 async function main() {
   const wsServerCleanup = useServer(
     {
