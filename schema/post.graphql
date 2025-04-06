@@ -54,7 +54,6 @@ input PostInput {
   title: String!
   content: String!
   images: [String]
-  id: String!
 }
 
 input GetAllPostArgs {

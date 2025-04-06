@@ -14,9 +14,13 @@ export const postResolvers: Resolvers = {
   },
   Mutation: {
     uploadPost: async (_, { body }, { dataSources }) => {
-      const response = await dataSources.postAPI.createAPost(body);
-      pubsub.publish("POST_CREATED", { newPost: response.result });
-      return response;
+      const userid = dataSources.user.id;
+      return dataSources.postAPI.createAPost({
+        ...body,
+        id: userid,
+      });
+
+      // pubsub.publish("POST_CREATED", { newPost: response.result });
     },
     updatePost: async (_, arg, { dataSources }) => {
       const updatedPost = await updatePost(arg);

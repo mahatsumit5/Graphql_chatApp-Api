@@ -266,7 +266,6 @@ export type Post = {
 
 export type PostInput = {
   content: Scalars['String']['input'];
-  id: Scalars['String']['input'];
   images?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   title: Scalars['String']['input'];
 };

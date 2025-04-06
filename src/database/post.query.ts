@@ -1,5 +1,6 @@
 import { executeQuery, prisma } from "../script";
 import { CreatePostParams, UpdataPostParams } from "../types";
+import { PostInput } from "../types/types";
 const SELECT_USER_PROFILE = {
   email: true,
   fName: true,
@@ -9,7 +10,7 @@ const SELECT_USER_PROFILE = {
   isActive: true,
 };
 
-export const createPost = ({ id, ...rest }: CreatePostParams) => {
+export const createPost = ({ id, ...rest }: PostInput & { id: string }) => {
   return executeQuery(
     prisma.post.create({
       data: {
@@ -46,6 +47,7 @@ export const createPost = ({ id, ...rest }: CreatePostParams) => {
         _count: {
           select: {
             comments: true,
+            likes: true,
           },
         },
       },

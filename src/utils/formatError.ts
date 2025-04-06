@@ -8,6 +8,7 @@ export function formatError(
   errorExtension: GraphQLFormattedErrorExtensions,
   message: string
 ) {
+  console.log(errorExtension);
   switch (errorExtension.code) {
     case ApolloServerErrorCode.BAD_USER_INPUT:
       return {

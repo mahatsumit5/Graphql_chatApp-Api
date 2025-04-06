@@ -5,7 +5,8 @@ import {
   PostInput,
   UploadAPostResponse,
 } from "../types/types";
-import { getAllPost } from "../database/post.query";
+import { createPost, getAllPost } from "../database/post.query";
+import { CreatePostParams } from "../types";
 export class PostAPI extends BaseAPI {
   override baseURL = `${process.env.BASE_URL}/post/`;
 
@@ -14,12 +15,18 @@ export class PostAPI extends BaseAPI {
    * @async
    * @returns {Promise<any>}
    */
-  async createAPost(body: PostInput): Promise<UploadAPostResponse> {
+  async createAPost(
+    arg: PostInput & { id: string }
+  ): Promise<UploadAPostResponse> {
     try {
-      const response = await this.post<UploadAPostResponse>("", {
-        body,
-      });
-      return response;
+      const response = await createPost(arg);
+      console.log(response);
+      if (!response.id) throw new Error("Unable to create a post");
+      return {
+        status: true,
+        message: "sucessfukk",
+        result: response,
+      };
     } catch (error) {
       return this.handleError(error);
     }

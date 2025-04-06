@@ -17,8 +17,7 @@ import fileUploadApi from "./restApi/router/file.upload.router";
 import { auth } from "express-oauth2-jwt-bearer";
 import { loggedInUserAuth } from "./middleware";
 import { formatError } from "./utils/formatError";
-import { updateUser } from "./database/user.query";
-import { updatePost } from "./database/post.query";
+
 // import { applyMiddleware } from "graphql-middleware";
 const app = express();
 const httpServer = http.createServer(app);
