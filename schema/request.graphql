@@ -2,7 +2,7 @@
 
 type Mutation {
   "Send friend request to other user"
-  sendRequest(toID: String!): SentRequestResponse
+  sendRequest(toId: String!): SentRequestResponse
   "Delete Friend Request"
   deleteFriendRequest(params: DeleteRequestParams): SentRequestResponse
   "Accept incoming request"

@@ -11,8 +11,9 @@ export const friendRequestResolvers: Resolvers = {
     },
   },
   Mutation: {
-    sendRequest(_, { toID }, { dataSources }) {
-      return dataSources.friendReqAPI.sendRequest(toID);
+    sendRequest(_, { toId }, { dataSources }) {
+      const fromId = dataSources.user.id;
+      return dataSources.friendReqAPI.sendRequest({ fromId, toId });
     },
     deleteFriendRequest(_, { params }, { dataSources }) {
       return dataSources.friendReqAPI.deleteFriendRequest(params!);

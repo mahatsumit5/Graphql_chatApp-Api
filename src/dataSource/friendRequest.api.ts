@@ -1,5 +1,8 @@
 import { BaseAPI } from ".";
-import { getFriendRequestByUser } from "../database/friendRequest.query";
+import {
+  getFriendRequestByUser,
+  sendFriendRequest,
+} from "../database/friendRequest.query";
 import {
   DeleteRequestParams,
   FriendRequestResponse,
@@ -11,13 +14,20 @@ import {
 export class FriendRequestAPI extends BaseAPI {
   override baseURL = `${process.env.BASE_URL}/friend/`;
 
-  async sendRequest(to: string): Promise<SentRequestResponse> {
+  async sendRequest({
+    fromId,
+    toId,
+  }: {
+    fromId: string;
+    toId: string;
+  }): Promise<SentRequestResponse> {
     try {
-      return this.post<SentRequestResponse>("send-request", {
-        body: {
-          to,
-        },
-      });
+      const response = await sendFriendRequest(fromId, toId);
+
+      return {
+        status: true,
+        message: "",
+      };
     } catch (error) {
       return this.handleError(error);
     }
