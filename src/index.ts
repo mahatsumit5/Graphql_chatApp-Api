@@ -86,6 +86,7 @@ async function main() {
     ],
     formatError: (err) => formatError(err.extensions, err.message),
   });
+
   await server.start();
 
   app.use(

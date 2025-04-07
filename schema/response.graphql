@@ -6,7 +6,7 @@ type Response {
 type FriendRequestResponse {
   status: Boolean!
   message: String!
-  data: [FriendRequest!]!
+  data: [FriendRequest!]
   count: Int
 }
 type SentRequestResponse {

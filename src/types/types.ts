@@ -93,7 +93,7 @@ export type FriendRequest = {
 export type FriendRequestResponse = {
   __typename?: 'FriendRequestResponse';
   count?: Maybe<Scalars['Int']['output']>;
-  data: Array<FriendRequest>;
+  data?: Maybe<Array<FriendRequest>>;
   message: Scalars['String']['output'];
   status: Scalars['Boolean']['output'];
 };
@@ -645,7 +645,7 @@ export type FriendRequestResolvers<ContextType = DataSourceContext, ParentType e
 
 export type FriendRequestResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['FriendRequestResponse'] = ResolversParentTypes['FriendRequestResponse']> = {
   count?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  data?: Resolver<Array<ResolversTypes['FriendRequest']>, ParentType, ContextType>;
+  data?: Resolver<Maybe<Array<ResolversTypes['FriendRequest']>>, ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

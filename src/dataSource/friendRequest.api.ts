@@ -1,4 +1,5 @@
 import { BaseAPI } from ".";
+import { getFriendRequestByUser } from "../database/friendRequest.query";
 import {
   DeleteRequestParams,
   FriendRequestResponse,
@@ -42,8 +43,18 @@ export class FriendRequestAPI extends BaseAPI {
     }
   }
 
-  async getFriendRequest(): Promise<FriendRequestResponse> {
-    return this.get("/friend-request");
+  async getFriendRequest(userId: string): Promise<FriendRequestResponse> {
+    try {
+      const response = await getFriendRequestByUser(userId);
+      if (!response.id) throw new Error("Unable to get friend request");
+      return {
+        status: true,
+        message: "List of friend request",
+        data: response,
+      };
+    } catch (error) {
+      return this.handleError(error);
+    }
   }
   async getSentFriendRequest({ page, search, take }: QueryParamsSentReq) {
     return this.get(`sent-request?page=${page}&search=${search}&take=${take}`);
