@@ -22,11 +22,13 @@ export class FriendRequestAPI extends BaseAPI {
     toId: string;
   }): Promise<SentRequestResponse> {
     try {
-      const response = await sendFriendRequest(fromId, toId);
-
+      const data = await sendFriendRequest(fromId, toId);
+      console.log(data);
+      if (!data?.status) throw new Error("Unable to send friend request");
       return {
         status: true,
-        message: "",
+        message: "Friend request sent",
+        data,
       };
     } catch (error) {
       return this.handleError(error);

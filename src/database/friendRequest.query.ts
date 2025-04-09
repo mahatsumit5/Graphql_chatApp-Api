@@ -19,6 +19,7 @@ export function sendFriendRequest(from: string, to: string) {
             lName: true,
             email: true,
             profile: true,
+            isActive: true,
           },
         },
         from: {
@@ -28,6 +29,7 @@ export function sendFriendRequest(from: string, to: string) {
             lName: true,
             email: true,
             profile: true,
+            isActive: true,
           },
         },
         status: true,
@@ -35,7 +37,6 @@ export function sendFriendRequest(from: string, to: string) {
       },
     })
   );
-  console.log("this is new fr req", result);
   return result;
 }
 

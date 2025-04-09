@@ -71,6 +71,7 @@ async function main() {
   );
   const server = new ApolloServer({
     schema,
+
     status400ForVariableCoercionErrors: true,
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer }),
