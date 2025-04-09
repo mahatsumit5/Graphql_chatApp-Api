@@ -6,7 +6,7 @@ type Mutation {
   "Delete Friend Request"
   deleteFriendRequest(fromId: String!, toId: String!): SentRequestResponse
   "Accept incoming request"
-  acceptFriendRequest(fromId: String!, toId: String!): Response
+  acceptFriendRequest(fromId: String!, toId: String!): CreateChatRoomResponse
 }
 
 type Query {

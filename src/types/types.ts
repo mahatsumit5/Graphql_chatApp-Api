@@ -60,6 +60,13 @@ export type CommentReply = {
   replyId: Scalars['String']['output'];
 };
 
+export type CreateChatRoomResponse = {
+  __typename?: 'CreateChatRoomResponse';
+  data?: Maybe<Scalars['String']['output']>;
+  message: Scalars['String']['output'];
+  status: Scalars['Boolean']['output'];
+};
+
 export type File = {
   __typename?: 'File';
   encoding: Scalars['String']['output'];
@@ -147,7 +154,7 @@ export type Message = {
 export type Mutation = {
   __typename?: 'Mutation';
   /** Accept incoming request */
-  acceptFriendRequest?: Maybe<Response>;
+  acceptFriendRequest?: Maybe<CreateChatRoomResponse>;
   /** Delete Friend Request */
   deleteFriendRequest?: Maybe<SentRequestResponse>;
   deleteMessage?: Maybe<Response>;
@@ -476,6 +483,7 @@ export type ResolversTypes = {
   Comment: ResolverTypeWrapper<Comment>;
   CommentLikes: ResolverTypeWrapper<CommentLikes>;
   CommentReply: ResolverTypeWrapper<CommentReply>;
+  CreateChatRoomResponse: ResolverTypeWrapper<CreateChatRoomResponse>;
   File: ResolverTypeWrapper<File>;
   Friend: ResolverTypeWrapper<Friend>;
   FriendRequest: ResolverTypeWrapper<FriendRequest>;
@@ -519,6 +527,7 @@ export type ResolversParentTypes = {
   Comment: Comment;
   CommentLikes: CommentLikes;
   CommentReply: CommentReply;
+  CreateChatRoomResponse: CreateChatRoomResponse;
   File: File;
   Friend: Friend;
   FriendRequest: FriendRequest;
@@ -592,6 +601,13 @@ export type CommentLikesResolvers<ContextType = DataSourceContext, ParentType ex
 export type CommentReplyResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['CommentReply'] = ResolversParentTypes['CommentReply']> = {
   reply?: Resolver<ResolversTypes['Comment'], ParentType, ContextType>;
   replyId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CreateChatRoomResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['CreateChatRoomResponse'] = ResolversParentTypes['CreateChatRoomResponse']> = {
+  data?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -669,7 +685,7 @@ export type MessageResolvers<ContextType = DataSourceContext, ParentType extends
 };
 
 export type MutationResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  acceptFriendRequest?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationAcceptFriendRequestArgs, 'fromId' | 'toId'>>;
+  acceptFriendRequest?: Resolver<Maybe<ResolversTypes['CreateChatRoomResponse']>, ParentType, ContextType, RequireFields<MutationAcceptFriendRequestArgs, 'fromId' | 'toId'>>;
   deleteFriendRequest?: Resolver<Maybe<ResolversTypes['SentRequestResponse']>, ParentType, ContextType, RequireFields<MutationDeleteFriendRequestArgs, 'fromId' | 'toId'>>;
   deleteMessage?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationDeleteMessageArgs, 'messageId'>>;
   deletePost?: Resolver<ResolversTypes['GetPostByUserIdResponse'], ParentType, ContextType, RequireFields<MutationDeletePostArgs, 'id'>>;
@@ -785,6 +801,7 @@ export type Resolvers<ContextType = DataSourceContext> = {
   Comment?: CommentResolvers<ContextType>;
   CommentLikes?: CommentLikesResolvers<ContextType>;
   CommentReply?: CommentReplyResolvers<ContextType>;
+  CreateChatRoomResponse?: CreateChatRoomResponseResolvers<ContextType>;
   File?: FileResolvers<ContextType>;
   Friend?: FriendResolvers<ContextType>;
   FriendRequest?: FriendRequestResolvers<ContextType>;

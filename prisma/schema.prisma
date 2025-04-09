@@ -19,9 +19,10 @@ model User {
   isActive       Boolean          @default(true)
   password       String
   profile        String?
-  bio            String?          
+  bio            String?
   coverPicture   String?
-  chatRoom       ChatRoom[]
+  chatRoom       ChatRoom[]       @relation("creator")
+  member         ChatRoom[]       @relation("member")
   session        Session[]
   friendRequests FriendRequests[] @relation("receiver")
   sentRequests   FriendRequests[] @relation("sender")
@@ -32,12 +33,22 @@ model User {
   comment        Comment[]
 }
 
+model ChatRoom {
+  messages  Message[]
+  creator   User      @relation("creator", fields: [creatorId], references: [id])
+  creatorId String
+  member    User      @relation("member", fields: [memberId], references: [id])
+  memberId  String
+
+  @@id([creatorId, memberId])
+}
+
 model PostLike {
   id     String @id @default(uuid())
   postId String
   userId String
   post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
-  user   User   @relation("likes", fields: [userId], references: [id],onDelete: Cascade)
+  user   User   @relation("likes", fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([postId, userId])
 }
@@ -45,10 +56,10 @@ model PostLike {
 model CommentLikes {
   commentId String
   userId    String
-  comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade,onUpdate: Cascade)
-  user      User    @relation("Commentlikes", fields: [userId], references: [id],onDelete: Cascade,onUpdate: Cascade)
+  comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user      User    @relation("Commentlikes", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  @@id([commentId, userId]) 
+  @@id([commentId, userId])
 }
 
 model Post {
@@ -69,23 +80,19 @@ model Comment {
   content   String
   post      Post           @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId    String
-  author    User           @relation(fields: [authorId], references: [id],onDelete: SetDefault,onUpdate: Cascade) 
+  author    User           @relation(fields: [authorId], references: [id], onDelete: SetDefault, onUpdate: Cascade)
   authorId  String
   likes     CommentLikes[]
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
-  replies CommentReply[]
-}
-model CommentReply{
-  reply Comment @relation(fields: [replyId],references: [id])
-  replyId String
-  @@id([replyId])
+  replies   CommentReply[]
 }
 
-model ChatRoom {
-  id       String    @id @default(uuid())
-  messages Message[]
-  user     User[]
+model CommentReply {
+  reply   Comment @relation(fields: [replyId], references: [id])
+  replyId String
+
+  @@id([replyId])
 }
 
 model Message {
@@ -93,9 +100,10 @@ model Message {
   content    String
   createdAt  DateTime @default(now())
   isSeen     Boolean  @default(false)
-  chat       ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+  chat       ChatRoom @relation(fields: [chatRoomId, mid], references: [creatorId, memberId], onDelete: Cascade)
   chatRoomId String
-  creatorId  User     @relation(fields: [author], references: [id],onDelete: SetDefault,onUpdate: Cascade)
+  mid        String
+  creatorId  User     @relation(fields: [author], references: [id], onDelete: SetDefault, onUpdate: Cascade)
   author     String
 }
 
@@ -109,9 +117,9 @@ model Session {
 }
 
 model FriendRequests {
-  from   User   @relation("sender", fields: [fromId], references: [id],onDelete: Cascade,onUpdate: Cascade)
+  from   User   @relation("sender", fields: [fromId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   fromId String
-  to     User   @relation("receiver", fields: [toId], references: [id],onDelete: Cascade,onUpdate: Cascade)
+  to     User   @relation("receiver", fields: [toId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   toId   String
   status Status @default(PENDING)
 

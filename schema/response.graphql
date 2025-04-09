@@ -25,3 +25,8 @@ type GetMessageByUserResponse {
   message: String!
   result: [Message!]!
 }
+type CreateChatRoomResponse {
+  status: Boolean!
+  message: String!
+  data: String
+}

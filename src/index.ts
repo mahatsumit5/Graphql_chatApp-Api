@@ -21,6 +21,7 @@ import {
   deleteSentRequest,
   getFriendRequestByUser,
 } from "./database/friendRequest.query";
+import { createChatRoom } from "./database/ChatRoom.query";
 
 // import { applyMiddleware } from "graphql-middleware";
 const app = express();

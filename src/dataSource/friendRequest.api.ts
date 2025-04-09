@@ -7,12 +7,14 @@ import {
   sendFriendRequest,
 } from "../database/friendRequest.query";
 import {
+  CreateChatRoomResponse,
   FriendRequest,
   FriendRequestResponse,
   Response,
   SentRequestResponse,
 } from "../types/types";
 import { GetSentReqParams } from "../types";
+import { createChatRoom } from "../database/ChatRoom.query";
 
 export class FriendRequestAPI extends BaseAPI {
   async sendRequest({
@@ -36,11 +38,21 @@ export class FriendRequestAPI extends BaseAPI {
     }
   }
 
-  async acceptFriendRequest(body: any): Promise<Response> {
+  async acceptFriendRequest({
+    fromId,
+    toId,
+  }: {
+    fromId: string;
+    toId: string;
+  }): Promise<CreateChatRoomResponse> {
     try {
-      return this.patch<Response>("/", {
-        body,
-      });
+      const response = await createChatRoom(fromId, toId);
+      if (!response?.id) throw new Error(response?.message);
+      return {
+        status: true,
+        message: "",
+        data: response.id,
+      };
     } catch (error) {
       return this.handleError<any>(error);
     }
