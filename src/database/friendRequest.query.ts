@@ -1,6 +1,28 @@
 import { executeQuery, prisma } from "../script";
 import { GetSentReqParams } from "../types";
-
+const SELECT_FRIEND_REQ = {
+  to: {
+    select: {
+      id: true,
+      fName: true,
+      lName: true,
+      email: true,
+      profile: true,
+      isActive: true,
+    },
+  },
+  from: {
+    select: {
+      id: true,
+      fName: true,
+      lName: true,
+      email: true,
+      profile: true,
+      isActive: true,
+    },
+  },
+  status: true,
+};
 export function sendFriendRequest(from: string, to: string) {
   const result = executeQuery(
     prisma.friendRequests.create({
@@ -12,30 +34,7 @@ export function sendFriendRequest(from: string, to: string) {
           connect: { id: to },
         },
       },
-      select: {
-        to: {
-          select: {
-            id: true,
-            fName: true,
-            lName: true,
-            email: true,
-            profile: true,
-            isActive: true,
-          },
-        },
-        from: {
-          select: {
-            id: true,
-            fName: true,
-            lName: true,
-            email: true,
-            profile: true,
-            isActive: true,
-          },
-        },
-        status: true,
-        toId: true,
-      },
+      select: SELECT_FRIEND_REQ,
     })
   );
   return result;
@@ -49,30 +48,7 @@ export function getFriendRequestByUser(id: string) {
         toId: id,
         status: "PENDING",
       },
-      select: {
-        from: {
-          select: {
-            fName: true,
-            lName: true,
-            email: true,
-            profile: true,
-            id: true,
-            isActive: true,
-          },
-        },
-        status: true,
-        to: {
-          select: {
-            fName: true,
-            lName: true,
-            email: true,
-            profile: true,
-            id: true,
-            isActive: true,
-          },
-        },
-        toId: true,
-      },
+      select: SELECT_FRIEND_REQ,
     })
   );
 }
@@ -94,30 +70,7 @@ export function getYourSentRequest({
           },
         },
       },
-      select: {
-        to: {
-          select: {
-            id: true,
-            fName: true,
-            lName: true,
-            email: true,
-            profile: true,
-            isActive: true,
-          },
-        },
-        from: {
-          select: {
-            id: true,
-            fName: true,
-            lName: true,
-            email: true,
-            profile: true,
-            isActive: true,
-          },
-        },
-        status: true,
-        toId: true,
-      },
+      select: SELECT_FRIEND_REQ,
       skip: (page - 1) * 7,
       take: take,
     })
@@ -138,7 +91,13 @@ export function getYourSentRequest({
   return { result, count };
 }
 
-export function deleteSentRequest(fromId: string, toId: string) {
+export function deleteSentRequest({
+  fromId,
+  toId,
+}: {
+  fromId: string;
+  toId: string;
+}) {
   return executeQuery(
     prisma.friendRequests.delete({
       where: {
@@ -147,27 +106,7 @@ export function deleteSentRequest(fromId: string, toId: string) {
           toId: toId,
         },
       },
-      select: {
-        to: {
-          select: {
-            id: true,
-            fName: true,
-            lName: true,
-            email: true,
-            profile: true,
-          },
-        },
-        from: {
-          select: {
-            fName: true,
-            lName: true,
-            email: true,
-            profile: true,
-            id: true,
-          },
-        },
-        status: true,
-      },
+      select: SELECT_FRIEND_REQ,
     })
   );
 }

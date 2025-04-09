@@ -20,12 +20,12 @@ export const friendRequestResolvers: Resolvers = {
       const fromId = dataSources.user.id;
       return dataSources.friendReqAPI.sendRequest({ fromId, toId });
     },
-    deleteFriendRequest(_, { params }, { dataSources }) {
-      return dataSources.friendReqAPI.deleteFriendRequest(params!);
+    deleteFriendRequest(_, arg, { dataSources }) {
+      return dataSources.friendReqAPI.deleteFriendRequest(arg);
     },
 
-    acceptFriendRequest(_, { body }, { dataSources }) {
-      return dataSources.friendReqAPI.acceptFriendRequest(body!);
+    acceptFriendRequest(_, arg, { dataSources }) {
+      return dataSources.friendReqAPI.acceptFriendRequest(arg);
     },
   },
 };

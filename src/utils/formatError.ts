@@ -8,7 +8,6 @@ export function formatError(
   errorExtension: GraphQLFormattedErrorExtensions,
   message: string
 ) {
-  console.log(errorExtension);
   switch (errorExtension.code) {
     case ApolloServerErrorCode.BAD_USER_INPUT:
       return {
@@ -19,7 +18,7 @@ export function formatError(
     case ApolloServerErrorCode.INTERNAL_SERVER_ERROR:
       return {
         code: errorExtension.code,
-        message: "Internal server error",
+        message: message,
       };
     case ServerErrorCode.FORBIDDEN:
       return {
@@ -30,7 +29,7 @@ export function formatError(
     default:
       return {
         code: errorExtension.code,
-        message: "Internal server error",
+        message: message,
       };
   }
 }

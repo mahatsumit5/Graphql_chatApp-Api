@@ -60,11 +60,6 @@ export type CommentReply = {
   replyId: Scalars['String']['output'];
 };
 
-export type DeleteRequestParams = {
-  fromId: Scalars['String']['input'];
-  toId: Scalars['String']['input'];
-};
-
 export type File = {
   __typename?: 'File';
   encoding: Scalars['String']['output'];
@@ -87,24 +82,14 @@ export type FriendRequest = {
   from: Friend;
   status: Status;
   to: Friend;
-  toId: Scalars['String']['output'];
 };
 
 export type FriendRequestResponse = {
   __typename?: 'FriendRequestResponse';
-  count?: Maybe<Scalars['Int']['output']>;
-  data?: Maybe<Array<FriendRequest>>;
+  count: Scalars['Int']['output'];
+  data: Array<FriendRequest>;
   message: Scalars['String']['output'];
   status: Scalars['Boolean']['output'];
-};
-
-export type FriendRequests = {
-  __typename?: 'FriendRequests';
-  from: User;
-  fromId: Scalars['String']['output'];
-  status: Status;
-  to: User;
-  toId: Scalars['String']['output'];
 };
 
 export type GetAllPostArgs = {
@@ -180,12 +165,14 @@ export type Mutation = {
 
 
 export type MutationAcceptFriendRequestArgs = {
-  body?: InputMaybe<DeleteRequestParams>;
+  fromId: Scalars['String']['input'];
+  toId: Scalars['String']['input'];
 };
 
 
 export type MutationDeleteFriendRequestArgs = {
-  params?: InputMaybe<DeleteRequestParams>;
+  fromId: Scalars['String']['input'];
+  toId: Scalars['String']['input'];
 };
 
 
@@ -489,12 +476,10 @@ export type ResolversTypes = {
   Comment: ResolverTypeWrapper<Comment>;
   CommentLikes: ResolverTypeWrapper<CommentLikes>;
   CommentReply: ResolverTypeWrapper<CommentReply>;
-  DeleteRequestParams: DeleteRequestParams;
   File: ResolverTypeWrapper<File>;
   Friend: ResolverTypeWrapper<Friend>;
   FriendRequest: ResolverTypeWrapper<FriendRequest>;
   FriendRequestResponse: ResolverTypeWrapper<FriendRequestResponse>;
-  FriendRequests: ResolverTypeWrapper<FriendRequests>;
   GetAllPostArgs: GetAllPostArgs;
   GetAllPostResponse: ResolverTypeWrapper<GetAllPostResponse>;
   GetMessageByUser: GetMessageByUser;
@@ -534,12 +519,10 @@ export type ResolversParentTypes = {
   Comment: Comment;
   CommentLikes: CommentLikes;
   CommentReply: CommentReply;
-  DeleteRequestParams: DeleteRequestParams;
   File: File;
   Friend: Friend;
   FriendRequest: FriendRequest;
   FriendRequestResponse: FriendRequestResponse;
-  FriendRequests: FriendRequests;
   GetAllPostArgs: GetAllPostArgs;
   GetAllPostResponse: GetAllPostResponse;
   GetMessageByUser: GetMessageByUser;
@@ -633,24 +616,14 @@ export type FriendRequestResolvers<ContextType = DataSourceContext, ParentType e
   from?: Resolver<ResolversTypes['Friend'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['Status'], ParentType, ContextType>;
   to?: Resolver<ResolversTypes['Friend'], ParentType, ContextType>;
-  toId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type FriendRequestResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['FriendRequestResponse'] = ResolversParentTypes['FriendRequestResponse']> = {
-  count?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  data?: Resolver<Maybe<Array<ResolversTypes['FriendRequest']>>, ParentType, ContextType>;
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  data?: Resolver<Array<ResolversTypes['FriendRequest']>, ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type FriendRequestsResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['FriendRequests'] = ResolversParentTypes['FriendRequests']> = {
-  from?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
-  fromId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  status?: Resolver<ResolversTypes['Status'], ParentType, ContextType>;
-  to?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
-  toId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -696,8 +669,8 @@ export type MessageResolvers<ContextType = DataSourceContext, ParentType extends
 };
 
 export type MutationResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  acceptFriendRequest?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, Partial<MutationAcceptFriendRequestArgs>>;
-  deleteFriendRequest?: Resolver<Maybe<ResolversTypes['SentRequestResponse']>, ParentType, ContextType, Partial<MutationDeleteFriendRequestArgs>>;
+  acceptFriendRequest?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationAcceptFriendRequestArgs, 'fromId' | 'toId'>>;
+  deleteFriendRequest?: Resolver<Maybe<ResolversTypes['SentRequestResponse']>, ParentType, ContextType, RequireFields<MutationDeleteFriendRequestArgs, 'fromId' | 'toId'>>;
   deleteMessage?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationDeleteMessageArgs, 'messageId'>>;
   deletePost?: Resolver<ResolversTypes['GetPostByUserIdResponse'], ParentType, ContextType, RequireFields<MutationDeletePostArgs, 'id'>>;
   likePost?: Resolver<ResolversTypes['GetPostByUserIdResponse'], ParentType, ContextType, RequireFields<MutationLikePostArgs, 'postId'>>;
@@ -816,7 +789,6 @@ export type Resolvers<ContextType = DataSourceContext> = {
   Friend?: FriendResolvers<ContextType>;
   FriendRequest?: FriendRequestResolvers<ContextType>;
   FriendRequestResponse?: FriendRequestResponseResolvers<ContextType>;
-  FriendRequests?: FriendRequestsResolvers<ContextType>;
   GetAllPostResponse?: GetAllPostResponseResolvers<ContextType>;
   GetMessageByUserResponse?: GetMessageByUserResponseResolvers<ContextType>;
   GetPostByUserIdResponse?: GetPostByUserIdResponseResolvers<ContextType>;

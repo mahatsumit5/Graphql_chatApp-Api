@@ -4,9 +4,9 @@ type Mutation {
   "Send friend request to other user"
   sendRequest(toId: String!): SentRequestResponse
   "Delete Friend Request"
-  deleteFriendRequest(params: DeleteRequestParams): SentRequestResponse
+  deleteFriendRequest(fromId: String!, toId: String!): SentRequestResponse
   "Accept incoming request"
-  acceptFriendRequest(body: DeleteRequestParams): Response
+  acceptFriendRequest(fromId: String!, toId: String!): Response
 }
 
 type Query {
@@ -20,28 +20,14 @@ type Query {
   ): FriendRequestResponse
 }
 
-type FriendRequests {
-  from: User!
-  fromId: String!
-  to: User!
-  toId: String!
-  status: Status!
-}
-
 type FriendRequest {
   from: Friend!
   to: Friend!
   status: Status!
-  toId: String!
 }
 
 enum Status {
   ACCEPTED
   PENDING
   REJECTED
-}
-
-input DeleteRequestParams {
-  fromId: String!
-  toId: String!
 }

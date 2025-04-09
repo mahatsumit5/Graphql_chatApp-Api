@@ -35,7 +35,7 @@ export class UserAPI extends BaseAPI {
         totalUsers,
       };
     } catch (error) {
-      return this.handleError(error);
+      return this.handleError<[]>(error);
     }
   }
 
