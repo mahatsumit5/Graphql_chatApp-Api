@@ -1,19 +1,19 @@
+import { C } from "graphql-ws/dist/common-DY-PBNYy";
 import { BaseAPI } from ".";
 import {
   getFriendRequestByUser,
+  getYourSentRequest,
   sendFriendRequest,
 } from "../database/friendRequest.query";
 import {
   DeleteRequestParams,
   FriendRequestResponse,
-  QueryParamsSentReq,
   Response,
   SentRequestResponse,
 } from "../types/types";
+import { GetSentReqParams } from "../types";
 
 export class FriendRequestAPI extends BaseAPI {
-  override baseURL = `${process.env.BASE_URL}/friend/`;
-
   async sendRequest({
     fromId,
     toId,
@@ -58,7 +58,8 @@ export class FriendRequestAPI extends BaseAPI {
   async getFriendRequest(userId: string): Promise<FriendRequestResponse> {
     try {
       const response = await getFriendRequestByUser(userId);
-      if (!response.id) throw new Error("Unable to get friend request");
+      if (!response?.length)
+        throw new Error("You do not have any friend request.");
       return {
         status: true,
         message: "List of friend request",
@@ -68,7 +69,21 @@ export class FriendRequestAPI extends BaseAPI {
       return this.handleError(error);
     }
   }
-  async getSentFriendRequest({ page, search, take }: QueryParamsSentReq) {
-    return this.get(`sent-request?page=${page}&search=${search}&take=${take}`);
+  async getSentFriendRequest(
+    arg: GetSentReqParams
+  ): Promise<FriendRequestResponse> {
+    try {
+      const { count, result } = getYourSentRequest(arg);
+      const length = (await result)?.length;
+      if (!length) throw new Error("You  have not sent  any friend request.");
+      return {
+        status: true,
+        message: "List of your sent request",
+        count: await count,
+        data: await result,
+      };
+    } catch (error) {
+      return this.handleError(error);
+    }
   }
 }

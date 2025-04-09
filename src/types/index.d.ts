@@ -93,3 +93,9 @@ declare type UpdateCommentParams = {
   uid: string;
   content: string;
 };
+declare type GetSentReqParams = {
+  id: string;
+  page: number;
+  take: number;
+  search: string;
+};

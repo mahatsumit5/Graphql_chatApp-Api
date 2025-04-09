@@ -17,6 +17,7 @@ import fileUploadApi from "./restApi/router/file.upload.router";
 import { auth } from "express-oauth2-jwt-bearer";
 import { loggedInUserAuth } from "./middleware";
 import { formatError } from "./utils/formatError";
+import { getFriendRequestByUser } from "./database/friendRequest.query";
 
 // import { applyMiddleware } from "graphql-middleware";
 const app = express();

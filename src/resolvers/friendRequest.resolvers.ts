@@ -6,8 +6,13 @@ export const friendRequestResolvers: Resolvers = {
     getFriendRequest: (_, args, { dataSources }) => {
       return dataSources.friendReqAPI.getFriendRequest(dataSources.user.id);
     },
-    getSentFriendRequest(_, { queryParams }, { dataSources }) {
-      return dataSources.friendReqAPI.getSentFriendRequest(queryParams!);
+    getSentFriendRequest(_, arg, { dataSources }) {
+      console.log(arg);
+      const userId = dataSources.user.id;
+      return dataSources.friendReqAPI.getSentFriendRequest({
+        id: userId,
+        ...arg,
+      });
     },
   },
   Mutation: {

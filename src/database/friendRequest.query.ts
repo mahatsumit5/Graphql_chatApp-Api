@@ -1,4 +1,5 @@
 import { executeQuery, prisma } from "../script";
+import { GetSentReqParams } from "../types";
 
 export function sendFriendRequest(from: string, to: string) {
   const result = executeQuery(
@@ -75,12 +76,12 @@ export function getFriendRequestByUser(id: string) {
     })
   );
 }
-export function getYourSentRequest(
-  id: string,
-  page: number,
-  take: number,
-  search: string
-) {
+export function getYourSentRequest({
+  id,
+  page,
+  search,
+  take,
+}: GetSentReqParams) {
   // Get friend requests sent by the user with this ID
   const result: Promise<[]> = executeQuery(
     prisma.friendRequests.findMany({
@@ -101,6 +102,7 @@ export function getYourSentRequest(
             lName: true,
             email: true,
             profile: true,
+            isActive: true,
           },
         },
         from: {
@@ -110,6 +112,7 @@ export function getYourSentRequest(
             lName: true,
             email: true,
             profile: true,
+            isActive: true,
           },
         },
         status: true,

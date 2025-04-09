@@ -316,7 +316,9 @@ export type QueryGetPostByUserIdArgs = {
 
 
 export type QueryGetSentFriendRequestArgs = {
-  queryParams?: InputMaybe<QueryParamsSentReq>;
+  page: Scalars['Int']['input'];
+  search: Scalars['String']['input'];
+  take: Scalars['Int']['input'];
 };
 
 export type Response = {
@@ -405,12 +407,6 @@ export type _Count = {
 
 export type AllUser = {
   order: Order;
-  page: Scalars['Int']['input'];
-  search: Scalars['String']['input'];
-  take: Scalars['Int']['input'];
-};
-
-export type QueryParamsSentReq = {
   page: Scalars['Int']['input'];
   search: Scalars['String']['input'];
   take: Scalars['Int']['input'];
@@ -528,7 +524,6 @@ export type ResolversTypes = {
   User: ResolverTypeWrapper<User>;
   _count: ResolverTypeWrapper<_Count>;
   allUser: AllUser;
-  queryParamsSentReq: QueryParamsSentReq;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -572,7 +567,6 @@ export type ResolversParentTypes = {
   User: User;
   _count: _Count;
   allUser: AllUser;
-  queryParamsSentReq: QueryParamsSentReq;
 };
 
 export type AllUsersResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['AllUsersResponse'] = ResolversParentTypes['AllUsersResponse']> = {
@@ -744,7 +738,7 @@ export type QueryResolvers<ContextType = DataSourceContext, ParentType extends R
   getFriendRequest?: Resolver<Maybe<ResolversTypes['FriendRequestResponse']>, ParentType, ContextType>;
   getMessagesByUsers?: Resolver<Maybe<ResolversTypes['GetMessageByUserResponse']>, ParentType, ContextType, Partial<QueryGetMessagesByUsersArgs>>;
   getPostByUserId?: Resolver<Maybe<ResolversTypes['GetPostByUserIdResponse']>, ParentType, ContextType, RequireFields<QueryGetPostByUserIdArgs, 'userId'>>;
-  getSentFriendRequest?: Resolver<Maybe<ResolversTypes['FriendRequestResponse']>, ParentType, ContextType, Partial<QueryGetSentFriendRequestArgs>>;
+  getSentFriendRequest?: Resolver<Maybe<ResolversTypes['FriendRequestResponse']>, ParentType, ContextType, RequireFields<QueryGetSentFriendRequestArgs, 'page' | 'search' | 'take'>>;
   loggedInUser?: Resolver<Maybe<ResolversTypes['LoggedInUserResponse']>, ParentType, ContextType>;
 };
 

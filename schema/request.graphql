@@ -13,7 +13,11 @@ type Query {
   "Get all incoming request"
   getFriendRequest: FriendRequestResponse
   "Get list of ALL SENT request"
-  getSentFriendRequest(queryParams: queryParamsSentReq): FriendRequestResponse
+  getSentFriendRequest(
+    page: Int!
+    take: Int!
+    search: String!
+  ): FriendRequestResponse
 }
 
 type FriendRequests {
@@ -35,12 +39,6 @@ enum Status {
   ACCEPTED
   PENDING
   REJECTED
-}
-
-input queryParamsSentReq {
-  page: Int!
-  take: Int!
-  search: String!
 }
 
 input DeleteRequestParams {
