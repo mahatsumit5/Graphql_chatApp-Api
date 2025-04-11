@@ -4,7 +4,7 @@ export function createChatRoom(from: string, to: string) {
   const result = executeQuery(
     prisma.chatRoom.create({
       data: {
-        user: {
+        members: {
           connect: [
             {
               id: from,
@@ -29,14 +29,14 @@ export function getChatRoom(
       where: {
         AND: [
           {
-            user: {
+            members: {
               some: {
                 id: userId,
               },
             },
           },
           {
-            user: {
+            members: {
               some: {
                 email: {
                   contains: contains,
@@ -47,7 +47,7 @@ export function getChatRoom(
         ],
       },
       include: {
-        user: {
+        members: {
           select: {
             id: true,
             fName: true,
@@ -97,7 +97,7 @@ export function getChatRoomByEmail(email: string) {
       where: {
         AND: [
           {
-            user: {
+            members: {
               some: {
                 email: email,
               },
@@ -116,7 +116,7 @@ export async function getChatRoomByRoomId(id: string) {
         id,
       },
       include: {
-        user: {
+        members: {
           select: {
             id: true,
             fName: true,

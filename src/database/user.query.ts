@@ -91,7 +91,7 @@ export async function getAllUsers({ order, page, take, search, email }: args) {
             {
               chatRoom: {
                 some: {
-                  user: {
+                  members: {
                     some: {
                       email: email,
                     },
@@ -133,7 +133,7 @@ export async function getAllUsers({ order, page, take, search, email }: args) {
         NOT: {
           chatRoom: {
             some: {
-              user: {
+              members: {
                 some: {
                   email: email,
                 },

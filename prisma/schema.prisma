@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  output = "./generated/prisma-client-js"
 }
 
 datasource db {
@@ -21,8 +22,7 @@ model User {
   profile        String?
   bio            String?
   coverPicture   String?
-  chatRoom       ChatRoom[]       @relation("creator")
-  member         ChatRoom[]       @relation("member")
+  chatRoom       ChatRoom[]
   session        Session[]
   friendRequests FriendRequests[] @relation("receiver")
   sentRequests   FriendRequests[] @relation("sender")
@@ -34,13 +34,9 @@ model User {
 }
 
 model ChatRoom {
-  messages  Message[]
-  creator   User      @relation("creator", fields: [creatorId], references: [id])
-  creatorId String
-  member    User      @relation("member", fields: [memberId], references: [id])
-  memberId  String
-
-  @@id([creatorId, memberId])
+  id       String    @id @default(uuid())
+  messages Message[]
+  members  User[]
 }
 
 model PostLike {
@@ -100,9 +96,8 @@ model Message {
   content    String
   createdAt  DateTime @default(now())
   isSeen     Boolean  @default(false)
-  chat       ChatRoom @relation(fields: [chatRoomId, mid], references: [creatorId, memberId], onDelete: Cascade)
+  chat       ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
   chatRoomId String
-  mid        String
   creatorId  User     @relation(fields: [author], references: [id], onDelete: SetDefault, onUpdate: Cascade)
   author     String
 }
