@@ -17,10 +17,6 @@ import fileUploadApi from "./restApi/router/file.upload.router";
 import { auth } from "express-oauth2-jwt-bearer";
 import { loggedInUserAuth } from "./middleware";
 import { formatError } from "./utils/formatError";
-import {
-  deleteSentRequest,
-  getFriendRequestByUser,
-} from "./database/friendRequest.query";
 import { createChatRoom } from "./database/ChatRoom.query";
 
 // import { applyMiddleware } from "graphql-middleware";
@@ -92,9 +88,17 @@ async function main() {
     ],
     formatError: (err) => formatError(err.extensions, err.message),
   });
+  // const res = await getChatRoom({
+  //   userId: "6e07ac43-bcfb-415a-9e86-50abe589fe43",
+  // });
+  // console.log(res[0].messages);
 
   await server.start();
-
+  // const res = await createChatRoom(
+  //   "286fa9a7-0d4e-46fa-9d9a-4f861d3d1834",
+  //   "2b0f95c8-2309-4b23-914a-ea274e6b85a4"
+  // );
+  // console.log(res);
   app.use(
     "/graphql",
     auth0Middleware,

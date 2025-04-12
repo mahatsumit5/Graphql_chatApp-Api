@@ -1,8 +1,16 @@
 # # ChatRoom model
 type ChatRoom {
   id: ID!
-  messages: [Message!]!
-  user: [User!]!
+  userId: String!
+  fName: String!
+  lName: String!
+  profile: String
+  email: String!
+  isActive: Boolean!
+  lastMessage: String
+  isLastMessageSeen: Boolean!
+  lastmessageAuthor: String!
+  unSeenMessageCount: Int!
 }
 
 type Query {

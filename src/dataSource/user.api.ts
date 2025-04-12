@@ -28,6 +28,7 @@ export class UserAPI extends BaseAPI {
     try {
       arg;
       const { totalUsers, users } = await getAllUsers(arg);
+      if (!users?.length) throw new Error("No users found");
       return {
         status: true,
         message: "List of users",

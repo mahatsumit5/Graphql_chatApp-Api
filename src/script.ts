@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "../prisma/generated/prisma-client-js";
 
 export const prisma = new PrismaClient();
 
@@ -9,7 +9,7 @@ export async function executeQuery(query: any) {
     console.log(
       "Databse Error--------->",
       error,
-      "ends herer-------------------"
+      "--------------ends herer-------------------"
     );
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       const code = error.code;

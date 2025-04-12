@@ -1,5 +1,6 @@
 import { BaseAPI } from ".";
 import { getChatRoom } from "../database/ChatRoom.query";
+import { numberOfUnSeenMessagesByUser } from "../database/message.query";
 import { GetChatRoomParams } from "../types";
 import { GetChatRoomResponse, QueryGetAllChatRoomsArgs } from "../types/types";
 
@@ -8,6 +9,7 @@ export class ChatRoomApi extends BaseAPI {
     arg: GetChatRoomParams
   ): Promise<GetChatRoomResponse> {
     try {
+      // numberOfUnSeenMessagesByUser(arg.userId)
       const res = await getChatRoom(arg);
       if (!res?.length) throw new Error(res.error || "No chat rooms found");
       return {

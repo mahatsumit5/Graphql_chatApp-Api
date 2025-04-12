@@ -91,21 +91,19 @@ export async function getAllUsers({ order, page, take, search, email }: args) {
             {
               chatRoom: {
                 some: {
-                  members: {
-                    some: {
-                      email: email,
-                    },
+                  user: {
+                    email,
                   },
                 },
               },
             },
             {
               friendRequests: {
-                some: { from: { email: email } },
+                some: { from: { email } },
               },
             },
             {
-              email: email,
+              email,
             },
           ],
         },
@@ -133,10 +131,8 @@ export async function getAllUsers({ order, page, take, search, email }: args) {
         NOT: {
           chatRoom: {
             some: {
-              members: {
-                some: {
-                  email: email,
-                },
+              user: {
+                email,
               },
             },
           },

@@ -27,9 +27,17 @@ export type AllUsersResponse = {
 
 export type ChatRoom = {
   __typename?: 'ChatRoom';
+  email: Scalars['String']['output'];
+  fName: Scalars['String']['output'];
   id: Scalars['ID']['output'];
-  messages: Array<Message>;
-  user: Array<User>;
+  isActive: Scalars['Boolean']['output'];
+  isLastMessageSeen: Scalars['Boolean']['output'];
+  lName: Scalars['String']['output'];
+  lastMessage?: Maybe<Scalars['String']['output']>;
+  lastmessageAuthor: Scalars['String']['output'];
+  profile?: Maybe<Scalars['String']['output']>;
+  unSeenMessageCount: Scalars['Int']['output'];
+  userId: Scalars['String']['output'];
 };
 
 export type Comment = {
@@ -153,7 +161,6 @@ export type Message = {
   chatRoomId: Scalars['String']['output'];
   content: Scalars['String']['output'];
   createdAt: Scalars['String']['output'];
-  creatorId: User;
   id: Scalars['ID']['output'];
   isSeen: Scalars['Boolean']['output'];
 };
@@ -593,9 +600,17 @@ export type AllUsersResponseResolvers<ContextType = DataSourceContext, ParentTyp
 };
 
 export type ChatRoomResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['ChatRoom'] = ResolversParentTypes['ChatRoom']> = {
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  fName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  messages?: Resolver<Array<ResolversTypes['Message']>, ParentType, ContextType>;
-  user?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
+  isActive?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isLastMessageSeen?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  lName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  lastMessage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  lastmessageAuthor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  profile?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  unSeenMessageCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -708,7 +723,6 @@ export type MessageResolvers<ContextType = DataSourceContext, ParentType extends
   chatRoomId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  creatorId?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   isSeen?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

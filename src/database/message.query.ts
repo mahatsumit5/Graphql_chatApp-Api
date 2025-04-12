@@ -123,7 +123,7 @@ export const numberOfUnSeenMessagesByUser = (
   author: string,
   roomId: string
 ) => {
-  const result = executeQuery(
+  return executeQuery(
     prisma.message.count({
       where: {
         isSeen: false,
@@ -132,8 +132,6 @@ export const numberOfUnSeenMessagesByUser = (
       },
     })
   );
-  console.log("the num of unseen message for this room is:", result);
-  return result;
 };
 
 export const deleteMessage = (messageId: string) => {
@@ -141,6 +139,9 @@ export const deleteMessage = (messageId: string) => {
     prisma.message.deleteMany({ where: { id: messageId } })
   );
   return result;
+};
+export const deleteAllMessage = () => {
+  return executeQuery(prisma.message.deleteMany());
 };
 
 export const updateMessage = (messageId: string, content: string) => {
