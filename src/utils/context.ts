@@ -3,6 +3,7 @@ import { UserAPI } from "../dataSource/user.api";
 import { ApolloServer, BaseContext } from "@apollo/server";
 import { FriendRequestAPI } from "../dataSource/friendRequest.api";
 import { PostAPI } from "../dataSource/post.api";
+import { ChatRoomApi } from "../dataSource/chatRoom.api";
 
 export const createContext: (
   args: ExpressContextFunctionArgument,
@@ -22,6 +23,7 @@ export const createContext: (
         friendReqAPI: new FriendRequestAPI({ cache }, token),
         postAPI: new PostAPI({ cache }, token),
         user: user,
+        chatRoom: new ChatRoomApi({ cache }, token),
       },
     };
   } catch (error) {

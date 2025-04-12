@@ -99,3 +99,9 @@ declare type GetSentReqParams = {
   take: number;
   search: string;
 };
+declare type GetChatRoomParams = {
+  userId: string;
+  page?: number;
+  take?: number;
+  search?: string;
+};

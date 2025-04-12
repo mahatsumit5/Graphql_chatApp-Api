@@ -4,3 +4,8 @@ type ChatRoom {
   messages: [Message!]!
   user: [User!]!
 }
+
+type Query {
+  getAllChatRooms(contains: String, take: Int, page: Int): GetChatRoomResponse!
+  getChatRoomById(id: ID!): ChatRoom!
+}

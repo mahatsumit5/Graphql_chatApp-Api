@@ -46,11 +46,14 @@ export class FriendRequestAPI extends BaseAPI {
     toId: string;
   }): Promise<CreateChatRoomResponse> {
     try {
-      const response = await createChatRoom(fromId, toId);
+      const [response] = await Promise.all([
+        createChatRoom(fromId, toId),
+        deleteSentRequest({ fromId, toId }),
+      ]);
       if (!response?.id) throw new Error(response?.message);
       return {
         status: true,
-        message: "",
+        message: "Request accepted",
         data: response.id,
       };
     } catch (error) {

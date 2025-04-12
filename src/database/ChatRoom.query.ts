@@ -1,4 +1,5 @@
 import { executeQuery, prisma } from "../script";
+import { GetChatRoomParams } from "../types";
 
 export function createChatRoom(from: string, to: string) {
   const result = executeQuery(
@@ -18,12 +19,7 @@ export function createChatRoom(from: string, to: string) {
   return result;
 }
 
-export function getChatRoom(
-  userId: string,
-  contains?: string,
-  take?: number,
-  page?: number
-) {
+export function getChatRoom({ userId, page, search, take }: GetChatRoomParams) {
   const rooms = executeQuery(
     prisma.chatRoom.findMany({
       where: {
@@ -39,7 +35,7 @@ export function getChatRoom(
             members: {
               some: {
                 email: {
-                  contains: contains,
+                  contains: search,
                 },
               },
             },

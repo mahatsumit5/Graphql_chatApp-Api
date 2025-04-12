@@ -30,3 +30,9 @@ type CreateChatRoomResponse {
   message: String!
   data: String
 }
+
+type GetChatRoomResponse {
+  status: Boolean!
+  message: String!
+  data: [ChatRoom!]!
+}

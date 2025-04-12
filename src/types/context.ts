@@ -1,3 +1,4 @@
+import { ChatRoomApi } from "../dataSource/chatRoom.api";
 import { FriendRequestAPI } from "../dataSource/friendRequest.api";
 import { PostAPI } from "../dataSource/post.api";
 import { UserAPI } from "../dataSource/user.api";
@@ -10,5 +11,6 @@ export type DataSourceContext = {
     postAPI: PostAPI;
     isAuthenticated: boolean;
     user: User;
+    chatRoom: ChatRoomApi;
   };
 };
