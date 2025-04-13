@@ -2,26 +2,29 @@ import { executeQuery, prisma } from "../script";
 import { GetChatRoomParams } from "../types";
 
 async function test() {
+  const room = await executeQuery(
+    prisma.chatRoom.create({
+      data: {},
+    })
+  );
   const res = await executeQuery(
-    prisma.chatRoomUser.create({
-      data: {
-        chatRoom: {
-          connect: {
-            id: "461f2ac6-98e7-4b56-81d8-5df20244063f",
-          },
+    prisma.chatRoomUser.createMany({
+      data: [
+        {
+          chatRoomId: room.id,
+          userId: "286fa9a7-0d4e-46fa-9d9a-4f861d3d1834",
         },
-        user: {
-          connect: {
-            id: "6e07ac43-bcfb-415a-9e86-50abe589fe43",
-          },
+        {
+          chatRoomId: room.id,
+          userId: "2b0f95c8-2309-4b23-914a-ea274e6b85a4",
         },
-      },
+      ],
     })
   );
 
   console.log(res);
 }
-
+test();
 export function createChatRoom(from: string, to: string) {
   const result = executeQuery(
     prisma.chatRoom.create({
@@ -67,18 +70,6 @@ export async function getChatRoom({
               },
             },
           },
-          {
-            // members: {
-            //   some: {
-            //     user: {
-            //       email: {
-            //         contains: search,
-            //         mode: "insensitive",
-            //       },
-            //     },
-            //   },
-            // },
-          },
         ],
       },
       include: {
@@ -96,47 +87,14 @@ export async function getChatRoom({
             },
           },
         },
-        messages: {
-          select: {
-            content: true,
-            isSeen: true,
-            author: true,
-          },
-          orderBy: {
-            createdAt: "desc",
-          },
-          take: 1,
-        },
       },
 
       take: take ? take : undefined,
       skip: page && take ? (page - 1) * take : undefined,
     })
   );
-  const count = await executeQuery(
-    prisma.chatRoom.count({
-      where: {
-        AND: [
-          {
-            members: {
-              some: {
-                userId,
-              },
-            },
-          },
-          {
-            messages: {
-              every: {
-                isSeen: false,
-              },
-            },
-          },
-        ],
-      },
-    })
-  );
-  console.log(count);
-  return { rooms, count };
+
+  return rooms;
 }
 
 export function deleteChatRoom(roomId: string) {
@@ -209,7 +167,6 @@ export function getChatRoomByUserId({
         userId,
       },
       select: {
-        id: false,
         userId: false,
         chatRoomId: true,
         chatRoom: {
@@ -223,9 +180,7 @@ export function getChatRoomByUserId({
                 },
               },
               where: {
-                NOT: {
-                  id: userId,
-                },
+                NOT: {},
               },
             },
           },

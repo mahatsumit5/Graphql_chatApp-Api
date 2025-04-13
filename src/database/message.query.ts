@@ -16,10 +16,13 @@ export const sendMessage = ({
 
         chat: {
           connect: {
-            id: roomId,
+            userId_chatRoomId: {
+              chatRoomId: roomId,
+              userId: author,
+            },
           },
         },
-        creatorId: {
+        author: {
           connect: {
             id: author,
           },
@@ -30,37 +33,13 @@ export const sendMessage = ({
   return result;
 };
 
-export const getllMessages = async () => {
-  const result = await executeQuery(
-    prisma.chatRoom.findFirst({
-      where: {
-        id: "dc52050b-59c2-404c-9cd9-bc5a5e4108f6",
-      },
-      select: {
-        messages: {
-          orderBy: {
-            createdAt: "asc",
-          },
-        },
-        _count: {
-          select: {
-            messages: true,
-          },
-        },
-      },
-    })
-  );
-  return result;
-};
-// getllMessages();
-
 export const getMessageByUsers = (id: string, take: number, skip: number) => {
   const result = executeQuery(
-    prisma.chatRoom.findFirst({
+    prisma.chatRoomUser.findFirst({
       where: {
-        id,
+        chatRoomId: id,
       },
-      select: {
+      include: {
         messages: {
           orderBy: {
             createdAt: "desc",
@@ -80,9 +59,9 @@ export const getMessageByUsers = (id: string, take: number, skip: number) => {
 };
 export const getLastMessageByRoomId = (roomid: string) => {
   const result = executeQuery(
-    prisma.chatRoom.findFirst({
+    prisma.chatRoomUser.findFirst({
       where: {
-        id: roomid,
+        chatRoomId: roomid,
       },
       select: {
         messages: {
@@ -95,43 +74,6 @@ export const getLastMessageByRoomId = (roomid: string) => {
     })
   );
   return result;
-};
-
-export const messageSeenByRoom = ({
-  roomid,
-  author,
-}: {
-  roomid: string;
-  author: string;
-}) => {
-  const result = executeQuery(
-    prisma.message.updateMany({
-      data: {
-        isSeen: true,
-      },
-      where: {
-        chatRoomId: roomid,
-        author: {
-          not: author,
-        },
-      },
-    })
-  );
-  return result;
-};
-export const numberOfUnSeenMessagesByUser = (
-  author: string,
-  roomId: string
-) => {
-  return executeQuery(
-    prisma.message.count({
-      where: {
-        isSeen: false,
-        author: author,
-        chatRoomId: roomId,
-      },
-    })
-  );
 };
 
 export const deleteMessage = (messageId: string) => {

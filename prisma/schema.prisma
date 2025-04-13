@@ -34,19 +34,21 @@ model User {
 }
 
 model ChatRoomUser {
-  id             String   @id @default(uuid())
   user           User     @relation(fields: [userId], references: [id])
   userId         String
-  chatRoom       ChatRoom @relation(fields: [chatRoomId], references: [id])
+  chatRoom       ChatRoom @relation(fields: [chatRoomId], references: [id],onDelete: Cascade, onUpdate: Cascade)
   chatRoomId     String
   unseenMessages Int      @default(0)
+  messages       Message[]
 
+  @@id([userId, chatRoomId]) // Each user can be in a chat room only once
   @@unique([userId, chatRoomId]) // Each user can be in a chat room only once
+  @@index([userId]) // Index for faster lookups
+  @@index([chatRoomId]) // Index for faster lookups
 }
 
 model ChatRoom {
   id             String         @id @default(uuid())
-  messages       Message[]
   members        ChatRoomUser[]
   unseenMessages Int            @default(0) // 👈 New field
 }
@@ -56,10 +58,11 @@ model Message {
   content    String
   createdAt  DateTime @default(now())
   isSeen     Boolean  @default(false)
-  chat       ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  chat       ChatRoomUser @relation(fields: [userId,chatRoomId], references: [userId,chatRoomId], onDelete: Cascade, onUpdate: Cascade)
   chatRoomId String
-  creatorId  User     @relation(fields: [author], references: [id], onDelete: SetDefault, onUpdate: Cascade)
-  author     String
+  userId     String
+  author  User     @relation(fields: [authorId], references: [id], onDelete: SetDefault, onUpdate: Cascade)
+  authorId     String
 }
 
 model PostLike {
