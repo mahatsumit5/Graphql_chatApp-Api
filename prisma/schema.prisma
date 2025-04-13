@@ -13,56 +13,65 @@ datasource db {
 
 // User model with fields like id, email, first name, last name, isActive, password, profile, refreshJWT
 model User {
-  id             String           @id @default(uuid())
-  email          String           @unique
-  fName          String
-  lName          String
-  isActive       Boolean          @default(true)
-  password       String
-  profile        String?
-  bio            String?
-  coverPicture   String?
-  chatRoom       ChatRoomUser[]
-  session        Session[]
-  friendRequests FriendRequests[] @relation("receiver")
-  sentRequests   FriendRequests[] @relation("sender")
-  messages       Message[]
-  post           Post[]           @relation("createdPost")
-  likedPosts     PostLike[]       @relation("likes")
-  likedComments  CommentLikes[]   @relation("Commentlikes")
-  comment        Comment[]
-}
-
-model ChatRoomUser {
-  user           User     @relation(fields: [userId], references: [id])
-  userId         String
-  chatRoom       ChatRoom @relation(fields: [chatRoomId], references: [id],onDelete: Cascade, onUpdate: Cascade)
-  chatRoomId     String
-  unseenMessages Int      @default(0)
-  messages       Message[]
-
-  @@id([userId, chatRoomId]) // Each user can be in a chat room only once
-  @@unique([userId, chatRoomId]) // Each user can be in a chat room only once
-  @@index([userId]) // Index for faster lookups
-  @@index([chatRoomId]) // Index for faster lookups
+  id              String           @id @default(uuid())
+  email           String           @unique
+  fName           String
+  lName           String
+  isActive        Boolean          @default(true)
+  password        String
+  profile         String?
+  bio             String?
+  coverPicture    String?
+  chatRoomCreated ChatRoom[]       @relation("createdRoom")
+  joinedChatRoom  ChatRoom[]       @relation("joinedRoom")
+  session         Session[]
+  friendRequests  FriendRequests[] @relation("receiver")
+  sentRequests    FriendRequests[] @relation("sender")
+  messages        Message[]
+  post            Post[]           @relation("createdPost")
+  likedPosts      PostLike[]       @relation("likes")
+  likedComments   CommentLikes[]   @relation("Commentlikes")
+  comment         Comment[]
+  GroupChatRoom   GroupChatRoom[]
 }
 
 model ChatRoom {
-  id             String         @id @default(uuid())
-  members        ChatRoomUser[]
-  unseenMessages Int            @default(0) // 👈 New field
+  id             String    @id @default(uuid())
+  Messages       Message[]
+  createdBy      User      @relation("createdRoom", fields: [createdById], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  createdById    String
+  joinedBy       User      @relation("joinedRoom", fields: [joinedById], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  joinedById     String
+  unseenMessages Int       @default(0) // 👈 New field
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@unique([createdById, joinedById])
+  @@unique([joinedById, createdById])
+  @@index([createdById])
+  @@index([joinedById])
+}
+
+model GroupChatRoom {
+  id             String    @id @default(uuid())
+  members        User[]
+  Messages       Message[]
+  unseenMessages Int       @default(0) // 👈 New field
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 }
 
 model Message {
-  id         String   @id @default(uuid())
-  content    String
-  createdAt  DateTime @default(now())
-  isSeen     Boolean  @default(false)
-  chat       ChatRoomUser @relation(fields: [userId,chatRoomId], references: [userId,chatRoomId], onDelete: Cascade, onUpdate: Cascade)
-  chatRoomId String
-  userId     String
-  author  User     @relation(fields: [authorId], references: [id], onDelete: SetDefault, onUpdate: Cascade)
-  authorId     String
+  id          String        @id @default(uuid())
+  content     String
+  createdAt   DateTime      @default(now())
+  isSeen      Boolean       @default(false)
+  chat        ChatRoom      @relation(fields: [chatRoomId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  chatRoomId  String
+  author      User          @relation(fields: [authorId], references: [id], onDelete: SetDefault, onUpdate: Cascade)
+  authorId    String
+  groupChat   GroupChatRoom? @relation(fields: [groupChatId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  groupChatId String? @default("")  
 }
 
 model PostLike {

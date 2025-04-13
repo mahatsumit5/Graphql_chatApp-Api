@@ -1,5 +1,5 @@
 import { BaseAPI } from ".";
-import { getChatRoom, getChatRoomByUserId } from "../database/ChatRoom.query";
+import { getChatRoomByUserId } from "../database/ChatRoom.query";
 import { GetChatRoomParams } from "../types";
 import { ChatRoom, GetChatRoomResponse, Message, User } from "../types/types";
 type ChatRoomResponse = {
@@ -15,12 +15,11 @@ export class ChatRoomApi extends BaseAPI {
   ): Promise<GetChatRoomResponse> {
     try {
       // const res = await getChatRoomByUserId(arg);
-      const { rooms: res, count } = await getChatRoom(arg);
+      const room = await getChatRoomByUserId(arg);
 
-      console.log(res[0].messages);
-      if (!res?.length) throw new Error(res.error || "No chat rooms found");
+      if (!room?.length) throw new Error(room.error || "No chat rooms found");
 
-      const chatRooms = res.map((room: ChatRoomResponse) => ({
+      const chatRooms = room.map((room: ChatRoomResponse) => ({
         id: room.id,
         userId: room.members[0].user.id,
 
@@ -32,7 +31,7 @@ export class ChatRoomApi extends BaseAPI {
         lastMessage: room.messages[0]?.content || "",
         isLastMessageSeen: room.messages[0]?.isSeen || false,
         lastmessageAuthor: room.messages[0]?.author || "",
-        unSeenMessageCount: count,
+        unSeenMessageCount: 0,
       }));
       return {
         status: true,
