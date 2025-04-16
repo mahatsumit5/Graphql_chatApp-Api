@@ -4,7 +4,7 @@ import { GetChatRoomParams } from "../types";
 import { ChatRoom, GetChatRoomResponse, Message, User } from "../types/types";
 type ChatRoomResponse = {
   id: string;
-  members: Array<{ user: User }>;
+  joinedBy: User;
   messages: Array<Message>;
   unseenMessages: number;
   _count: {};
@@ -16,18 +16,18 @@ export class ChatRoomApi extends BaseAPI {
     try {
       // const res = await getChatRoomByUserId(arg);
       const room = await getChatRoomByUserId(arg);
-
+      console.log(room, "room");
       if (!room?.length) throw new Error(room.error || "No chat rooms found");
 
       const chatRooms = room.map((room: ChatRoomResponse) => ({
         id: room.id,
-        userId: room.members[0].user.id,
+        userId: room.joinedBy.id,
 
-        fName: room.members[0].user.fName,
-        lName: room.members[0].user.lName,
-        profile: room.members[0].user.profile,
-        email: room.members[0].user.email,
-        isActive: room.members[0].user.isActive,
+        fName: room.joinedBy.fName,
+        lName: room.joinedBy.lName,
+        profile: room.joinedBy.profile,
+        email: room.joinedBy.email,
+        isActive: room.joinedBy.isActive,
         lastMessage: room.messages[0]?.content || "",
         isLastMessageSeen: room.messages[0]?.isSeen || false,
         lastmessageAuthor: room.messages[0]?.author || "",

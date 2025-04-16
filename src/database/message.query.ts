@@ -13,18 +13,14 @@ export const sendMessage = ({
     prisma.message.create({
       data: {
         content,
-
-        chat: {
-          connect: {
-            userId_chatRoomId: {
-              chatRoomId: roomId,
-              userId: author,
-            },
-          },
-        },
         author: {
           connect: {
             id: author,
+          },
+        },
+        chat: {
+          connect: {
+            id: roomId,
           },
         },
       },
@@ -35,9 +31,9 @@ export const sendMessage = ({
 
 export const getMessageByUsers = (id: string, take: number, skip: number) => {
   const result = executeQuery(
-    prisma.chatRoomUser.findFirst({
+    prisma.chatRoom.findFirst({
       where: {
-        chatRoomId: id,
+        id: id,
       },
       include: {
         messages: {
@@ -59,9 +55,9 @@ export const getMessageByUsers = (id: string, take: number, skip: number) => {
 };
 export const getLastMessageByRoomId = (roomid: string) => {
   const result = executeQuery(
-    prisma.chatRoomUser.findFirst({
+    prisma.chatRoom.findFirst({
       where: {
-        chatRoomId: roomid,
+        id: roomid,
       },
       select: {
         messages: {

@@ -86,12 +86,33 @@ export async function getAllUsers({ order, page, take, search, email }: args) {
   const users: [] = await executeQuery(
     prisma.user.findMany({
       where: {
+        // NOT: {
+        //   OR: [
+        //     {
+        //       chatRoom: {
+        //         some: {
+        //           user: {
+        //             email,
+        //           },
+        //         },
+        //       },
+        //     },
+        //     {
+        //       friendRequests: {
+        //         some: { from: { email } },
+        //       },
+        //     },
+        //     {
+        //       email,
+        //     },
+        //   ],
+        // },
         NOT: {
           OR: [
             {
-              chatRoom: {
+              chatRoomCreated: {
                 some: {
-                  user: {
+                  createdBy: {
                     email,
                   },
                 },
@@ -103,7 +124,13 @@ export async function getAllUsers({ order, page, take, search, email }: args) {
               },
             },
             {
-              email,
+              joinedChatRoom: {
+                some: {
+                  joinedBy: {
+                    email,
+                  },
+                },
+              },
             },
           ],
         },
@@ -129,9 +156,9 @@ export async function getAllUsers({ order, page, take, search, email }: args) {
     prisma.user.count({
       where: {
         NOT: {
-          chatRoom: {
+          chatRoomCreated: {
             some: {
-              user: {
+              createdBy: {
                 email,
               },
             },

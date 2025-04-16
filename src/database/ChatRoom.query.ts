@@ -88,11 +88,22 @@ export function getChatRoomByUserId({
             password: true,
           },
         },
-        Messages: {
+        messages: {
           orderBy: {
             createdAt: "desc",
           },
           take: 1,
+        },
+        id: true,
+        unseenMessages: true,
+        _count: {
+          select: {
+            messages: {
+              where: {
+                isSeen: false,
+              },
+            },
+          },
         },
       },
       take: take ? take : undefined,

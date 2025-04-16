@@ -100,6 +100,14 @@ async function main() {
 }
 main();
 
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception:", err.message);
+  console.error(err.stack);
+});
+process.on("unhandledRejection", (reason) => {
+  console.error("❌ Unhandled Rejection:", reason);
+});
 httpServer.listen(PORT, () => {
   console.log(`Server is now running on http://localhost:${PORT}/graphql`);
 });
+console.log("📁 Current working directory:", process.cwd());

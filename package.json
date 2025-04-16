@@ -7,7 +7,8 @@
     "dev": "nodemon",
     "compile": "tsc",
     "start": "npm run compile && node ./dist/index.js",
-    "generate": "graphql-codegen --watch \"./schema/**.graphql\""
+    "generate": "graphql-codegen --watch \"./schema/**.graphql\"",
+    "format:prisma": "npx prisma format --watch \"./prisma/schema.prisma\""
   },
   "keywords": [],
   "author": "",
