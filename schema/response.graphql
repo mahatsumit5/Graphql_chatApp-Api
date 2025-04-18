@@ -20,10 +20,11 @@ type SendMessageResponse {
   message: String!
   data: Message
 }
-type GetMessageByUserResponse {
+type GetMessageByRoomResponse {
   status: Boolean!
   message: String!
-  result: [Message!]!
+  data: [Message!]!
+  _count: Int
 }
 type CreateChatRoomResponse {
   status: Boolean!

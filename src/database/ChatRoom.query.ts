@@ -70,7 +70,14 @@ export function getChatRoomByUserId({
       where: {
         AND: [
           {
-            createdById: userId,
+            OR: [
+              {
+                createdById: userId,
+              },
+              {
+                joinedById: userId,
+              },
+            ],
           },
           {
             joinedBy: {
@@ -83,6 +90,11 @@ export function getChatRoomByUserId({
         ],
       },
       select: {
+        createdBy: {
+          omit: {
+            password: true,
+          },
+        },
         joinedBy: {
           omit: {
             password: true,

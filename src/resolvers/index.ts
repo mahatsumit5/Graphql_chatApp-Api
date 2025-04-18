@@ -5,6 +5,7 @@ import { friendRequestResolvers } from "./friendRequest.resolvers";
 import { subscriptionResolvers } from "./subscription.resolvers";
 import { chatRoomResolvers } from "./ChatRoom.resolvers";
 import { PubSub } from "graphql-subscriptions";
+import { messageResolvers } from "./message.resolvers";
 export const pubsub = new PubSub();
 
 export const resolvers = mergeResolvers([
@@ -13,4 +14,5 @@ export const resolvers = mergeResolvers([
   friendRequestResolvers,
   subscriptionResolvers,
   chatRoomResolvers,
+  messageResolvers,
 ]);

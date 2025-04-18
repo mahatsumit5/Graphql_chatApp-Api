@@ -1,16 +1,14 @@
 import { send } from "process";
 import { BaseAPI } from ".";
 import {
-  GetMessageByUser,
-  GetMessageByUserResponse,
+  GetMessageByRoomResponse,
+  MessageByRoomIdParams,
   SendMessageResponse,
 } from "../types/types";
-import { sendMessage } from "../database/message.query";
+import { getMessageByRoomId, sendMessage } from "../database/message.query";
 import { SendMessageParams } from "../types";
 
 export class MessageApi extends BaseAPI {
-  override baseURL = `${process.env.BASE_URL}/message/`;
-
   /**
    * Sends a message
    * @param {string} message - The message to be sent
@@ -19,15 +17,14 @@ export class MessageApi extends BaseAPI {
   async sendMessage(body: SendMessageParams): Promise<SendMessageResponse> {
     try {
       const response = await sendMessage(body);
-      if (response?.id) {
-        return {
-          status: true,
-          message: "Message sent successfully",
-          data: response,
-        };
-      } else {
+      if (!response?.id)
         throw new Error(response?.message || "Failed to send message");
-      }
+
+      return {
+        status: true,
+        message: "Message sent successfully",
+        data: response,
+      };
     } catch (error) {
       return this.handleError(error);
     }
@@ -35,15 +32,19 @@ export class MessageApi extends BaseAPI {
 
   /**
    * Retrieves messages
-   * @returns {Promise<string[]>}
+   * @returns {Promise<GetMessageByRoomResponse>}
    */
-  async getMessages({
-    roomId,
-    skip,
-    take,
-  }: GetMessageByUser): Promise<GetMessageByUserResponse> {
-    // todo implement get messages logic
-    return this.get(`/?id=${roomId}&take=${take}&skip=${skip}`);
+  async getMessages(
+    body: MessageByRoomIdParams
+  ): Promise<GetMessageByRoomResponse> {
+    const result = await getMessageByRoomId(body);
+    if (!result.messages.length) throw new Error("No messages found");
+    return {
+      status: true,
+      message: "Messages retrieved successfully",
+      data: result.messages,
+      _count: result._count.messages,
+    };
   }
 
   /**

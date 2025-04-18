@@ -1,5 +1,6 @@
 import { executeQuery, prisma } from "../script";
 import { SendMessageParams } from "../types";
+import { MessageByRoomIdParams } from "../types/types";
 
 export const sendMessage = ({ content, roomId, author }: SendMessageParams) => {
   const result = executeQuery(
@@ -29,20 +30,33 @@ export const sendMessage = ({ content, roomId, author }: SendMessageParams) => {
   return result;
 };
 
-export const getMessageByUsers = (id: string, take: number, skip: number) => {
+export const getMessageByRoomId = ({
+  roomId: id,
+  skip,
+  take,
+}: MessageByRoomIdParams) => {
   const result = executeQuery(
     prisma.chatRoom.findFirst({
       where: {
-        id: id,
+        id,
       },
-      include: {
+
+      select: {
         messages: {
+          include: {
+            author: {
+              omit: {
+                password: true,
+              },
+            },
+          },
           orderBy: {
             createdAt: "desc",
           },
           take,
           skip,
         },
+
         _count: {
           select: {
             messages: true,

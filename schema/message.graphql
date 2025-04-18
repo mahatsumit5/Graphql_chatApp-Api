@@ -20,10 +20,10 @@ type Mutation {
 }
 
 type Query {
-  getMessagesByUsers(input: GetMessageByUser): GetMessageByUserResponse
+  getMessagesByRoomId(input: MessageByRoomIdParams): GetMessageByRoomResponse
 }
 
-input GetMessageByUser {
+input MessageByRoomIdParams {
   roomId: String!
   take: Int!
   skip: Int!

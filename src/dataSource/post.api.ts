@@ -20,11 +20,10 @@ export class PostAPI extends BaseAPI {
   ): Promise<UploadAPostResponse> {
     try {
       const response = await createPost(arg);
-      console.log(response);
       if (!response.id) throw new Error("Unable to create a post");
       return {
         status: true,
-        message: "sucessfukk",
+        message: "sucessfull",
         result: response,
       };
     } catch (error) {

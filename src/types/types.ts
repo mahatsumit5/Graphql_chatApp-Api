@@ -127,16 +127,11 @@ export type GetChatRoomResponse = {
   status: Scalars['Boolean']['output'];
 };
 
-export type GetMessageByUser = {
-  roomId: Scalars['String']['input'];
-  skip: Scalars['Int']['input'];
-  take: Scalars['Int']['input'];
-};
-
-export type GetMessageByUserResponse = {
-  __typename?: 'GetMessageByUserResponse';
+export type GetMessageByRoomResponse = {
+  __typename?: 'GetMessageByRoomResponse';
+  _count?: Maybe<Scalars['Int']['output']>;
+  data: Array<Message>;
   message: Scalars['String']['output'];
-  result: Array<Message>;
   status: Scalars['Boolean']['output'];
 };
 
@@ -164,6 +159,12 @@ export type Message = {
   groupChatId?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   isSeen: Scalars['Boolean']['output'];
+};
+
+export type MessageByRoomIdParams = {
+  roomId: Scalars['String']['input'];
+  skip: Scalars['Int']['input'];
+  take: Scalars['Int']['input'];
 };
 
 export type Mutation = {
@@ -299,7 +300,7 @@ export type Query = {
   getChatRoomById: ChatRoom;
   /** Get all incoming request */
   getFriendRequest?: Maybe<FriendRequestResponse>;
-  getMessagesByUsers?: Maybe<GetMessageByUserResponse>;
+  getMessagesByRoomId?: Maybe<GetMessageByRoomResponse>;
   getPostByUserId?: Maybe<GetPostByUserIdResponse>;
   /** Get list of ALL SENT request */
   getSentFriendRequest?: Maybe<FriendRequestResponse>;
@@ -330,8 +331,8 @@ export type QueryGetChatRoomByIdArgs = {
 };
 
 
-export type QueryGetMessagesByUsersArgs = {
-  input?: InputMaybe<GetMessageByUser>;
+export type QueryGetMessagesByRoomIdArgs = {
+  input?: InputMaybe<MessageByRoomIdParams>;
 };
 
 
@@ -516,13 +517,13 @@ export type ResolversTypes = {
   GetAllPostArgs: GetAllPostArgs;
   GetAllPostResponse: ResolverTypeWrapper<GetAllPostResponse>;
   GetChatRoomResponse: ResolverTypeWrapper<GetChatRoomResponse>;
-  GetMessageByUser: GetMessageByUser;
-  GetMessageByUserResponse: ResolverTypeWrapper<GetMessageByUserResponse>;
+  GetMessageByRoomResponse: ResolverTypeWrapper<GetMessageByRoomResponse>;
   GetPostByUserIdResponse: ResolverTypeWrapper<GetPostByUserIdResponse>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   LoggedInUserResponse: ResolverTypeWrapper<LoggedInUserResponse>;
   Message: ResolverTypeWrapper<Message>;
+  MessageByRoomIdParams: MessageByRoomIdParams;
   Mutation: ResolverTypeWrapper<{}>;
   Order: Order;
   Post: ResolverTypeWrapper<Post>;
@@ -560,13 +561,13 @@ export type ResolversParentTypes = {
   GetAllPostArgs: GetAllPostArgs;
   GetAllPostResponse: GetAllPostResponse;
   GetChatRoomResponse: GetChatRoomResponse;
-  GetMessageByUser: GetMessageByUser;
-  GetMessageByUserResponse: GetMessageByUserResponse;
+  GetMessageByRoomResponse: GetMessageByRoomResponse;
   GetPostByUserIdResponse: GetPostByUserIdResponse;
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
   LoggedInUserResponse: LoggedInUserResponse;
   Message: Message;
+  MessageByRoomIdParams: MessageByRoomIdParams;
   Mutation: {};
   Post: Post;
   PostInput: PostInput;
@@ -691,9 +692,10 @@ export type GetChatRoomResponseResolvers<ContextType = DataSourceContext, Parent
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type GetMessageByUserResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['GetMessageByUserResponse'] = ResolversParentTypes['GetMessageByUserResponse']> = {
+export type GetMessageByRoomResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['GetMessageByRoomResponse'] = ResolversParentTypes['GetMessageByRoomResponse']> = {
+  _count?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  data?: Resolver<Array<ResolversTypes['Message']>, ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  result?: Resolver<Array<ResolversTypes['Message']>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -767,7 +769,7 @@ export type QueryResolvers<ContextType = DataSourceContext, ParentType extends R
   getAllPosts?: Resolver<Maybe<ResolversTypes['GetAllPostResponse']>, ParentType, ContextType, Partial<QueryGetAllPostsArgs>>;
   getChatRoomById?: Resolver<ResolversTypes['ChatRoom'], ParentType, ContextType, RequireFields<QueryGetChatRoomByIdArgs, 'id'>>;
   getFriendRequest?: Resolver<Maybe<ResolversTypes['FriendRequestResponse']>, ParentType, ContextType>;
-  getMessagesByUsers?: Resolver<Maybe<ResolversTypes['GetMessageByUserResponse']>, ParentType, ContextType, Partial<QueryGetMessagesByUsersArgs>>;
+  getMessagesByRoomId?: Resolver<Maybe<ResolversTypes['GetMessageByRoomResponse']>, ParentType, ContextType, Partial<QueryGetMessagesByRoomIdArgs>>;
   getPostByUserId?: Resolver<Maybe<ResolversTypes['GetPostByUserIdResponse']>, ParentType, ContextType, RequireFields<QueryGetPostByUserIdArgs, 'userId'>>;
   getSentFriendRequest?: Resolver<Maybe<ResolversTypes['FriendRequestResponse']>, ParentType, ContextType, RequireFields<QueryGetSentFriendRequestArgs, 'page' | 'search' | 'take'>>;
   loggedInUser?: Resolver<Maybe<ResolversTypes['LoggedInUserResponse']>, ParentType, ContextType>;
@@ -850,7 +852,7 @@ export type Resolvers<ContextType = DataSourceContext> = {
   FriendRequestResponse?: FriendRequestResponseResolvers<ContextType>;
   GetAllPostResponse?: GetAllPostResponseResolvers<ContextType>;
   GetChatRoomResponse?: GetChatRoomResponseResolvers<ContextType>;
-  GetMessageByUserResponse?: GetMessageByUserResponseResolvers<ContextType>;
+  GetMessageByRoomResponse?: GetMessageByRoomResponseResolvers<ContextType>;
   GetPostByUserIdResponse?: GetPostByUserIdResponseResolvers<ContextType>;
   LoggedInUserResponse?: LoggedInUserResponseResolvers<ContextType>;
   Message?: MessageResolvers<ContextType>;
