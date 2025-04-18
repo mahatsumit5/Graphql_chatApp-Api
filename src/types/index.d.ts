@@ -105,3 +105,8 @@ declare type GetChatRoomParams = {
   take?: number;
   search?: string;
 };
+declare type SendMessageParams = {
+  content: string;
+  author: string;
+  roomId: string;
+};

@@ -1,10 +1,12 @@
+import { send } from "process";
 import { BaseAPI } from ".";
 import {
   GetMessageByUser,
   GetMessageByUserResponse,
-  SendMessageParams,
   SendMessageResponse,
 } from "../types/types";
+import { sendMessage } from "../database/message.query";
+import { SendMessageParams } from "../types";
 
 export class MessageApi extends BaseAPI {
   override baseURL = `${process.env.BASE_URL}/message/`;
@@ -12,13 +14,23 @@ export class MessageApi extends BaseAPI {
   /**
    * Sends a message
    * @param {string} message - The message to be sent
-   * @returns {Promise<void>}
+   * @returns {Promise<SendMessageResponse>}
    */
   async sendMessage(body: SendMessageParams): Promise<SendMessageResponse> {
-    // todo implement send message logic
-    return this.post("/", {
-      body,
-    });
+    try {
+      const response = await sendMessage(body);
+      if (response?.id) {
+        return {
+          status: true,
+          message: "Message sent successfully",
+          data: response,
+        };
+      } else {
+        throw new Error(response?.message || "Failed to send message");
+      }
+    } catch (error) {
+      return this.handleError(error);
+    }
   }
 
   /**

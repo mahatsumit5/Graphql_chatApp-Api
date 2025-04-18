@@ -18,6 +18,7 @@ import { auth } from "express-oauth2-jwt-bearer";
 import { loggedInUserAuth } from "./middleware";
 import { formatError } from "./utils/formatError";
 import { createChatRoom } from "./database/ChatRoom.query";
+import { sendMessage } from "./database/message.query";
 
 // import { applyMiddleware } from "graphql-middleware";
 const app = express();

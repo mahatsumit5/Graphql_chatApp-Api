@@ -4,13 +4,18 @@ type Message {
   content: String!
   createdAt: String!
   isSeen: Boolean!
-  chat: ChatRoom!
   chatRoomId: String!
-  author: String!
+  author: User!
+  authorId: String!
+  groupChatId: String
 }
 
 type Mutation {
-  sendMessage(input: SendMessageParams): SendMessageResponse
+  sendMessage(
+    content: String!
+    author: String!
+    roomId: String!
+  ): SendMessageResponse
   deleteMessage(messageId: String!): Response
 }
 
@@ -18,11 +23,6 @@ type Query {
   getMessagesByUsers(input: GetMessageByUser): GetMessageByUserResponse
 }
 
-input SendMessageParams {
-  content: String!
-  author: String!
-  roomId: String!
-}
 input GetMessageByUser {
   roomId: String!
   take: Int!

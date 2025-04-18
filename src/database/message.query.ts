@@ -1,14 +1,7 @@
 import { executeQuery, prisma } from "../script";
+import { SendMessageParams } from "../types";
 
-export const sendMessage = ({
-  content,
-  roomId,
-  author,
-}: {
-  content: string;
-  author: string;
-  roomId: string;
-}) => {
+export const sendMessage = ({ content, roomId, author }: SendMessageParams) => {
   const result = executeQuery(
     prisma.message.create({
       data: {
@@ -21,6 +14,13 @@ export const sendMessage = ({
         chat: {
           connect: {
             id: roomId,
+          },
+        },
+      },
+      include: {
+        author: {
+          omit: {
+            password: true,
           },
         },
       },

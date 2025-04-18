@@ -156,11 +156,12 @@ export type LoggedInUserResponse = {
 
 export type Message = {
   __typename?: 'Message';
-  author: Scalars['String']['output'];
-  chat: ChatRoom;
+  author: User;
+  authorId: Scalars['String']['output'];
   chatRoomId: Scalars['String']['output'];
   content: Scalars['String']['output'];
   createdAt: Scalars['String']['output'];
+  groupChatId?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   isSeen: Scalars['Boolean']['output'];
 };
@@ -218,7 +219,9 @@ export type MutationLogoutArgs = {
 
 
 export type MutationSendMessageArgs = {
-  input?: InputMaybe<SendMessageParams>;
+  author: Scalars['String']['input'];
+  content: Scalars['String']['input'];
+  roomId: Scalars['String']['input'];
 };
 
 
@@ -349,16 +352,10 @@ export type Response = {
   status: Scalars['Boolean']['output'];
 };
 
-export type SendMessageParams = {
-  author: Scalars['String']['input'];
-  content: Scalars['String']['input'];
-  roomId: Scalars['String']['input'];
-};
-
 export type SendMessageResponse = {
   __typename?: 'SendMessageResponse';
+  data?: Maybe<Message>;
   message: Scalars['String']['output'];
-  result?: Maybe<Message>;
   status: Scalars['Boolean']['output'];
 };
 
@@ -533,7 +530,6 @@ export type ResolversTypes = {
   PostLike: ResolverTypeWrapper<PostLike>;
   Query: ResolverTypeWrapper<{}>;
   Response: ResolverTypeWrapper<Response>;
-  SendMessageParams: SendMessageParams;
   SendMessageResponse: ResolverTypeWrapper<SendMessageResponse>;
   SentRequestResponse: ResolverTypeWrapper<SentRequestResponse>;
   Session: ResolverTypeWrapper<Session>;
@@ -577,7 +573,6 @@ export type ResolversParentTypes = {
   PostLike: PostLike;
   Query: {};
   Response: Response;
-  SendMessageParams: SendMessageParams;
   SendMessageResponse: SendMessageResponse;
   SentRequestResponse: SentRequestResponse;
   Session: Session;
@@ -718,11 +713,12 @@ export type LoggedInUserResponseResolvers<ContextType = DataSourceContext, Paren
 };
 
 export type MessageResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Message'] = ResolversParentTypes['Message']> = {
-  author?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  chat?: Resolver<ResolversTypes['ChatRoom'], ParentType, ContextType>;
+  author?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  authorId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   chatRoomId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  groupChatId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   isSeen?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -735,7 +731,7 @@ export type MutationResolvers<ContextType = DataSourceContext, ParentType extend
   deletePost?: Resolver<ResolversTypes['GetPostByUserIdResponse'], ParentType, ContextType, RequireFields<MutationDeletePostArgs, 'id'>>;
   likePost?: Resolver<ResolversTypes['GetPostByUserIdResponse'], ParentType, ContextType, RequireFields<MutationLikePostArgs, 'postId'>>;
   logout?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationLogoutArgs, 'email'>>;
-  sendMessage?: Resolver<Maybe<ResolversTypes['SendMessageResponse']>, ParentType, ContextType, Partial<MutationSendMessageArgs>>;
+  sendMessage?: Resolver<Maybe<ResolversTypes['SendMessageResponse']>, ParentType, ContextType, RequireFields<MutationSendMessageArgs, 'author' | 'content' | 'roomId'>>;
   sendRequest?: Resolver<Maybe<ResolversTypes['SentRequestResponse']>, ParentType, ContextType, RequireFields<MutationSendRequestArgs, 'toId'>>;
   unlikePost?: Resolver<ResolversTypes['GetPostByUserIdResponse'], ParentType, ContextType, RequireFields<MutationUnlikePostArgs, 'postId'>>;
   updatePost?: Resolver<Maybe<ResolversTypes['UploadAPostResponse']>, ParentType, ContextType, RequireFields<MutationUpdatePostArgs, 'id'>>;
@@ -784,8 +780,8 @@ export type ResponseResolvers<ContextType = DataSourceContext, ParentType extend
 };
 
 export type SendMessageResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['SendMessageResponse'] = ResolversParentTypes['SendMessageResponse']> = {
+  data?: Resolver<Maybe<ResolversTypes['Message']>, ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  result?: Resolver<Maybe<ResolversTypes['Message']>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

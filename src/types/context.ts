@@ -1,5 +1,6 @@
 import { ChatRoomApi } from "../dataSource/chatRoom.api";
 import { FriendRequestAPI } from "../dataSource/friendRequest.api";
+import { MessageApi } from "../dataSource/message.api";
 import { PostAPI } from "../dataSource/post.api";
 import { UserAPI } from "../dataSource/user.api";
 import { User } from "./types";
@@ -12,5 +13,6 @@ export type DataSourceContext = {
     isAuthenticated: boolean;
     user: User;
     chatRoom: ChatRoomApi;
+    message: MessageApi;
   };
 };
