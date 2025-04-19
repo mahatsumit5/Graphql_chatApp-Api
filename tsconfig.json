@@ -13,5 +13,11 @@
     "noImplicitReturns": true,
     "types": ["node"]
   },
-  "exclude": ["node_modules", "codegen.ts", "src/types/**.ts", "test_data.js"]
+  "exclude": [
+    "node_modules",
+    "codegen.ts",
+    "src/types/**.ts",
+    "test_data.js",
+    "prisma/**"
+  ]
 }

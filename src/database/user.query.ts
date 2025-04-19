@@ -1,4 +1,4 @@
-import { executeQuery, prisma } from "../../prisma/script";
+import { executeQuery, prisma } from "../script";
 import { AllUser, SignUpUserParams } from "../types/types";
 
 export function createUser(obj: SignUpUserParams) {

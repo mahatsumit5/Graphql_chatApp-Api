@@ -5,7 +5,7 @@ import { mergeTypeDefs } from "@graphql-tools/merge";
 function loadSchema(schemaNames: string[]): string[] {
   return schemaNames.map((schemaName) =>
     fs.readFileSync(
-      path.join(__dirname, "..", "..", `./schema/${schemaName}.graphql`),
+      path.join(process.cwd(), `./schema/${schemaName}.graphql`),
       { encoding: "utf-8" }
     )
   );

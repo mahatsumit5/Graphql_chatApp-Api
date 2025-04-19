@@ -67,7 +67,7 @@ router.post(
 router.get("/", (req, res) => {
   res.json({
     status: true,
-    message: "Server is up and running",
+    message: "Server is up and asdfrunning",
   });
 });
 export default router;

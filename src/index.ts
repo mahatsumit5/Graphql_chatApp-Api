@@ -17,6 +17,7 @@ import fileUploadApi from "./restApi/router/file.upload.router";
 import { auth } from "express-oauth2-jwt-bearer";
 import { loggedInUserAuth } from "./middleware";
 import { formatError } from "./utils/formatError";
+import { PubSub } from "graphql-subscriptions";
 
 // import { applyMiddleware } from "graphql-middleware";
 const app = express();
@@ -49,31 +50,37 @@ app.use(express.json());
 app.use(cors<cors.CorsRequest>(options));
 
 app.use("/api/v1/user", publicApi);
-app.use("/api/v1/post", auth0Middleware, loggedInUserAuth, fileUploadApi);
+app.use("/api/v1/post", loggedInUserAuth, fileUploadApi);
 app.use(ErrorHandler);
 
+export const pubsub = new PubSub();
 async function main() {
   const wsServerCleanup = useServer(
     {
       schema,
       onConnect: async (ctx) => {
         // Check authentication every time a client connects.
-        console.log(ctx.connectionParams);
-        // if (!ctx.connectionParams?.authorization) {
-        //   // You can return false to close the connection  or throw an explicit error
-        //   throw new Error("Auth token missing!");
-        // }
-        console.log('"Connected to websocket!");');
+        if (!ctx.connectionParams?.Authorization) {
+          // You can return false to close the connection  or throw an explicit error
+          throw new Error("Auth token missing!");
+        }
+        console.log("Connected to websocket!");
       },
       onDisconnect(ctx, code, reason) {
-        console.log("Disconnected!");
+        console.log("Disconnected!", reason);
+      },
+      context: async (ctx, msg, args) => {
+        return {
+          dataSources: {
+            pubsub,
+          },
+        }; // Cast wsServer to any to avoid type error
       },
     },
     wsServer
   );
   const server = new ApolloServer({
     schema,
-
     status400ForVariableCoercionErrors: true,
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer }),
@@ -96,7 +103,9 @@ async function main() {
     "/graphql",
     auth0Middleware,
     loggedInUserAuth,
-    expressMiddleware(server, { context: (arg) => createContext(arg, server) })
+    expressMiddleware(server, {
+      context: (arg) => createContext(arg, server),
+    })
   );
 }
 main();

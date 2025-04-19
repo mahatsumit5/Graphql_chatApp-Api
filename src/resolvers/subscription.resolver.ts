@@ -1,17 +1,23 @@
-import { Resolvers } from "../types/types";
 import { PubSub } from "graphql-subscriptions";
+import { Resolvers } from "../types/types";
 
-export const pubsub = new PubSub();
-export const SubscriptionResolver: Resolvers = {
+export const subscriptionResolver: Resolvers = {
   Subscription: {
     newPost: {
-      subscribe: (_, args, { dataSources }) => {
-        return pubsub.asyncIterableIterator("POST_CREATED");
+      subscribe: (parent, args, { dataSources }) => {
+        return dataSources.pubsub.asyncIterableIterator("POST_CREATED");
       },
     },
     newMessage: {
-      subscribe: (_, args, { dataSources }) => {
-        return pubsub.asyncIterableIterator("MESSAGE_CREATED");
+      subscribe: (parent, args, { dataSources }) => {
+        return dataSources.pubsub.asyncIterableIterator(["MESSAGE_CREATED"]);
+      },
+    },
+    messageInRoom: {
+      subscribe: (parent, { roomId }, { dataSources }) => {
+        return dataSources.pubsub.asyncIterableIterator(
+          `MESSAGE_CREATED_${roomId}`
+        );
       },
     },
   },

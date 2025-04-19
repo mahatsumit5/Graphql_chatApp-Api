@@ -1,5 +1,4 @@
 import { Resolvers } from "../types/types";
-import { pubsub } from ".";
 import { updatePost } from "../database/post.query";
 
 export const postResolvers: Resolvers = {

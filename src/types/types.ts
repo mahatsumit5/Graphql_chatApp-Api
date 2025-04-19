@@ -390,8 +390,14 @@ export enum Status {
 
 export type Subscription = {
   __typename?: 'Subscription';
+  messageInRoom?: Maybe<Message>;
   newMessage?: Maybe<Message>;
   newPost?: Maybe<Post>;
+};
+
+
+export type SubscriptionMessageInRoomArgs = {
+  roomId: Scalars['ID']['input'];
 };
 
 export type UpdateUserResponse = {
@@ -805,6 +811,7 @@ export type SessionResolvers<ContextType = DataSourceContext, ParentType extends
 };
 
 export type SubscriptionResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
+  messageInRoom?: SubscriptionResolver<Maybe<ResolversTypes['Message']>, "messageInRoom", ParentType, ContextType, RequireFields<SubscriptionMessageInRoomArgs, 'roomId'>>;
   newMessage?: SubscriptionResolver<Maybe<ResolversTypes['Message']>, "newMessage", ParentType, ContextType>;
   newPost?: SubscriptionResolver<Maybe<ResolversTypes['Post']>, "newPost", ParentType, ContextType>;
 };

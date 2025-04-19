@@ -1,3 +1,4 @@
+import { PubSub } from "graphql-subscriptions";
 import { ChatRoomApi } from "../dataSource/chatRoom.api";
 import { FriendRequestAPI } from "../dataSource/friendRequest.api";
 import { MessageApi } from "../dataSource/message.api";
@@ -14,5 +15,6 @@ export type DataSourceContext = {
     user: User;
     chatRoom: ChatRoomApi;
     message: MessageApi;
-  };
+    pubsub: PubSub<Record<string, never>>;
+  } | null;
 };

@@ -1,4 +1,5 @@
 type Subscription {
   newPost: Post
   newMessage: Message
+  messageInRoom(roomId: ID!): Message
 }

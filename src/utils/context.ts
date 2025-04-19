@@ -23,7 +23,7 @@ export const createContext: (
         userAPI: new UserAPI({ cache }, token),
         friendReqAPI: new FriendRequestAPI({ cache }, token),
         postAPI: new PostAPI({ cache }, token),
-        user: user,
+        user,
         chatRoom: new ChatRoomApi({ cache }, token),
         message: new MessageApi({ cache }, token),
       },

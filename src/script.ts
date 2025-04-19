@@ -1,5 +1,4 @@
-import { Prisma, PrismaClient } from "./generated/prisma-client-js";
-
+import { Prisma, PrismaClient } from "../prisma/gen-prisma-client";
 export const prisma = new PrismaClient();
 
 export async function executeQuery(query: any) {

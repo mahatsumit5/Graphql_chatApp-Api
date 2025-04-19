@@ -1,4 +1,4 @@
-import { executeQuery, prisma } from "../../prisma/script";
+import { executeQuery, prisma } from "../script";
 import { GetChatRoomParams } from "../types";
 
 export function createChatRoom(from: string, to: string) {
