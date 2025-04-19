@@ -1,4 +1,4 @@
-import { executeQuery, prisma } from "../script";
+import { executeQuery, prisma } from "../../prisma/script";
 import { AllUser, SignUpUserParams } from "../types/types";
 
 export function createUser(obj: SignUpUserParams) {
@@ -185,7 +185,6 @@ export function deleteUser(id: string) {
 }
 
 export function deleteUserByEmail(email: string) {
-  console.log(email);
   const data = executeQuery(
     prisma.user.delete({
       where: {

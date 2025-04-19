@@ -1,4 +1,4 @@
-import { executeQuery, prisma } from "../script";
+import { executeQuery, prisma } from "../../prisma/script";
 import { GetSentReqParams } from "../types";
 const SELECT_FRIEND_REQ = {
   to: {

@@ -7,7 +7,6 @@ export const friendRequestResolvers: Resolvers = {
       return dataSources.friendReqAPI.getFriendRequest(dataSources.user.id);
     },
     getSentFriendRequest(_, arg, { dataSources }) {
-      console.log(arg);
       const userId = dataSources.user.id;
       return dataSources.friendReqAPI.getSentFriendRequest({
         id: userId,

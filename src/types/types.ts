@@ -390,6 +390,7 @@ export enum Status {
 
 export type Subscription = {
   __typename?: 'Subscription';
+  newMessage?: Maybe<Message>;
   newPost?: Maybe<Post>;
 };
 
@@ -804,6 +805,7 @@ export type SessionResolvers<ContextType = DataSourceContext, ParentType extends
 };
 
 export type SubscriptionResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
+  newMessage?: SubscriptionResolver<Maybe<ResolversTypes['Message']>, "newMessage", ParentType, ContextType>;
   newPost?: SubscriptionResolver<Maybe<ResolversTypes['Post']>, "newPost", ParentType, ContextType>;
 };
 

@@ -1,4 +1,4 @@
-import { executeQuery, prisma } from "../script";
+import { executeQuery, prisma } from "../../prisma/script";
 import { CreatePostParams, UpdataPostParams } from "../types";
 import { PostInput } from "../types/types";
 const SELECT_USER_PROFILE = {

@@ -81,7 +81,6 @@ export class FriendRequestAPI extends BaseAPI {
   ): Promise<FriendRequestResponse> {
     try {
       const { count, result } = getYourSentRequest(arg);
-      console.log(await result, "Sent req");
       const length = (await result)?.length;
       if (!length) throw new Error("You  have not sent  any friend request.");
       return {

@@ -1,4 +1,4 @@
-import { executeQuery, prisma } from "../script";
+import { executeQuery, prisma } from "../../prisma/script";
 import { SendMessageParams } from "../types";
 import { MessageByRoomIdParams } from "../types/types";
 
