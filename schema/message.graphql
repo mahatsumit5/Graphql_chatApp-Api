@@ -15,6 +15,7 @@ type Mutation {
     content: String!
     author: String!
     roomId: String!
+    receiverId: String!
   ): SendMessageResponse
   deleteMessage(messageId: String!): Response
 }

@@ -71,9 +71,7 @@ async function main() {
       },
       context: async (ctx, msg, args) => {
         return {
-          dataSources: {
-            pubsub,
-          },
+          pubsub,
         }; // Cast wsServer to any to avoid type error
       },
     },

@@ -222,6 +222,7 @@ export type MutationLogoutArgs = {
 export type MutationSendMessageArgs = {
   author: Scalars['String']['input'];
   content: Scalars['String']['input'];
+  receiverId: Scalars['String']['input'];
   roomId: Scalars['String']['input'];
 };
 
@@ -391,13 +392,18 @@ export enum Status {
 export type Subscription = {
   __typename?: 'Subscription';
   messageInRoom?: Maybe<Message>;
-  newMessage?: Maybe<Message>;
+  newMessageReceived?: Maybe<Message>;
   newPost?: Maybe<Post>;
 };
 
 
 export type SubscriptionMessageInRoomArgs = {
   roomId: Scalars['ID']['input'];
+};
+
+
+export type SubscriptionNewMessageReceivedArgs = {
+  yourUserId: Scalars['ID']['input'];
 };
 
 export type UpdateUserResponse = {
@@ -740,7 +746,7 @@ export type MutationResolvers<ContextType = DataSourceContext, ParentType extend
   deletePost?: Resolver<ResolversTypes['GetPostByUserIdResponse'], ParentType, ContextType, RequireFields<MutationDeletePostArgs, 'id'>>;
   likePost?: Resolver<ResolversTypes['GetPostByUserIdResponse'], ParentType, ContextType, RequireFields<MutationLikePostArgs, 'postId'>>;
   logout?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationLogoutArgs, 'email'>>;
-  sendMessage?: Resolver<Maybe<ResolversTypes['SendMessageResponse']>, ParentType, ContextType, RequireFields<MutationSendMessageArgs, 'author' | 'content' | 'roomId'>>;
+  sendMessage?: Resolver<Maybe<ResolversTypes['SendMessageResponse']>, ParentType, ContextType, RequireFields<MutationSendMessageArgs, 'author' | 'content' | 'receiverId' | 'roomId'>>;
   sendRequest?: Resolver<Maybe<ResolversTypes['SentRequestResponse']>, ParentType, ContextType, RequireFields<MutationSendRequestArgs, 'toId'>>;
   unlikePost?: Resolver<ResolversTypes['GetPostByUserIdResponse'], ParentType, ContextType, RequireFields<MutationUnlikePostArgs, 'postId'>>;
   updatePost?: Resolver<Maybe<ResolversTypes['UploadAPostResponse']>, ParentType, ContextType, RequireFields<MutationUpdatePostArgs, 'id'>>;
@@ -812,7 +818,7 @@ export type SessionResolvers<ContextType = DataSourceContext, ParentType extends
 
 export type SubscriptionResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
   messageInRoom?: SubscriptionResolver<Maybe<ResolversTypes['Message']>, "messageInRoom", ParentType, ContextType, RequireFields<SubscriptionMessageInRoomArgs, 'roomId'>>;
-  newMessage?: SubscriptionResolver<Maybe<ResolversTypes['Message']>, "newMessage", ParentType, ContextType>;
+  newMessageReceived?: SubscriptionResolver<Maybe<ResolversTypes['Message']>, "newMessageReceived", ParentType, ContextType, RequireFields<SubscriptionNewMessageReceivedArgs, 'yourUserId'>>;
   newPost?: SubscriptionResolver<Maybe<ResolversTypes['Post']>, "newPost", ParentType, ContextType>;
 };
 

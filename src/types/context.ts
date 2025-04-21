@@ -7,6 +7,8 @@ import { UserAPI } from "../dataSource/user.api";
 import { User } from "./types";
 
 export type DataSourceContext = {
+  pubsub: PubSub<Record<string, never>>;
+
   dataSources: {
     userAPI: UserAPI;
     friendReqAPI: FriendRequestAPI;
@@ -15,6 +17,5 @@ export type DataSourceContext = {
     user: User;
     chatRoom: ChatRoomApi;
     message: MessageApi;
-    pubsub: PubSub<Record<string, never>>;
   } | null;
 };

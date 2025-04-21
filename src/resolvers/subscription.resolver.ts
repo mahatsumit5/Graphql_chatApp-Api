@@ -4,20 +4,19 @@ import { Resolvers } from "../types/types";
 export const subscriptionResolver: Resolvers = {
   Subscription: {
     newPost: {
-      subscribe: (parent, args, { dataSources }) => {
-        return dataSources.pubsub.asyncIterableIterator("POST_CREATED");
+      subscribe: (parent, args, { pubsub }) => {
+        return pubsub.asyncIterableIterator("POST_CREATED");
       },
     },
-    newMessage: {
-      subscribe: (parent, args, { dataSources }) => {
-        return dataSources.pubsub.asyncIterableIterator(["MESSAGE_CREATED"]);
+    newMessageReceived: {
+      subscribe: (parent, { yourUserId }, { pubsub }) => {
+        return pubsub.asyncIterableIterator([`SEND_MESSAGE_TO_${yourUserId}`]);
       },
     },
     messageInRoom: {
-      subscribe: (parent, { roomId }, { dataSources }) => {
-        return dataSources.pubsub.asyncIterableIterator(
-          `MESSAGE_CREATED_${roomId}`
-        );
+      subscribe: (parent, { roomId }, { pubsub }) => {
+        console.log("this is roomid", roomId);
+        return pubsub.asyncIterableIterator([`MESSAGE_CREATED_${roomId}`]);
       },
     },
   },

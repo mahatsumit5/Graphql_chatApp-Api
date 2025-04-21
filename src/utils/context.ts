@@ -5,6 +5,7 @@ import { FriendRequestAPI } from "../dataSource/friendRequest.api";
 import { PostAPI } from "../dataSource/post.api";
 import { ChatRoomApi } from "../dataSource/chatRoom.api";
 import { MessageApi } from "../dataSource/message.api";
+import { pubsub } from "..";
 
 export const createContext: (
   args: ExpressContextFunctionArgument,
@@ -19,6 +20,7 @@ export const createContext: (
     const { cache } = server;
 
     return {
+      pubsub,
       dataSources: {
         userAPI: new UserAPI({ cache }, token),
         friendReqAPI: new FriendRequestAPI({ cache }, token),
