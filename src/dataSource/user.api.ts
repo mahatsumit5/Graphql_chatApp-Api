@@ -9,6 +9,7 @@ import { BaseAPI } from ".";
 import {
   createUser,
   getAllUsers,
+  getListOfFriends,
   getUserByEmail,
   updateUser,
 } from "../database/user.query";
@@ -71,6 +72,18 @@ export class UserAPI extends BaseAPI {
       };
     } catch (error) {
       return this.handleError(error);
+    }
+  }
+  async getListOfFriends(userId: string): Promise<AllUsersResponse> {
+    try {
+      const response = await getListOfFriends(userId);
+      return {
+        status: true,
+        message: "List of friends",
+        data: response,
+      };
+    } catch (error) {
+      return this.handleError<[]>(error);
     }
   }
 }

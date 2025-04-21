@@ -30,6 +30,8 @@ type Query {
   loggedInUser: LoggedInUserResponse
   "a list of all the users"
   allUsers(params: allUser): AllUsersResponse
+  "a list of all the friends"
+  allFriends: AllUsersResponse
 }
 
 type Mutation {
@@ -77,13 +79,6 @@ type LoggedInUserResponse {
   status: Boolean!
   message: String!
   data: User
-}
-
-type AllUsersResponse {
-  status: Boolean!
-  message: String!
-  data: [Friend!]
-  totalUsers: Int
 }
 
 enum Order {

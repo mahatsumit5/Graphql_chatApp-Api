@@ -294,6 +294,8 @@ export type PostLike = {
 
 export type Query = {
   __typename?: 'Query';
+  /** a list of all the friends */
+  allFriends?: Maybe<AllUsersResponse>;
   /** a list of all the users */
   allUsers?: Maybe<AllUsersResponse>;
   getAllChatRooms: GetChatRoomResponse;
@@ -777,6 +779,7 @@ export type PostLikeResolvers<ContextType = DataSourceContext, ParentType extend
 };
 
 export type QueryResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  allFriends?: Resolver<Maybe<ResolversTypes['AllUsersResponse']>, ParentType, ContextType>;
   allUsers?: Resolver<Maybe<ResolversTypes['AllUsersResponse']>, ParentType, ContextType, Partial<QueryAllUsersArgs>>;
   getAllChatRooms?: Resolver<ResolversTypes['GetChatRoomResponse'], ParentType, ContextType, Partial<QueryGetAllChatRoomsArgs>>;
   getAllPosts?: Resolver<Maybe<ResolversTypes['GetAllPostResponse']>, ParentType, ContextType, Partial<QueryGetAllPostsArgs>>;

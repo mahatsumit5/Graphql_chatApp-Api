@@ -37,3 +37,9 @@ type GetChatRoomResponse {
   message: String!
   data: [ChatRoom!]!
 }
+type AllUsersResponse {
+  status: Boolean!
+  message: String!
+  data: [Friend!]
+  totalUsers: Int
+}

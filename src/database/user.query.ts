@@ -1,5 +1,6 @@
 import { executeQuery, prisma } from "../script";
-import { AllUser, SignUpUserParams } from "../types/types";
+import { IUser } from "../types";
+import { AllUser, Friend, SignUpUserParams, User } from "../types/types";
 
 export function createUser(obj: SignUpUserParams) {
   return executeQuery(
@@ -193,4 +194,35 @@ export function deleteUserByEmail(email: string) {
     })
   );
   return data;
+}
+
+export async function getListOfFriends(userId: string): Promise<Friend[]> {
+  const res = await executeQuery(
+    prisma.chatRoom.findMany({
+      where: {
+        OR: [
+          {
+            createdById: userId,
+          },
+          {
+            joinedById: userId,
+          },
+        ],
+      },
+
+      select: {
+        createdBy: {
+          omit: {
+            password: true,
+          },
+        },
+        joinedBy: { omit: { password: true } },
+      },
+    })
+  );
+  const friends: Friend[] = res.map(
+    (user: { createdBy: User; joinedBy: User }) =>
+      user.createdBy.id === userId ? user.joinedBy : user.createdBy
+  );
+  return friends;
 }
