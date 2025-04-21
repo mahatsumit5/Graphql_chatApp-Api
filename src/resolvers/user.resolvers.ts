@@ -39,5 +39,18 @@ export const userResolvers: Resolvers = {
         data: dataSources.user,
       };
     },
+    allFriends: (__, _, { dataSources }) => {
+      if (!dataSources.user.id)
+        throw new GraphQLError(
+          "You are not authorized to perform this action.",
+          {
+            extensions: {
+              code: ServerErrorCode.FORBIDDEN,
+            },
+          }
+        );
+      const { id } = dataSources.user;
+      return dataSources.userAPI.getListOfFriends(id);
+    },
   },
 };
