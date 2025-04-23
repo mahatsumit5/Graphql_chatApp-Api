@@ -18,6 +18,8 @@ import { auth } from "express-oauth2-jwt-bearer";
 import { loggedInUserAuth } from "./middleware";
 import { formatError } from "./utils/formatError";
 import { PubSub } from "graphql-subscriptions";
+import { getSession } from "./database/session.query";
+import { User } from "./types/types";
 
 // import { applyMiddleware } from "graphql-middleware";
 const app = express();
@@ -33,6 +35,7 @@ const options = {
   allowedHeaders: ["Authorization", "refreshjwt", "Content-Type"],
   credentials: true,
 };
+const onlineUsers = new Set<User>();
 export const auth0Middleware = auth({
   audience: process.env.audience,
   issuerBaseURL: process.env.issuerBaseURL,
@@ -60,14 +63,27 @@ async function main() {
       schema,
       onConnect: async (ctx) => {
         // Check authentication every time a client connects.
-        if (!ctx.connectionParams?.Authorization) {
-          // You can return false to close the connection  or throw an explicit error
+        if (!ctx.connectionParams?.Authorization)
           throw new Error("Auth token missing!");
-        }
-        console.log("Connected to websocket!");
+
+        const user = await getSession(
+          `Bearer ${ctx.connectionParams.Authorization}`
+        );
+        onlineUsers.add(user.associate);
+        pubsub.publish("ONLINE_USERS", {
+          onlineUsers: [...onlineUsers],
+        });
+        console.log("Online users", [...onlineUsers]);
       },
-      onDisconnect(ctx, code, reason) {
+      async onDisconnect(ctx, code, reason) {
+        const user = await getSession(
+          `Bearer ${ctx.connectionParams.Authorization}`
+        );
         console.log("Disconnected!", reason);
+        onlineUsers.delete(user.associate);
+        pubsub.publish("ONLINE_USERS", {
+          onlineUsers: [...onlineUsers],
+        });
       },
       context: async (ctx, msg, args) => {
         return {

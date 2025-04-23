@@ -396,6 +396,7 @@ export type Subscription = {
   messageInRoom?: Maybe<Message>;
   newMessageReceived?: Maybe<Message>;
   newPost?: Maybe<Post>;
+  onlineUsers: Array<User>;
 };
 
 
@@ -823,6 +824,7 @@ export type SubscriptionResolvers<ContextType = DataSourceContext, ParentType ex
   messageInRoom?: SubscriptionResolver<Maybe<ResolversTypes['Message']>, "messageInRoom", ParentType, ContextType, RequireFields<SubscriptionMessageInRoomArgs, 'roomId'>>;
   newMessageReceived?: SubscriptionResolver<Maybe<ResolversTypes['Message']>, "newMessageReceived", ParentType, ContextType, RequireFields<SubscriptionNewMessageReceivedArgs, 'yourUserId'>>;
   newPost?: SubscriptionResolver<Maybe<ResolversTypes['Post']>, "newPost", ParentType, ContextType>;
+  onlineUsers?: SubscriptionResolver<Array<ResolversTypes['User']>, "onlineUsers", ParentType, ContextType>;
 };
 
 export type UpdateUserResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['UpdateUserResponse'] = ResolversParentTypes['UpdateUserResponse']> = {
