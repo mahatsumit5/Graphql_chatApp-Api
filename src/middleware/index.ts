@@ -3,6 +3,8 @@ import { getSession } from "../database/session.query";
 import multer from "multer";
 import multerS3 from "multer-s3";
 import { S3Client } from "@aws-sdk/client-s3";
+import { redisClient } from "../redis";
+const USER_EXPIRY = 60 * 60; // 1 hour
 export const loggedInUserAuth = async (
   req: Request,
   res: Response,
@@ -17,14 +19,21 @@ export const loggedInUserAuth = async (
         message: "Please login and provide a token to continue",
       });
     }
-    const user = await getSession(token);
-    if (!user?.associate) {
-      return res.status(401).json({ message: "You are not logged in" });
-    }
-    user.associate.password = undefined;
-    user.associate.refreshJWT = undefined;
-    req.userInfo = user.associate;
+    const data = await redisClient.get("user");
+    if (data == null) {
+      console.log("inside database");
+      const user = await getSession(token);
+      if (!user?.associate) {
+        return res.status(401).json({ message: "You are not logged in" });
+      }
+      redisClient.setEx("user", USER_EXPIRY, JSON.stringify(user.associate));
 
+      req.userInfo = user.associate;
+    } else {
+      console.log("inside redis");
+      const user = JSON.parse(data as string);
+      req.userInfo = user;
+    }
     return next();
   } catch (error: Error | any) {
     next(error);

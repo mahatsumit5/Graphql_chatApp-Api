@@ -20,8 +20,8 @@ import { formatError } from "./utils/formatError";
 import { PubSub } from "graphql-subscriptions";
 import { getSession } from "./database/session.query";
 import { User } from "./types/types";
+import { redisClient } from "./redis/index";
 
-// import { applyMiddleware } from "graphql-middleware";
 const app = express();
 const httpServer = http.createServer(app);
 const PORT = Number(process.env.PORT) || 8000;
@@ -35,7 +35,8 @@ const options = {
   allowedHeaders: ["Authorization", "refreshjwt", "Content-Type"],
   credentials: true,
 };
-const onlineUsers = new Set<User>();
+const onlineUsers = new Map<string, User>();
+new Map<string, string>();
 export const auth0Middleware = auth({
   audience: process.env.audience,
   issuerBaseURL: process.env.issuerBaseURL,
@@ -57,7 +58,7 @@ app.use("/api/v1/post", loggedInUserAuth, fileUploadApi);
 app.use(ErrorHandler);
 
 export const pubsub = new PubSub();
-async function main() {
+async function startServer() {
   const wsServerCleanup = useServer(
     {
       schema,
@@ -69,20 +70,21 @@ async function main() {
         const user = await getSession(
           `Bearer ${ctx.connectionParams.Authorization}`
         );
-        onlineUsers.add(user.associate);
+        if (!user) throw new Error("User not found!");
+
+        onlineUsers.set(user.associate?.id, user.associate);
         pubsub.publish("ONLINE_USERS", {
-          onlineUsers: [...onlineUsers],
+          onlineUsers: [...onlineUsers.values()],
         });
-        console.log("Online users", [...onlineUsers]);
       },
       async onDisconnect(ctx, code, reason) {
         const user = await getSession(
           `Bearer ${ctx.connectionParams.Authorization}`
         );
         console.log("Disconnected!", reason);
-        onlineUsers.delete(user.associate);
+        onlineUsers.delete(user.associate?.id);
         pubsub.publish("ONLINE_USERS", {
-          onlineUsers: [...onlineUsers],
+          onlineUsers: [...onlineUsers.values()],
         });
       },
       context: async (ctx, msg, args) => {
@@ -112,7 +114,7 @@ async function main() {
   });
 
   await server.start();
-
+  await redisClient.connect();
   app.use(
     "/graphql",
     auth0Middleware,
@@ -122,7 +124,7 @@ async function main() {
     })
   );
 }
-main();
+startServer();
 
 process.on("uncaughtException", (err) => {
   console.error("Uncaught Exception:", err.message);
