@@ -3,8 +3,9 @@ import { getSession } from "../database/session.query";
 import multer from "multer";
 import multerS3 from "multer-s3";
 import { S3Client } from "@aws-sdk/client-s3";
-import { redisClient } from "../redis";
-const USER_EXPIRY = 60 * 60; // 1 hour
+import { getOrSetCache, redisClient } from "../redis";
+import { verifyToken } from "../utils";
+const USER_EXPIRY = 60 * 30; // 30 minutes
 export const loggedInUserAuth = async (
   req: Request,
   res: Response,
@@ -12,6 +13,8 @@ export const loggedInUserAuth = async (
 ) => {
   try {
     const token = req.headers.authorization;
+    const resp = await verifyToken(token.split(" ")[1]);
+    console.log(resp, "this is resp");
     if (!token) {
       return res.status(500).json({
         status: false,
@@ -19,21 +22,28 @@ export const loggedInUserAuth = async (
         message: "Please login and provide a token to continue",
       });
     }
-    const data = await redisClient.get("user");
-    if (data == null) {
-      console.log("inside database");
-      const user = await getSession(token);
-      if (!user?.associate) {
-        return res.status(401).json({ message: "You are not logged in" });
-      }
-      redisClient.setEx("user", USER_EXPIRY, JSON.stringify(user.associate));
+    // const data = await redisClient.get("user");
+    // if (data == null) {
+    //   console.log("inside database");
+    //   const user = await getSession(token);
+    //   if (!user?.associate) {
+    //     return res.status(401).json({ message: "You are not logged in" });
+    //   }
+    //   redisClient.setEx("user", USER_EXPIRY, JSON.stringify(user.associate));
 
-      req.userInfo = user.associate;
-    } else {
-      console.log("inside redis");
-      const user = JSON.parse(data as string);
-      req.userInfo = user;
-    }
+    //   req.userInfo = user.associate;
+    // } else {
+    //   console.log("inside redis");
+    //   const user = JSON.parse(data as string);
+    //   req.userInfo = user;
+    // }
+
+    const user = await getOrSetCache(
+      token,
+      USER_EXPIRY,
+      async () => await getSession(token)
+    );
+    req.userInfo = user.associate;
     return next();
   } catch (error: Error | any) {
     next(error);

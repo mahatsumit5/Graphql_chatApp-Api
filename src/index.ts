@@ -32,7 +32,7 @@ const options = {
     "http://localhost:5173",
   ],
   methods: ["GET", "PUT", "PATCH", "DELETE", "POST"],
-  allowedHeaders: ["Authorization", "refreshjwt", "Content-Type"],
+  allowedHeaders: ["Authorization", "refreshjwt", "Content-Type", "test"],
   credentials: true,
 };
 const onlineUsers = new Map<string, User>();
@@ -136,4 +136,4 @@ process.on("unhandledRejection", (reason) => {
 httpServer.listen(PORT, () => {
   console.log(`Server is now running on http://localhost:${PORT}/graphql`);
 });
-console.log("📁 Current working directory:", process.cwd());
+// console.log("📁 Current working directory:", process.cwd());

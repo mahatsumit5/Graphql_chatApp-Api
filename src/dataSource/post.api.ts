@@ -7,6 +7,7 @@ import {
 } from "../types/types";
 import { createPost, getAllPost } from "../database/post.query";
 import { CreatePostParams } from "../types";
+import { getOrSetCache } from "../redis";
 export class PostAPI extends BaseAPI {
   override baseURL = `${process.env.BASE_URL}/post/`;
 
@@ -44,7 +45,11 @@ export class PostAPI extends BaseAPI {
     // TO DO: implement logic to fetch all posts
 
     try {
-      const response = await getAllPost(arg);
+      const response = await getOrSetCache(
+        `post-${arg.page}-${arg.userId}-${arg.take}`,
+        60 * 15, //15 minutes
+        async () => await getAllPost(arg)
+      );
       if (!response) throw new Error("No posts found");
       return {
         posts: response.postsWithHasLiked,
