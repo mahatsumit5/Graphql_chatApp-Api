@@ -47,7 +47,7 @@ export class PostAPI extends BaseAPI {
     try {
       const response = await getOrSetCache(
         `post-${arg.page}-${arg.userId}-${arg.take}`,
-        60 * 15, //15 minutes
+        5 * 60, //5 minutes
         async () => await getAllPost(arg)
       );
       if (!response) throw new Error("No posts found");

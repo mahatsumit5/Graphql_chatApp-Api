@@ -1,29 +1,18 @@
 import {
   AllUser,
   AllUsersResponse,
-  LoggedInUserResponse,
   Response,
   UpdateUserResponse,
 } from "../types/types";
 import { BaseAPI } from ".";
 import {
-  createUser,
   getAllUsers,
   getListOfFriends,
-  getUserByEmail,
   updateUser,
 } from "../database/user.query";
-import {
-  comparePassword,
-  createAuth0Token,
-  hashPass,
-  sendResponse,
-} from "../utils";
-import {
-  createSession,
-  findSessionAndDelete,
-  getSession,
-} from "../database/session.query";
+
+import { findSessionAndDelete } from "../database/session.query";
+
 export class UserAPI extends BaseAPI {
   async allUsers(arg: AllUser & { email: string }): Promise<AllUsersResponse> {
     try {
@@ -44,6 +33,7 @@ export class UserAPI extends BaseAPI {
   async logout(email: string): Promise<Response> {
     try {
       const token = this.getToken();
+      console.log("this is token", token);
       const response = await findSessionAndDelete(token, email);
       if (!response?.userEmail) throw new Error("Unable to logout");
       return {

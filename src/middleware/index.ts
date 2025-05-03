@@ -13,8 +13,7 @@ export const loggedInUserAuth = async (
 ) => {
   try {
     const token = req.headers.authorization;
-    const resp = await verifyToken(token.split(" ")[1]);
-    console.log(resp, "this is resp");
+
     if (!token) {
       return res.status(500).json({
         status: false,

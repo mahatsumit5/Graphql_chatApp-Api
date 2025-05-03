@@ -7,6 +7,7 @@ export const ErrorHandler = (
   res: Response,
   next: NextFunction
 ) => {
+  console.log("Error coming from the handler", error.message);
   if (error.message.includes(`"password" with value`)) {
     error.message = "Password must match the requirement";
   }

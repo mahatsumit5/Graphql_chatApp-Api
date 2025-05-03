@@ -55,7 +55,6 @@ app.use(cors<cors.CorsRequest>(options));
 
 app.use("/api/v1/user", publicApi);
 app.use("/api/v1/post", loggedInUserAuth, fileUploadApi);
-app.use(ErrorHandler);
 
 export const pubsub = new PubSub();
 async function startServer() {
@@ -115,6 +114,7 @@ async function startServer() {
 
   await server.start();
   await redisClient.connect();
+
   app.use(
     "/graphql",
     auth0Middleware,
@@ -123,6 +123,8 @@ async function startServer() {
       context: (arg) => createContext(arg, server),
     })
   );
+
+  app.use(ErrorHandler);
 }
 startServer();
 
