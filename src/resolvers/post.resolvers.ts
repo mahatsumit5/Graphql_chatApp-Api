@@ -30,5 +30,8 @@ export const postResolvers: Resolvers = {
         result: updatedPost,
       };
     },
+    likePost: async (_, arg, { dataSources, pubsub }) => {
+      return dataSources.postAPI.likePost(arg.postId);
+    },
   },
 };

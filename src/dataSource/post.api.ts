@@ -1,16 +1,14 @@
-import { PubSub } from "graphql-subscriptions";
 import { BaseAPI } from ".";
 import {
   GetAllPostResponse,
+  GetLikedPostResponse,
   PostInput,
   UploadAPostResponse,
 } from "../types/types";
 import { createPost, getAllPost } from "../database/post.query";
-import { CreatePostParams } from "../types";
 import { getOrSetCache } from "../redis";
+import { likePost } from "../database/postLike.query";
 export class PostAPI extends BaseAPI {
-  override baseURL = `${process.env.BASE_URL}/post/`;
-
   /**
    * Creates a new post.
    * @async
@@ -47,7 +45,7 @@ export class PostAPI extends BaseAPI {
     try {
       const response = await getOrSetCache(
         `post-${arg.page}-${arg.userId}-${arg.take}`,
-        5 * 60, //5 minutes
+        5, //5 sec
         async () => await getAllPost(arg)
       );
       if (!response) throw new Error("No posts found");
@@ -95,8 +93,20 @@ export class PostAPI extends BaseAPI {
    * @param {string} postId - The ID of the post.
    * @returns {Promise<any>}
    */
-  async likePost(postId: string) {
+  async likePost(postId: string): Promise<GetLikedPostResponse> {
     // TO DO: implement logic to like post
+    try {
+      const { id } = this.getUser();
+      const post = await likePost(id, postId);
+      if (!post.id) throw new Error(post.message);
+      return {
+        status: true,
+        message: "You liked this post",
+        likedPost: post.postId,
+      };
+    } catch (error) {
+      return this.handleError(error);
+    }
   }
 
   /**

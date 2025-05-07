@@ -127,6 +127,13 @@ export type GetChatRoomResponse = {
   status: Scalars['Boolean']['output'];
 };
 
+export type GetLikedPostResponse = {
+  __typename?: 'GetLikedPostResponse';
+  likedPost?: Maybe<Scalars['String']['output']>;
+  message: Scalars['String']['output'];
+  status: Scalars['Boolean']['output'];
+};
+
 export type GetMessageByRoomResponse = {
   __typename?: 'GetMessageByRoomResponse';
   _count?: Maybe<Scalars['Int']['output']>;
@@ -175,7 +182,7 @@ export type Mutation = {
   deleteFriendRequest?: Maybe<SentRequestResponse>;
   deleteMessage?: Maybe<Response>;
   deletePost: GetPostByUserIdResponse;
-  likePost: GetPostByUserIdResponse;
+  likePost: GetLikedPostResponse;
   logout?: Maybe<Response>;
   sendMessage?: Maybe<SendMessageResponse>;
   /** Send friend request to other user */
@@ -533,6 +540,7 @@ export type ResolversTypes = {
   GetAllPostArgs: GetAllPostArgs;
   GetAllPostResponse: ResolverTypeWrapper<GetAllPostResponse>;
   GetChatRoomResponse: ResolverTypeWrapper<GetChatRoomResponse>;
+  GetLikedPostResponse: ResolverTypeWrapper<GetLikedPostResponse>;
   GetMessageByRoomResponse: ResolverTypeWrapper<GetMessageByRoomResponse>;
   GetPostByUserIdResponse: ResolverTypeWrapper<GetPostByUserIdResponse>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
@@ -577,6 +585,7 @@ export type ResolversParentTypes = {
   GetAllPostArgs: GetAllPostArgs;
   GetAllPostResponse: GetAllPostResponse;
   GetChatRoomResponse: GetChatRoomResponse;
+  GetLikedPostResponse: GetLikedPostResponse;
   GetMessageByRoomResponse: GetMessageByRoomResponse;
   GetPostByUserIdResponse: GetPostByUserIdResponse;
   ID: Scalars['ID']['output'];
@@ -708,6 +717,13 @@ export type GetChatRoomResponseResolvers<ContextType = DataSourceContext, Parent
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GetLikedPostResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['GetLikedPostResponse'] = ResolversParentTypes['GetLikedPostResponse']> = {
+  likedPost?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GetMessageByRoomResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['GetMessageByRoomResponse'] = ResolversParentTypes['GetMessageByRoomResponse']> = {
   _count?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   data?: Resolver<Array<ResolversTypes['Message']>, ParentType, ContextType>;
@@ -747,7 +763,7 @@ export type MutationResolvers<ContextType = DataSourceContext, ParentType extend
   deleteFriendRequest?: Resolver<Maybe<ResolversTypes['SentRequestResponse']>, ParentType, ContextType, RequireFields<MutationDeleteFriendRequestArgs, 'fromId' | 'toId'>>;
   deleteMessage?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationDeleteMessageArgs, 'messageId'>>;
   deletePost?: Resolver<ResolversTypes['GetPostByUserIdResponse'], ParentType, ContextType, RequireFields<MutationDeletePostArgs, 'id'>>;
-  likePost?: Resolver<ResolversTypes['GetPostByUserIdResponse'], ParentType, ContextType, RequireFields<MutationLikePostArgs, 'postId'>>;
+  likePost?: Resolver<ResolversTypes['GetLikedPostResponse'], ParentType, ContextType, RequireFields<MutationLikePostArgs, 'postId'>>;
   logout?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationLogoutArgs, 'email'>>;
   sendMessage?: Resolver<Maybe<ResolversTypes['SendMessageResponse']>, ParentType, ContextType, RequireFields<MutationSendMessageArgs, 'author' | 'content' | 'receiverId' | 'roomId'>>;
   sendRequest?: Resolver<Maybe<ResolversTypes['SentRequestResponse']>, ParentType, ContextType, RequireFields<MutationSendRequestArgs, 'toId'>>;
@@ -872,6 +888,7 @@ export type Resolvers<ContextType = DataSourceContext> = {
   FriendRequestResponse?: FriendRequestResponseResolvers<ContextType>;
   GetAllPostResponse?: GetAllPostResponseResolvers<ContextType>;
   GetChatRoomResponse?: GetChatRoomResponseResolvers<ContextType>;
+  GetLikedPostResponse?: GetLikedPostResponseResolvers<ContextType>;
   GetMessageByRoomResponse?: GetMessageByRoomResponseResolvers<ContextType>;
   GetPostByUserIdResponse?: GetPostByUserIdResponseResolvers<ContextType>;
   LoggedInUserResponse?: LoggedInUserResponseResolvers<ContextType>;

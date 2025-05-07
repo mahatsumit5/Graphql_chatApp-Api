@@ -5,11 +5,7 @@ redisClient.on("error", (err) => console.log("Redis Client Error", err));
 redisClient.on("connect", () => console.log("Redis Client Connected"));
 redisClient.on("ready", () => console.log("Redis Client Ready"));
 redisClient.on("end", () => console.log("Redis Client Disconnected"));
-type getOrSetCacheFn = (
-  key: string,
-  expiryInSeconds: number,
-  cb: () => Promise<any>
-) => Promise<any>;
+
 export const getOrSetCache: getOrSetCacheFn = async (
   key: string,
   expiryInSeconds: number,
@@ -30,3 +26,9 @@ export const getOrSetCache: getOrSetCacheFn = async (
     console.log(error);
   }
 };
+
+type getOrSetCacheFn = (
+  key: string,
+  expiryInSeconds: number,
+  cb: () => Promise<any>
+) => Promise<any>;

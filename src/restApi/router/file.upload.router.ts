@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { upload } from "../../middleware";
+import { upload } from "../../middleware/index";
 const router = Router();
 router.post("/", upload.array("images"), async (req, res, next) => {
   try {

@@ -41,7 +41,7 @@ type Mutation {
     content: String
     images: [String!]
   ): UploadAPostResponse
-  likePost(postId: String!): GetPostByUserIdResponse!
+  likePost(postId: String!): GetLikedPostResponse!
   unlikePost(postId: String!): GetPostByUserIdResponse!
 }
 

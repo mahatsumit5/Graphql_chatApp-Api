@@ -40,7 +40,7 @@ const PrismaErrorCode: Record<string, string> = {
   P1017: "Server closed the connection",
   P2000: "Value too long for column",
   P2001: "Record not found",
-  P2002: "Unique constraint failed",
+  P2002: "Unique constraint failed.Record already exist",
   P2003: "Foreign key constraint failed",
   P2004: "Constraint failed",
   P2005: "Invalid value for field type",

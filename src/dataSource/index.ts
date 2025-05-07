@@ -1,12 +1,14 @@
 import { AugmentedRequest, RESTDataSource } from "@apollo/datasource-rest";
 import { KeyValueCache } from "@apollo/utils.keyvaluecache";
-import { date } from "joi";
+import { User } from "../types/types";
 
 export class BaseAPI extends RESTDataSource {
   private token: string;
-  constructor(options: { cache: KeyValueCache }, token?: string) {
+  private user: User;
+  constructor(options: { cache: KeyValueCache }, user: User, token?: string) {
     super(options); // this sends our server's `cache` through
     this.token = token || "";
+    this.user = user;
   }
 
   // override willSendRequest(_path: string, request: AugmentedRequest) {
@@ -15,6 +17,9 @@ export class BaseAPI extends RESTDataSource {
   // Getter for token to provide access in derived classes
   protected getToken(): string {
     return this.token;
+  }
+  protected getUser(): User {
+    return this.user;
   }
 
   // protected didEncounterError(_error: Error): void {

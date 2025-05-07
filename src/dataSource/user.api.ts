@@ -1,6 +1,7 @@
 import {
   AllUser,
   AllUsersResponse,
+  LoggedInUserResponse,
   Response,
   UpdateUserResponse,
 } from "../types/types";
@@ -14,10 +15,10 @@ import {
 import { findSessionAndDelete } from "../database/session.query";
 
 export class UserAPI extends BaseAPI {
-  async allUsers(arg: AllUser & { email: string }): Promise<AllUsersResponse> {
+  async allUsers(arg: AllUser): Promise<AllUsersResponse> {
     try {
-      arg;
-      const { totalUsers, users } = await getAllUsers(arg);
+      const { email } = this.getUser();
+      const { totalUsers, users } = await getAllUsers({ ...arg, email });
       if (!users?.length) throw new Error("No users found");
       return {
         status: true,
@@ -33,7 +34,6 @@ export class UserAPI extends BaseAPI {
   async logout(email: string): Promise<Response> {
     try {
       const token = this.getToken();
-      console.log("this is token", token);
       const response = await findSessionAndDelete(token, email);
       if (!response?.userEmail) throw new Error("Unable to logout");
       return {
@@ -52,9 +52,10 @@ export class UserAPI extends BaseAPI {
     }
   }
 
-  async updateUser(id: string, body: unknown): Promise<UpdateUserResponse> {
+  async updateUser(body: unknown): Promise<UpdateUserResponse> {
     try {
-      const data = await updateUser(id, body);
+      const user = this.getUser();
+      const data = await updateUser(user.id, body);
       return {
         status: true,
         message: "User updated successfully",
@@ -64,9 +65,11 @@ export class UserAPI extends BaseAPI {
       return this.handleError(error);
     }
   }
-  async getListOfFriends(userId: string): Promise<AllUsersResponse> {
+  async getListOfFriends(): Promise<AllUsersResponse> {
     try {
-      const response = await getListOfFriends(userId);
+      const user = this.getUser();
+
+      const response = await getListOfFriends(user.id);
       return {
         status: true,
         message: "List of friends",
@@ -74,6 +77,19 @@ export class UserAPI extends BaseAPI {
       };
     } catch (error) {
       return this.handleError<[]>(error);
+    }
+  }
+
+  async loggedInUser(): Promise<LoggedInUserResponse> {
+    try {
+      const user = this.getUser();
+      return {
+        status: true,
+        data: user,
+        message: "User details",
+      };
+    } catch (error) {
+      return this.handleError(error);
     }
   }
 }

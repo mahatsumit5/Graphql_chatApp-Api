@@ -22,12 +22,12 @@ export const createContext: (
     return {
       pubsub,
       dataSources: {
-        userAPI: new UserAPI({ cache }, token),
-        friendReqAPI: new FriendRequestAPI({ cache }, token),
-        postAPI: new PostAPI({ cache }, token),
+        userAPI: new UserAPI({ cache }, user, token),
+        friendReqAPI: new FriendRequestAPI({ cache }, user, token),
         user,
-        chatRoom: new ChatRoomApi({ cache }, token),
-        message: new MessageApi({ cache }, token),
+        postAPI: new PostAPI({ cache }, user, token),
+        chatRoom: new ChatRoomApi({ cache }, user, token),
+        message: new MessageApi({ cache }, user, token),
       },
     };
   } catch (error) {

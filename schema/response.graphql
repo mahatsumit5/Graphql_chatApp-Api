@@ -43,3 +43,9 @@ type AllUsersResponse {
   data: [Friend!]
   totalUsers: Int
 }
+
+type GetLikedPostResponse {
+  status: Boolean!
+  message: String!
+  likedPost: String
+}
