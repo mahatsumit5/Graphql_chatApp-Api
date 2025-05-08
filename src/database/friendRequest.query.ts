@@ -1,5 +1,6 @@
 import { executeQuery, prisma } from "../script";
 import { GetSentReqParams } from "../types";
+import { FriendRequest } from "../types/types";
 const SELECT_FRIEND_REQ = {
   to: {
     select: {
@@ -24,7 +25,7 @@ const SELECT_FRIEND_REQ = {
   status: true,
 };
 export function sendFriendRequest(from: string, to: string) {
-  const result = executeQuery(
+  const result = executeQuery<FriendRequest>(
     prisma.friendRequests.create({
       data: {
         from: {
@@ -42,7 +43,7 @@ export function sendFriendRequest(from: string, to: string) {
 
 export function getFriendRequestByUser(id: string) {
   // Get friend requests sent by the user with this ID
-  return executeQuery(
+  return executeQuery<[]>(
     prisma.friendRequests.findMany({
       where: {
         toId: id,
@@ -59,7 +60,7 @@ export function getYourSentRequest({
   take,
 }: GetSentReqParams) {
   // Get friend requests sent by the user with this ID
-  const result: Promise<[]> = executeQuery(
+  const result = executeQuery<[]>(
     prisma.friendRequests.findMany({
       where: {
         fromId: id,
@@ -75,7 +76,7 @@ export function getYourSentRequest({
       take: take,
     })
   );
-  const count = executeQuery(
+  const count = executeQuery<number>(
     prisma.friendRequests.count({
       where: {
         fromId: id,
@@ -98,7 +99,7 @@ export function deleteSentRequest({
   fromId: string;
   toId: string;
 }) {
-  return executeQuery(
+  return executeQuery<FriendRequest>(
     prisma.friendRequests.delete({
       where: {
         fromId_toId: {

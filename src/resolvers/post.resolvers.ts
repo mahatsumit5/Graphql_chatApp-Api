@@ -22,12 +22,12 @@ export const postResolvers: Resolvers = {
       // pubsub.publish("POST_CREATED", { newPost: response.result });
     },
     updatePost: async (_, arg, { dataSources }) => {
-      const updatedPost = await updatePost(arg);
-      if (!updatedPost?.id) throw new Error("Unable to updata post");
+      const { data, error } = await updatePost(arg);
+      if (!data?.id) throw new Error("Unable to updata post");
       return {
         status: true,
         message: "Post Updated",
-        result: updatedPost,
+        result: data,
       };
     },
     likePost: async (_, arg, { dataSources, pubsub }) => {

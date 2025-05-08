@@ -1,6 +1,6 @@
 import { executeQuery, prisma } from "../script";
 import { CreatePostParams, UpdataPostParams } from "../types";
-import { PostInput } from "../types/types";
+import { Post, PostInput } from "../types/types";
 const SELECT_USER_PROFILE = {
   email: true,
   fName: true,
@@ -11,7 +11,7 @@ const SELECT_USER_PROFILE = {
 };
 
 export const createPost = ({ id, ...rest }: PostInput & { id: string }) => {
-  return executeQuery(
+  return executeQuery<Post>(
     prisma.post.create({
       data: {
         ...rest,
@@ -65,7 +65,7 @@ export const getAllPost = async ({
   userId: string;
 }) => {
   const skip = (page - 1) * take;
-  const data = await executeQuery(
+  const { data } = await executeQuery<Post[]>(
     prisma.post.findMany({
       select: {
         id: true,
@@ -124,7 +124,7 @@ export const getAllPost = async ({
 };
 
 export const getPostByUser = (authorId: string) => {
-  return executeQuery(
+  return executeQuery<Post[]>(
     prisma.post.findMany({
       where: {
         authorId,
@@ -176,7 +176,7 @@ export const deletePost = (id: string, authorId: string) => {
 };
 
 export const updatePost = ({ id, ...rest }: UpdataPostParams) => {
-  return executeQuery(
+  return executeQuery<Post>(
     prisma.post.update({
       where: {
         id,

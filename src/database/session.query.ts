@@ -1,4 +1,5 @@
 import { executeQuery, prisma } from "../script";
+import { Session } from "../types/types";
 export function createSession({
   email,
   token,
@@ -35,7 +36,7 @@ export function getAllSession() {
 }
 
 export async function getSession(token: string) {
-  const result = await executeQuery(
+  const result = await executeQuery<Session>(
     prisma.session.findFirst({
       where: {
         token,

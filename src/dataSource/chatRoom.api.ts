@@ -1,25 +1,19 @@
 import { BaseAPI } from ".";
 import { getChatRoomByUserId } from "../database/ChatRoom.query";
-import { GetChatRoomParams } from "../types";
+import { ChatRoomResponse, GetChatRoomParams } from "../types";
 import { GetChatRoomResponse, Message, User } from "../types/types";
-type ChatRoomResponse = {
-  id: string;
-  joinedBy: User;
-  createdBy: User;
-  messages: Array<Message>;
-  unseenMessages: number;
-  _count: {};
-};
+
 export class ChatRoomApi extends BaseAPI {
   async getChatRoomByUserId(
     arg: GetChatRoomParams
   ): Promise<GetChatRoomResponse> {
     try {
       // const res = await getChatRoomByUserId(arg);
-      const room = await getChatRoomByUserId(arg);
-      if (!room?.length) throw new Error(room.error || "No chat rooms found");
+      const { data, error } = await getChatRoomByUserId(arg);
+      if (!data?.length)
+        throw new Error(error.message || "No chat rooms found");
 
-      const chatRooms = room.map((room: ChatRoomResponse) => ({
+      const chatRooms = data.map((room: ChatRoomResponse) => ({
         id: room.id,
         userId:
           arg.userId === room.createdBy.id

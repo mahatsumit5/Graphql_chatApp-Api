@@ -16,14 +16,13 @@ export class MessageApi extends BaseAPI {
    */
   async sendMessage(body: SendMessageParams): Promise<SendMessageResponse> {
     try {
-      const response = await sendMessage(body);
-      if (!response?.id)
-        throw new Error(response?.message || "Failed to send message");
+      const { data, error } = await sendMessage(body);
+      if (error) throw new Error(error?.message || "Failed to send message");
 
       return {
         status: true,
         message: "Message sent successfully",
-        data: response,
+        data,
       };
     } catch (error) {
       return this.handleError(error);
@@ -37,13 +36,14 @@ export class MessageApi extends BaseAPI {
   async getMessages(
     body: MessageByRoomIdParams
   ): Promise<GetMessageByRoomResponse> {
-    const result = await getMessageByRoomId(body);
-    if (!result.messages.length) throw new Error("No messages found");
+    const { data, error } = await getMessageByRoomId(body);
+    if (error) throw new Error(error.message);
+    if (!data.length) throw new Error("No messages found");
     return {
       status: true,
       message: "Messages retrieved successfully",
-      data: result.messages.reverse(),
-      _count: result._count.messages,
+      data: data.reverse(),
+      _count: data._count.messages,
     };
   }
 

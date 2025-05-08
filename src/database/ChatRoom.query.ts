@@ -1,8 +1,9 @@
 import { executeQuery, prisma } from "../script";
-import { GetChatRoomParams } from "../types";
+import { ChatRoomResponse, GetChatRoomParams } from "../types";
+import { ChatRoom } from "../types/types";
 
 export function createChatRoom(from: string, to: string) {
-  const result = executeQuery(
+  const result = executeQuery<{ id: string }>(
     prisma.chatRoom.create({
       data: {
         createdBy: {
@@ -64,7 +65,7 @@ export function getChatRoomByUserId({
   search,
   take,
 }: GetChatRoomParams) {
-  const data = executeQuery(
+  const data = executeQuery<ChatRoomResponse[]>(
     prisma.chatRoom.findMany({
       where: {
         AND: [

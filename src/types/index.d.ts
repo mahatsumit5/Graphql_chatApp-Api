@@ -110,3 +110,11 @@ declare type SendMessageParams = {
   author: string;
   roomId: string;
 };
+declare type ChatRoomResponse = {
+  id: string;
+  joinedBy: User;
+  createdBy: User;
+  messages: Array<Message>;
+  unseenMessages: number;
+  _count: {};
+};

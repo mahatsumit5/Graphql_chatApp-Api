@@ -32,22 +32,22 @@ export async function startApolloServer() {
         if (!ctx.connectionParams?.Authorization)
           throw new Error("Auth token missing!");
 
-        const user = await getSession(
+        const { data, error } = await getSession(
           `Bearer ${ctx.connectionParams.Authorization}`
         );
-        if (!user) throw new Error("User not found!");
+        if (error) throw new Error("User not found!");
 
-        onlineUsers.set(user.associate?.id, user.associate);
+        onlineUsers.set(data.associate?.id, data.associate);
         pubsub.publish("ONLINE_USERS", {
           onlineUsers: [...onlineUsers.values()],
         });
       },
       async onDisconnect(ctx, code, reason) {
-        const user = await getSession(
+        const { data } = await getSession(
           `Bearer ${ctx.connectionParams.Authorization}`
         );
         console.log("Disconnected!", reason);
-        onlineUsers.delete(user.associate?.id);
+        onlineUsers.delete(data.associate.id);
         pubsub.publish("ONLINE_USERS", {
           onlineUsers: [...onlineUsers.values()],
         });

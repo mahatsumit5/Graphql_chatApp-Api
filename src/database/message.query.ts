@@ -1,9 +1,9 @@
 import { executeQuery, prisma } from "../script";
 import { SendMessageParams } from "../types";
-import { MessageByRoomIdParams } from "../types/types";
+import { Message, MessageByRoomIdParams } from "../types/types";
 
 export const sendMessage = ({ content, roomId, author }: SendMessageParams) => {
-  const result = executeQuery(
+  const result = executeQuery<Message>(
     prisma.message.create({
       data: {
         content,
@@ -35,7 +35,7 @@ export const getMessageByRoomId = ({
   skip,
   take,
 }: MessageByRoomIdParams) => {
-  const result = executeQuery(
+  const result = executeQuery<Message[]>(
     prisma.chatRoom.findFirst({
       where: {
         id,

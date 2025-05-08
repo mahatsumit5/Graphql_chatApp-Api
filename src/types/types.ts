@@ -187,7 +187,7 @@ export type Mutation = {
   sendMessage?: Maybe<SendMessageResponse>;
   /** Send friend request to other user */
   sendRequest?: Maybe<SentRequestResponse>;
-  unlikePost: GetPostByUserIdResponse;
+  unlikePost: UnlikePostResponse;
   updatePost?: Maybe<UploadAPostResponse>;
   updateUser?: Maybe<UpdateUserResponse>;
   uploadPost: UploadAPostResponse;
@@ -416,6 +416,13 @@ export type SubscriptionNewMessageReceivedArgs = {
   yourUserId: Scalars['ID']['input'];
 };
 
+export type UnlikePostResponse = {
+  __typename?: 'UnlikePostResponse';
+  data?: Maybe<Scalars['String']['output']>;
+  message: Scalars['String']['output'];
+  status: Scalars['Boolean']['output'];
+};
+
 export type UpdateUserResponse = {
   __typename?: 'UpdateUserResponse';
   data?: Maybe<User>;
@@ -562,6 +569,7 @@ export type ResolversTypes = {
   Status: Status;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Subscription: ResolverTypeWrapper<{}>;
+  UnlikePostResponse: ResolverTypeWrapper<UnlikePostResponse>;
   UpdateUserResponse: ResolverTypeWrapper<UpdateUserResponse>;
   UploadAPostResponse: ResolverTypeWrapper<UploadAPostResponse>;
   User: ResolverTypeWrapper<User>;
@@ -605,6 +613,7 @@ export type ResolversParentTypes = {
   SignUpUserParams: SignUpUserParams;
   String: Scalars['String']['output'];
   Subscription: {};
+  UnlikePostResponse: UnlikePostResponse;
   UpdateUserResponse: UpdateUserResponse;
   UploadAPostResponse: UploadAPostResponse;
   User: User;
@@ -767,7 +776,7 @@ export type MutationResolvers<ContextType = DataSourceContext, ParentType extend
   logout?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationLogoutArgs, 'email'>>;
   sendMessage?: Resolver<Maybe<ResolversTypes['SendMessageResponse']>, ParentType, ContextType, RequireFields<MutationSendMessageArgs, 'author' | 'content' | 'receiverId' | 'roomId'>>;
   sendRequest?: Resolver<Maybe<ResolversTypes['SentRequestResponse']>, ParentType, ContextType, RequireFields<MutationSendRequestArgs, 'toId'>>;
-  unlikePost?: Resolver<ResolversTypes['GetPostByUserIdResponse'], ParentType, ContextType, RequireFields<MutationUnlikePostArgs, 'postId'>>;
+  unlikePost?: Resolver<ResolversTypes['UnlikePostResponse'], ParentType, ContextType, RequireFields<MutationUnlikePostArgs, 'postId'>>;
   updatePost?: Resolver<Maybe<ResolversTypes['UploadAPostResponse']>, ParentType, ContextType, RequireFields<MutationUpdatePostArgs, 'id'>>;
   updateUser?: Resolver<Maybe<ResolversTypes['UpdateUserResponse']>, ParentType, ContextType, Partial<MutationUpdateUserArgs>>;
   uploadPost?: Resolver<ResolversTypes['UploadAPostResponse'], ParentType, ContextType, Partial<MutationUploadPostArgs>>;
@@ -843,6 +852,13 @@ export type SubscriptionResolvers<ContextType = DataSourceContext, ParentType ex
   onlineUsers?: SubscriptionResolver<Array<ResolversTypes['User']>, "onlineUsers", ParentType, ContextType>;
 };
 
+export type UnlikePostResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['UnlikePostResponse'] = ResolversParentTypes['UnlikePostResponse']> = {
+  data?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type UpdateUserResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['UpdateUserResponse'] = ResolversParentTypes['UpdateUserResponse']> = {
   data?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -902,6 +918,7 @@ export type Resolvers<ContextType = DataSourceContext> = {
   SentRequestResponse?: SentRequestResponseResolvers<ContextType>;
   Session?: SessionResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
+  UnlikePostResponse?: UnlikePostResponseResolvers<ContextType>;
   UpdateUserResponse?: UpdateUserResponseResolvers<ContextType>;
   UploadAPostResponse?: UploadAPostResponseResolvers<ContextType>;
   User?: UserResolvers<ContextType>;

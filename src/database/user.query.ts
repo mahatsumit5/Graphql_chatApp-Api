@@ -61,7 +61,7 @@ export function getUserByEmailAndUpdate(email: string, dataToUpdate: any) {
 }
 
 export function getUserByEmail(email: string) {
-  return executeQuery(
+  return executeQuery< {password:string} extends User>(
     prisma.user.findUnique({
       where: { email: email },
     })
@@ -84,30 +84,9 @@ type args = AllUser & {
 };
 export async function getAllUsers({ order, page, take, search, email }: args) {
   const skipAmount = (page - 1) * take;
-  const users: [] = await executeQuery(
+  const { data } = await executeQuery<User[]>(
     prisma.user.findMany({
       where: {
-        // NOT: {
-        //   OR: [
-        //     {
-        //       chatRoom: {
-        //         some: {
-        //           user: {
-        //             email,
-        //           },
-        //         },
-        //       },
-        //     },
-        //     {
-        //       friendRequests: {
-        //         some: { from: { email } },
-        //       },
-        //     },
-        //     {
-        //       email,
-        //     },
-        //   ],
-        // },
         NOT: {
           OR: [
             {
@@ -152,7 +131,6 @@ export async function getAllUsers({ order, page, take, search, email }: args) {
       skip: skipAmount,
     })
   );
-
   const totalUsers = await executeQuery(
     prisma.user.count({
       where: {
@@ -172,7 +150,7 @@ export async function getAllUsers({ order, page, take, search, email }: args) {
     })
   );
 
-  return { users, totalUsers };
+  return { users: data, totalUsers };
 }
 
 export function deleteUser(id: string) {
@@ -197,7 +175,7 @@ export function deleteUserByEmail(email: string) {
 }
 
 export async function getListOfFriends(userId: string): Promise<Friend[]> {
-  const res = await executeQuery(
+  const { data } = await executeQuery<[]>(
     prisma.chatRoom.findMany({
       where: {
         OR: [
@@ -220,7 +198,7 @@ export async function getListOfFriends(userId: string): Promise<Friend[]> {
       },
     })
   );
-  const friends: Friend[] = res.map(
+  const friends: Friend[] = data.map(
     (user: { createdBy: User; joinedBy: User }) =>
       user.createdBy.id === userId ? user.joinedBy : user.createdBy
   );

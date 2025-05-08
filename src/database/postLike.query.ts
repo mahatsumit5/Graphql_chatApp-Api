@@ -1,7 +1,7 @@
 import { executeQuery, prisma } from "../script";
 
 export function likePost(userId: string, postId: string) {
-  return executeQuery(
+  return executeQuery<{ id: string; postId: string }>(
     prisma.postLike.create({
       data: {
         post: {
@@ -19,7 +19,7 @@ export function likePost(userId: string, postId: string) {
   );
 }
 export async function removeLike(postId: string, userId: string) {
-  const result = await executeQuery(
+  const result = await executeQuery<{ id: string }>(
     prisma.postLike.delete({
       where: {
         postId_userId: {
@@ -29,5 +29,10 @@ export async function removeLike(postId: string, userId: string) {
       },
     })
   );
+  console.log("like removed", result);
   return result;
 }
+removeLike(
+  "1b1c0162-6e7e-4786-b571-d43165a1d166",
+  "82ebde29-2a8f-4835-b468-971f751ffecf"
+);

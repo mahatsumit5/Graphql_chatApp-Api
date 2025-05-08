@@ -42,7 +42,7 @@ type Mutation {
     images: [String!]
   ): UploadAPostResponse
   likePost(postId: String!): GetLikedPostResponse!
-  unlikePost(postId: String!): GetPostByUserIdResponse!
+  unlikePost(postId: String!): UnlikePostResponse!
 }
 
 type Query {

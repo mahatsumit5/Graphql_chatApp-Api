@@ -49,3 +49,8 @@ type GetLikedPostResponse {
   message: String!
   likedPost: String
 }
+type UnlikePostResponse {
+  status: Boolean!
+  message: String!
+  data: String
+}

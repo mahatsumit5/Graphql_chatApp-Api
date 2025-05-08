@@ -25,9 +25,9 @@ export class FriendRequestAPI extends BaseAPI {
     toId: string;
   }): Promise<SentRequestResponse> {
     try {
-      const data = await sendFriendRequest(fromId, toId);
+      const { data, error } = await sendFriendRequest(fromId, toId);
 
-      if (!data?.status) throw new Error(data?.message);
+      if (error) throw new Error(error.message);
       return {
         status: true,
         message: "Friend request sent",
@@ -50,11 +50,11 @@ export class FriendRequestAPI extends BaseAPI {
         createChatRoom(fromId, toId),
         deleteSentRequest({ fromId, toId }),
       ]);
-      if (!response?.id) throw new Error(response?.message);
+      if (response.error) throw new Error(response.error.message);
       return {
         status: true,
         message: "Request accepted",
-        data: response.id,
+        data: response.data.id,
       };
     } catch (error) {
       return this.handleError<any>(error);
@@ -63,13 +63,12 @@ export class FriendRequestAPI extends BaseAPI {
 
   async getFriendRequest(userId: string): Promise<FriendRequestResponse> {
     try {
-      const response = await getFriendRequestByUser(userId);
-      if (!response?.length)
-        throw new Error("You do not have any friend request.");
+      const { data, error } = await getFriendRequestByUser(userId);
+      if (!data?.length) throw new Error("You do not have any friend request.");
       return {
         status: true,
         message: "List of friend request",
-        data: response,
+        data,
         count: 0,
       };
     } catch (error) {
@@ -81,13 +80,13 @@ export class FriendRequestAPI extends BaseAPI {
   ): Promise<FriendRequestResponse> {
     try {
       const { count, result } = getYourSentRequest(arg);
-      const length = (await result)?.length;
-      if (!length) throw new Error("You  have not sent  any friend request.");
+      const { error } = await result;
+      if (error) throw new Error(error.message);
       return {
         status: true,
         message: "List of your sent request",
-        count: await count,
-        data: await result,
+        count: (await count).data,
+        data: (await result).data,
       };
     } catch (error) {
       return this.handleError<[]>(error);
@@ -99,13 +98,13 @@ export class FriendRequestAPI extends BaseAPI {
     toId: string;
   }): Promise<SentRequestResponse> {
     try {
-      const response = await deleteSentRequest(params);
+      const { data, error } = await deleteSentRequest(params);
 
-      if (!response?.status) throw new Error(response.message);
+      if (error) throw new Error(error.message);
       return {
         status: true,
         message: "Friend request deleted",
-        data: response,
+        data,
       };
     } catch (error) {
       return this.handleError(error);

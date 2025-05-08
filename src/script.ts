@@ -1,23 +1,55 @@
 import { Prisma, PrismaClient } from "../prisma/gen-prisma-client";
+
+interface DataBaseReturnObj<T> {
+  data: T | undefined;
+  error: any | undefined;
+}
 export const prisma = new PrismaClient();
 
-export async function executeQuery(query: any) {
+// export async function executeQuery(query: any) {
+//   try {
+//     return await query;
+//   } catch (error) {
+//     console.log(
+//       "Databse Error--------->",
+//       error,
+//       "--------------ends herer-------------------"
+//     );
+//     if (error instanceof Prisma.PrismaClientKnownRequestError) {
+//       const code = error.code;
+//       return {
+//         message:
+//           // error.meta?.cause ||
+//           PrismaErrorCode[code] || "Unknown Database operation failed",
+//       };
+//     }
+//   } finally {
+//     await prisma.$disconnect();
+//   }
+// }
+export async function executeQuery<T>(
+  query: any
+): Promise<DataBaseReturnObj<T>> {
+  let data;
+  let err;
   try {
-    return await query;
+    const data: T = await query;
+    return {
+      data,
+      error: err,
+    };
   } catch (error) {
-    console.log(
-      "Databse Error--------->",
-      error,
-      "--------------ends herer-------------------"
-    );
+    let message = "Unknown database operation failed";
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       const code = error.code;
-      return {
-        message:
-          // error.meta?.cause ||
-          PrismaErrorCode[code] || "Unknown Database operation failed",
-      };
+      message = PrismaErrorCode[code] || message;
+    } else {
+      message = error.message;
     }
+    return {
+      data,
+      error: { message },
+    };
   } finally {
     await prisma.$disconnect();
   }
