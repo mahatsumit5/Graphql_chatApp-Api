@@ -2,10 +2,11 @@ import { BaseAPI } from ".";
 import {
   GetAllPostResponse,
   GetLikedPostResponse,
+  Post,
   PostInput,
   UploadAPostResponse,
 } from "../types/types";
-import { createPost, getAllPost } from "../database/post.query";
+import { countTotalPost, createPost, getAllPost } from "../database/post.query";
 import { getOrSetCache } from "../redis";
 import { likePost, removeLike } from "../database/postLike.query";
 export class PostAPI extends BaseAPI {
@@ -40,20 +41,23 @@ export class PostAPI extends BaseAPI {
     take: number;
     userId: string;
   }): Promise<GetAllPostResponse> {
-    // TO DO: implement logic to fetch all posts
+    const key = `post-${arg.page}-${arg.userId}-${arg.take}`;
+    const expiry = 5 * 60; //5 minutes
 
     try {
-      const response = await getOrSetCache(
-        `post-${arg.page}-${arg.userId}-${arg.take}`,
-        5, //5 sec
+      const posts = await getOrSetCache<Post[]>(
+        key,
+        expiry,
         async () => await getAllPost(arg)
       );
-      if (!response) throw new Error("No posts found");
+      const { data: count, error } = await countTotalPost();
+      if (error) throw new Error(error.message);
+      if (!count) throw new Error("No posts found");
       return {
-        posts: response.postsWithHasLiked,
+        posts: posts,
         message: "Posts retrieved successfully",
         status: true,
-        totalNumberOfPosts: response.count,
+        totalNumberOfPosts: count,
       };
     } catch (error) {
       return this.handleError(error);

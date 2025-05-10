@@ -38,7 +38,6 @@ export class MessageApi extends BaseAPI {
   ): Promise<GetMessageByRoomResponse> {
     const { data, error } = await getMessageByRoomId(body);
     if (error) throw new Error(error.message);
-    if (!data.length) throw new Error("No messages found");
     return {
       status: true,
       message: "Messages retrieved successfully",

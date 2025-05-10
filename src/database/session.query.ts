@@ -19,7 +19,7 @@ export function createSession({
   );
 }
 export function findSessionAndDelete(token: string, email: string) {
-  return executeQuery(
+  return executeQuery<Session>(
     prisma.session.delete({
       where: {
         userEmail_token: {

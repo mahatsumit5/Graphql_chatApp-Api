@@ -3,14 +3,14 @@ import { IUser } from "../types";
 import { AllUser, Friend, SignUpUserParams, User } from "../types/types";
 
 export function createUser(obj: SignUpUserParams) {
-  return executeQuery(
+  return executeQuery<User>(
     prisma.user.create({
       data: obj,
     })
   );
 }
 export function updateUser(userId: string, data: unknown) {
-  return executeQuery(
+  return executeQuery<User>(
     prisma.user.update({
       where: {
         id: userId,
@@ -61,7 +61,7 @@ export function getUserByEmailAndUpdate(email: string, dataToUpdate: any) {
 }
 
 export function getUserByEmail(email: string) {
-  return executeQuery< {password:string} extends User>(
+  return executeQuery<{ password: string } & User>(
     prisma.user.findUnique({
       where: { email: email },
     })
@@ -84,7 +84,7 @@ type args = AllUser & {
 };
 export async function getAllUsers({ order, page, take, search, email }: args) {
   const skipAmount = (page - 1) * take;
-  const { data } = await executeQuery<User[]>(
+  const { data } = await executeQuery<Friend[]>(
     prisma.user.findMany({
       where: {
         NOT: {
@@ -131,7 +131,7 @@ export async function getAllUsers({ order, page, take, search, email }: args) {
       skip: skipAmount,
     })
   );
-  const totalUsers = await executeQuery(
+  const { data: totalUsers } = await executeQuery<number>(
     prisma.user.count({
       where: {
         NOT: {
@@ -198,9 +198,8 @@ export async function getListOfFriends(userId: string): Promise<Friend[]> {
       },
     })
   );
-  const friends: Friend[] = data.map(
-    (user: { createdBy: User; joinedBy: User }) =>
-      user.createdBy.id === userId ? user.joinedBy : user.createdBy
+  const friends: Friend[] = data.map((user: any) =>
+    user.createdBy.id === userId ? user.joinedBy : user.createdBy
   );
   return friends;
 }

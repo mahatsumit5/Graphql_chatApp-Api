@@ -35,7 +35,7 @@ export const getMessageByRoomId = ({
   skip,
   take,
 }: MessageByRoomIdParams) => {
-  const result = executeQuery<Message[]>(
+  const result = executeQuery<{ _count: { messages: number } } & Message[]>(
     prisma.chatRoom.findFirst({
       where: {
         id,

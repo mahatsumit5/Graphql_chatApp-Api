@@ -16,7 +16,7 @@ router.post("/sign-up", validateUserSignUp, async (req, res, next) => {
     if (userAlreadyExist)
       throw new Error("An account already exist with this email.");
     req.body.password = hashPass(req.body.password);
-    const user = await createUser(req.body);
+    const { data: user } = await createUser(req.body);
 
     user?.id
       ? res.json({ status: true, message: "User Created" })
@@ -47,7 +47,7 @@ router.post(
       const token = await createAuth0Token();
       if (!token?.access_token) throw new Error("Unable to create token");
       const session = await createSession({
-        email: user.email,
+        email: data.email,
         token: `Bearer ${token.access_token}`,
       });
 

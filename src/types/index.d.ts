@@ -1,3 +1,5 @@
+import { User } from "./types";
+
 interface Issue {
   code: string;
   maximum: number;
@@ -31,7 +33,7 @@ export type jwtReturnType =
 declare global {
   namespace Express {
     interface Request {
-      userInfo?: IUser;
+      userInfo?: User;
     }
   }
   namespace NodeJS {

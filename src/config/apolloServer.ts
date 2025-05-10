@@ -13,6 +13,7 @@ import { typeDefs } from "../typedefs";
 import { resolvers } from "../resolvers";
 import { createContext } from "../utils/context";
 import { WebSocketServer } from "ws";
+import { executeQuery, prisma } from "../script";
 
 const schema = makeExecutableSchema({
   resolvers,

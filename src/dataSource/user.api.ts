@@ -34,7 +34,7 @@ export class UserAPI extends BaseAPI {
   async logout(email: string): Promise<Response> {
     try {
       const token = this.getToken();
-      const response = await findSessionAndDelete(token, email);
+      const { data: response } = await findSessionAndDelete(token, email);
       if (!response?.userEmail) throw new Error("Unable to logout");
       return {
         status: true,
@@ -55,7 +55,7 @@ export class UserAPI extends BaseAPI {
   async updateUser(body: unknown): Promise<UpdateUserResponse> {
     try {
       const user = this.getUser();
-      const data = await updateUser(user.id, body);
+      const { data } = await updateUser(user.id, body);
       return {
         status: true,
         message: "User updated successfully",

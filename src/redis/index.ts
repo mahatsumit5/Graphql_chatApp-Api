@@ -6,29 +6,24 @@ redisClient.on("connect", () => console.log("Redis Client Connected"));
 redisClient.on("ready", () => console.log("Redis Client Ready"));
 redisClient.on("end", () => console.log("Redis Client Disconnected"));
 
-export const getOrSetCache: getOrSetCacheFn = async (
+export async function getOrSetCache<T>(
   key: string,
   expiryInSeconds: number,
-  cb: () => Promise<any>
-) => {
-  try {
-    const data = await redisClient.get(key);
-    if (data != null) {
-      console.log("Sending data from cache");
-      return JSON.parse(data as string);
-    }
-
-    const freshData = await cb();
-    console.log("loading fresh data");
-    await redisClient.setEx(key, expiryInSeconds, JSON.stringify(freshData));
-    return freshData;
-  } catch (error) {
-    console.log(error);
+  cb: () => Promise<T>
+): Promise<T> {
+  const data = await redisClient.get(key);
+  if (data != null) {
+    return JSON.parse(data as string);
   }
-};
 
-type getOrSetCacheFn = (
+  const newData = await cb();
+  console.log("Data coming from redish", newData);
+  await redisClient.setEx(key, expiryInSeconds, JSON.stringify(newData));
+  return newData;
+}
+
+type getOrSetCacheFn<T> = (
   key: string,
   expiryInSeconds: number,
-  cb: () => Promise<any>
-) => Promise<any>;
+  cb: () => Promise<T>
+) => Promise<T>;
