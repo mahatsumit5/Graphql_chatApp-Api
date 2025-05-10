@@ -4,6 +4,7 @@ import {
   GetLikedPostResponse,
   Post,
   PostInput,
+  UnlikePostResponse,
   UploadAPostResponse,
 } from "../types/types";
 import { countTotalPost, createPost, getAllPost } from "../database/post.query";
@@ -42,7 +43,7 @@ export class PostAPI extends BaseAPI {
     userId: string;
   }): Promise<GetAllPostResponse> {
     const key = `post-${arg.page}-${arg.userId}-${arg.take}`;
-    const expiry = 5 * 60; //5 minutes
+    const expiry = 1; //5 minutes
 
     try {
       const posts = await getOrSetCache<Post[]>(
@@ -98,7 +99,6 @@ export class PostAPI extends BaseAPI {
    * @returns {Promise<any>}
    */
   async likePost(postId: string): Promise<GetLikedPostResponse> {
-    // TO DO: implement logic to like post
     try {
       const { id } = this.getUser();
       const { data, error } = await likePost(id, postId);
@@ -113,21 +113,16 @@ export class PostAPI extends BaseAPI {
     }
   }
 
-  /**
-   * Unlikes a post.
-   * @param {string} postId - The ID of the post.
-   * @returns {Promise<any>}
-   */
-  async unlikePost(postId: string) {
-    // TO DO: implement logic to unlike post
+  async unlikePost(postId: string): Promise<UnlikePostResponse> {
     try {
       const user = this.getUser();
       const { data, error } = await removeLike(postId, user.id);
+      console.log(data);
       if (error) throw new Error(error.message);
       return {
         status: true,
-        message: "",
-        data: data.id,
+        message: "like removed",
+        data: data.postId,
       };
     } catch (error) {
       return this.handleError(error);
