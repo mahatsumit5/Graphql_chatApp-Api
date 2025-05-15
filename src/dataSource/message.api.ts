@@ -41,7 +41,7 @@ export class MessageApi extends BaseAPI {
     return {
       status: true,
       message: "Messages retrieved successfully",
-      data: data.reverse(),
+      data: data.messages.reverse(),
       _count: data._count.messages,
     };
   }

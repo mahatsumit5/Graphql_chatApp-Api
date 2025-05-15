@@ -10,7 +10,8 @@ import { loggedInUserAuth } from "./middleware/index";
 import { PubSub } from "graphql-subscriptions";
 import { User } from "./types/types";
 import { startApolloServer } from "./config/apolloServer";
-
+import os from "os";
+import { G } from "graphql-ws/dist/common-DY-PBNYy";
 export const onlineUsers = new Map<string, User>();
 export const pubsub = new PubSub();
 export const app = express();
@@ -19,7 +20,7 @@ const PORT = Number(process.env.PORT) || 8000;
 const options = {
   origin: [
     process.env.WEB_DOMAIN as string,
-    "http://192.168.20.8:5173",
+    "http://192.168.20.6:5173",
     "http://localhost:5173",
     "https://daisy-ui-chat-app.vercel.app/",
   ],
@@ -36,7 +37,20 @@ app.use("/api/v1/post", loggedInUserAuth, fileUploadApi);
 app.use(ErrorHandler);
 
 startApolloServer();
+// Function to get local IP address
+function getLocalIPAddress() {
+  const interfaces = os.networkInterfaces();
+  for (const name of Object.keys(interfaces)) {
+    for (const iface of interfaces[name]) {
+      if (iface.family === "IPv4" && !iface.internal) {
+        return iface.address;
+      }
+    }
+  }
+  return "127.0.0.1"; // fallback
+}
 
+const host = getLocalIPAddress();
 httpServer.listen(PORT, () => {
-  console.log(`Server is now running on http://localhost:${PORT}/graphql`);
+  console.log(`Server is now running on http://${host}:${PORT}/graphql`);
 });

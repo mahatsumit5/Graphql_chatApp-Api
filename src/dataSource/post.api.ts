@@ -117,7 +117,6 @@ export class PostAPI extends BaseAPI {
     try {
       const user = this.getUser();
       const { data, error } = await removeLike(postId, user.id);
-      console.log(data);
       if (error) throw new Error(error.message);
       return {
         status: true,

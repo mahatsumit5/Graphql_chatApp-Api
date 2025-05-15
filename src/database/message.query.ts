@@ -30,12 +30,15 @@ export const sendMessage = ({ content, roomId, author }: SendMessageParams) => {
   return result;
 };
 
-export const getMessageByRoomId = ({
+export const getMessageByRoomId = async ({
   roomId: id,
   skip,
   take,
 }: MessageByRoomIdParams) => {
-  const result = executeQuery<{ _count: { messages: number } } & Message[]>(
+  const result = await executeQuery<{
+    _count: { messages: number };
+    messages: Message[];
+  }>(
     prisma.chatRoom.findFirst({
       where: {
         id,
@@ -65,6 +68,7 @@ export const getMessageByRoomId = ({
       },
     })
   );
+  console.log(result.data, "result");
   return result;
 };
 export const getLastMessageByRoomId = (roomid: string) => {
@@ -105,7 +109,6 @@ export const updateMessage = (messageId: string, content: string) => {
       },
     })
   );
-  console.log(result);
 
   return result;
 };

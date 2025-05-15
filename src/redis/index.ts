@@ -17,7 +17,6 @@ export async function getOrSetCache<T>(
   }
 
   const newData = await cb();
-  console.log("Data coming from redish", newData);
   await redisClient.setEx(key, expiryInSeconds, JSON.stringify(newData));
   return newData;
 }
