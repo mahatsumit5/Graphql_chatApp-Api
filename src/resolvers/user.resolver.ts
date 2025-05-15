@@ -1,6 +1,6 @@
 import { Resolvers } from "../types/types";
 import { hashPass } from "../utils";
-export const userResolvers: Resolvers = {
+export const userResolver: Resolvers = {
   Mutation: {
     logout: (_, { email }, { dataSources }) => {
       return dataSources.userAPI.logout(email);

@@ -13,7 +13,7 @@ import { typeDefs } from "../typedefs";
 import { resolvers } from "../resolvers";
 import { createContext } from "../utils/context";
 import { WebSocketServer } from "ws";
-import { executeQuery, prisma } from "../script";
+import { getCommentsByPostId, postComment } from "../database/comment.query";
 
 const schema = makeExecutableSchema({
   resolvers,

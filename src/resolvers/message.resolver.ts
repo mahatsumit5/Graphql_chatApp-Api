@@ -1,6 +1,6 @@
 import { Resolvers } from "../types/types";
 import { pubsub } from "..";
-export const messageResolvers: Resolvers = {
+export const messageResolver: Resolvers = {
   Mutation: {
     sendMessage: async (_, args, { dataSources }) => {
       const response = await dataSources.message.sendMessage(args);

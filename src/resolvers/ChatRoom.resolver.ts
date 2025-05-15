@@ -1,6 +1,6 @@
 import { Resolvers } from "../types/types";
 
-export const chatRoomResolvers: Resolvers = {
+export const chatRoomResolver: Resolvers = {
   Query: {
     getAllChatRooms: (_, args, { dataSources }) => {
       const userId = dataSources.user.id;

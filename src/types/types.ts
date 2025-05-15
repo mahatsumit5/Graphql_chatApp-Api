@@ -48,7 +48,6 @@ export type Comment = {
   createdAt: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   likes: Array<CommentLikes>;
-  post: Post;
   postId: Scalars['String']['output'];
   replies: Array<CommentReply>;
   updatedAt: Scalars['String']['output'];
@@ -56,7 +55,6 @@ export type Comment = {
 
 export type CommentLikes = {
   __typename?: 'CommentLikes';
-  comment: Comment;
   commentId: Scalars['String']['output'];
   user: User;
   userId: Scalars['String']['output'];
@@ -127,6 +125,14 @@ export type GetChatRoomResponse = {
   status: Scalars['Boolean']['output'];
 };
 
+export type GetCommentResponse = {
+  __typename?: 'GetCommentResponse';
+  count?: Maybe<Scalars['Int']['output']>;
+  data: Array<Comment>;
+  message: Scalars['String']['output'];
+  status: Scalars['Boolean']['output'];
+};
+
 export type GetLikedPostResponse = {
   __typename?: 'GetLikedPostResponse';
   likedPost?: Maybe<Scalars['String']['output']>;
@@ -178,16 +184,21 @@ export type Mutation = {
   __typename?: 'Mutation';
   /** Accept incoming request */
   acceptFriendRequest?: Maybe<CreateChatRoomResponse>;
+  createComment: PostCommentResponse;
+  deleteComment: Scalars['Boolean']['output'];
   /** Delete Friend Request */
   deleteFriendRequest?: Maybe<SentRequestResponse>;
   deleteMessage?: Maybe<Response>;
   deletePost: GetPostByUserIdResponse;
+  likeComment: CommentLikes;
   likePost: GetLikedPostResponse;
   logout?: Maybe<Response>;
   sendMessage?: Maybe<SendMessageResponse>;
   /** Send friend request to other user */
   sendRequest?: Maybe<SentRequestResponse>;
+  unlikeComment: Scalars['Boolean']['output'];
   unlikePost: UnlikePostResponse;
+  updateComment: Comment;
   updatePost?: Maybe<UploadAPostResponse>;
   updateUser?: Maybe<UpdateUserResponse>;
   uploadPost: UploadAPostResponse;
@@ -197,6 +208,18 @@ export type Mutation = {
 export type MutationAcceptFriendRequestArgs = {
   fromId: Scalars['String']['input'];
   toId: Scalars['String']['input'];
+};
+
+
+export type MutationCreateCommentArgs = {
+  content: Scalars['String']['input'];
+  postId: Scalars['String']['input'];
+  userId: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteCommentArgs = {
+  id: Scalars['String']['input'];
 };
 
 
@@ -213,6 +236,11 @@ export type MutationDeleteMessageArgs = {
 
 export type MutationDeletePostArgs = {
   id: Scalars['String']['input'];
+};
+
+
+export type MutationLikeCommentArgs = {
+  commentId: Scalars['String']['input'];
 };
 
 
@@ -239,8 +267,19 @@ export type MutationSendRequestArgs = {
 };
 
 
+export type MutationUnlikeCommentArgs = {
+  commentId: Scalars['String']['input'];
+};
+
+
 export type MutationUnlikePostArgs = {
   postId: Scalars['String']['input'];
+};
+
+
+export type MutationUpdateCommentArgs = {
+  content: Scalars['String']['input'];
+  id: Scalars['String']['input'];
 };
 
 
@@ -284,6 +323,13 @@ export type Post = {
   updatedAt: Scalars['String']['output'];
 };
 
+export type PostCommentResponse = {
+  __typename?: 'PostCommentResponse';
+  data?: Maybe<Comment>;
+  message: Scalars['String']['output'];
+  status: Scalars['Boolean']['output'];
+};
+
 export type PostInput = {
   content: Scalars['String']['input'];
   images?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
@@ -308,6 +354,8 @@ export type Query = {
   getAllChatRooms: GetChatRoomResponse;
   getAllPosts?: Maybe<GetAllPostResponse>;
   getChatRoomById: ChatRoom;
+  getComment: Comment;
+  getComments: GetCommentResponse;
   /** Get all incoming request */
   getFriendRequest?: Maybe<FriendRequestResponse>;
   getMessagesByRoomId?: Maybe<GetMessageByRoomResponse>;
@@ -338,6 +386,16 @@ export type QueryGetAllPostsArgs = {
 
 export type QueryGetChatRoomByIdArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryGetCommentArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryGetCommentsArgs = {
+  postId: Scalars['String']['input'];
 };
 
 
@@ -547,6 +605,7 @@ export type ResolversTypes = {
   GetAllPostArgs: GetAllPostArgs;
   GetAllPostResponse: ResolverTypeWrapper<GetAllPostResponse>;
   GetChatRoomResponse: ResolverTypeWrapper<GetChatRoomResponse>;
+  GetCommentResponse: ResolverTypeWrapper<GetCommentResponse>;
   GetLikedPostResponse: ResolverTypeWrapper<GetLikedPostResponse>;
   GetMessageByRoomResponse: ResolverTypeWrapper<GetMessageByRoomResponse>;
   GetPostByUserIdResponse: ResolverTypeWrapper<GetPostByUserIdResponse>;
@@ -558,6 +617,7 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   Order: Order;
   Post: ResolverTypeWrapper<Post>;
+  PostCommentResponse: ResolverTypeWrapper<PostCommentResponse>;
   PostInput: PostInput;
   PostLike: ResolverTypeWrapper<PostLike>;
   Query: ResolverTypeWrapper<{}>;
@@ -593,6 +653,7 @@ export type ResolversParentTypes = {
   GetAllPostArgs: GetAllPostArgs;
   GetAllPostResponse: GetAllPostResponse;
   GetChatRoomResponse: GetChatRoomResponse;
+  GetCommentResponse: GetCommentResponse;
   GetLikedPostResponse: GetLikedPostResponse;
   GetMessageByRoomResponse: GetMessageByRoomResponse;
   GetPostByUserIdResponse: GetPostByUserIdResponse;
@@ -603,6 +664,7 @@ export type ResolversParentTypes = {
   MessageByRoomIdParams: MessageByRoomIdParams;
   Mutation: {};
   Post: Post;
+  PostCommentResponse: PostCommentResponse;
   PostInput: PostInput;
   PostLike: PostLike;
   Query: {};
@@ -651,7 +713,6 @@ export type CommentResolvers<ContextType = DataSourceContext, ParentType extends
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   likes?: Resolver<Array<ResolversTypes['CommentLikes']>, ParentType, ContextType>;
-  post?: Resolver<ResolversTypes['Post'], ParentType, ContextType>;
   postId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   replies?: Resolver<Array<ResolversTypes['CommentReply']>, ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -659,7 +720,6 @@ export type CommentResolvers<ContextType = DataSourceContext, ParentType extends
 };
 
 export type CommentLikesResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['CommentLikes'] = ResolversParentTypes['CommentLikes']> = {
-  comment?: Resolver<ResolversTypes['Comment'], ParentType, ContextType>;
   commentId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -726,6 +786,14 @@ export type GetChatRoomResponseResolvers<ContextType = DataSourceContext, Parent
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GetCommentResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['GetCommentResponse'] = ResolversParentTypes['GetCommentResponse']> = {
+  count?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  data?: Resolver<Array<ResolversTypes['Comment']>, ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GetLikedPostResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['GetLikedPostResponse'] = ResolversParentTypes['GetLikedPostResponse']> = {
   likedPost?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -769,14 +837,19 @@ export type MessageResolvers<ContextType = DataSourceContext, ParentType extends
 
 export type MutationResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   acceptFriendRequest?: Resolver<Maybe<ResolversTypes['CreateChatRoomResponse']>, ParentType, ContextType, RequireFields<MutationAcceptFriendRequestArgs, 'fromId' | 'toId'>>;
+  createComment?: Resolver<ResolversTypes['PostCommentResponse'], ParentType, ContextType, RequireFields<MutationCreateCommentArgs, 'content' | 'postId' | 'userId'>>;
+  deleteComment?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteCommentArgs, 'id'>>;
   deleteFriendRequest?: Resolver<Maybe<ResolversTypes['SentRequestResponse']>, ParentType, ContextType, RequireFields<MutationDeleteFriendRequestArgs, 'fromId' | 'toId'>>;
   deleteMessage?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationDeleteMessageArgs, 'messageId'>>;
   deletePost?: Resolver<ResolversTypes['GetPostByUserIdResponse'], ParentType, ContextType, RequireFields<MutationDeletePostArgs, 'id'>>;
+  likeComment?: Resolver<ResolversTypes['CommentLikes'], ParentType, ContextType, RequireFields<MutationLikeCommentArgs, 'commentId'>>;
   likePost?: Resolver<ResolversTypes['GetLikedPostResponse'], ParentType, ContextType, RequireFields<MutationLikePostArgs, 'postId'>>;
   logout?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationLogoutArgs, 'email'>>;
   sendMessage?: Resolver<Maybe<ResolversTypes['SendMessageResponse']>, ParentType, ContextType, RequireFields<MutationSendMessageArgs, 'author' | 'content' | 'receiverId' | 'roomId'>>;
   sendRequest?: Resolver<Maybe<ResolversTypes['SentRequestResponse']>, ParentType, ContextType, RequireFields<MutationSendRequestArgs, 'toId'>>;
+  unlikeComment?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUnlikeCommentArgs, 'commentId'>>;
   unlikePost?: Resolver<ResolversTypes['UnlikePostResponse'], ParentType, ContextType, RequireFields<MutationUnlikePostArgs, 'postId'>>;
+  updateComment?: Resolver<ResolversTypes['Comment'], ParentType, ContextType, RequireFields<MutationUpdateCommentArgs, 'content' | 'id'>>;
   updatePost?: Resolver<Maybe<ResolversTypes['UploadAPostResponse']>, ParentType, ContextType, RequireFields<MutationUpdatePostArgs, 'id'>>;
   updateUser?: Resolver<Maybe<ResolversTypes['UpdateUserResponse']>, ParentType, ContextType, Partial<MutationUpdateUserArgs>>;
   uploadPost?: Resolver<ResolversTypes['UploadAPostResponse'], ParentType, ContextType, Partial<MutationUploadPostArgs>>;
@@ -795,6 +868,13 @@ export type PostResolvers<ContextType = DataSourceContext, ParentType extends Re
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type PostCommentResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['PostCommentResponse'] = ResolversParentTypes['PostCommentResponse']> = {
+  data?: Resolver<Maybe<ResolversTypes['Comment']>, ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type PostLikeResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['PostLike'] = ResolversParentTypes['PostLike']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   post?: Resolver<ResolversTypes['Post'], ParentType, ContextType>;
@@ -810,6 +890,8 @@ export type QueryResolvers<ContextType = DataSourceContext, ParentType extends R
   getAllChatRooms?: Resolver<ResolversTypes['GetChatRoomResponse'], ParentType, ContextType, Partial<QueryGetAllChatRoomsArgs>>;
   getAllPosts?: Resolver<Maybe<ResolversTypes['GetAllPostResponse']>, ParentType, ContextType, Partial<QueryGetAllPostsArgs>>;
   getChatRoomById?: Resolver<ResolversTypes['ChatRoom'], ParentType, ContextType, RequireFields<QueryGetChatRoomByIdArgs, 'id'>>;
+  getComment?: Resolver<ResolversTypes['Comment'], ParentType, ContextType, RequireFields<QueryGetCommentArgs, 'id'>>;
+  getComments?: Resolver<ResolversTypes['GetCommentResponse'], ParentType, ContextType, RequireFields<QueryGetCommentsArgs, 'postId'>>;
   getFriendRequest?: Resolver<Maybe<ResolversTypes['FriendRequestResponse']>, ParentType, ContextType>;
   getMessagesByRoomId?: Resolver<Maybe<ResolversTypes['GetMessageByRoomResponse']>, ParentType, ContextType, Partial<QueryGetMessagesByRoomIdArgs>>;
   getPostByUserId?: Resolver<Maybe<ResolversTypes['GetPostByUserIdResponse']>, ParentType, ContextType, RequireFields<QueryGetPostByUserIdArgs, 'userId'>>;
@@ -904,6 +986,7 @@ export type Resolvers<ContextType = DataSourceContext> = {
   FriendRequestResponse?: FriendRequestResponseResolvers<ContextType>;
   GetAllPostResponse?: GetAllPostResponseResolvers<ContextType>;
   GetChatRoomResponse?: GetChatRoomResponseResolvers<ContextType>;
+  GetCommentResponse?: GetCommentResponseResolvers<ContextType>;
   GetLikedPostResponse?: GetLikedPostResponseResolvers<ContextType>;
   GetMessageByRoomResponse?: GetMessageByRoomResponseResolvers<ContextType>;
   GetPostByUserIdResponse?: GetPostByUserIdResponseResolvers<ContextType>;
@@ -911,6 +994,7 @@ export type Resolvers<ContextType = DataSourceContext> = {
   Message?: MessageResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Post?: PostResolvers<ContextType>;
+  PostCommentResponse?: PostCommentResponseResolvers<ContextType>;
   PostLike?: PostLikeResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Response?: ResponseResolvers<ContextType>;

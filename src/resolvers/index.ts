@@ -1,16 +1,18 @@
 import { mergeResolvers } from "@graphql-tools/merge";
-import { userResolvers } from "./user.resolvers";
-import { postResolvers } from "./post.resolvers";
-import { friendRequestResolvers } from "./friendRequest.resolvers";
+import { userResolver } from "./user.resolver";
+import { postResolver } from "./post.resolver";
+import { friendRequestResolver } from "./friendRequest.resolver";
 import { subscriptionResolver } from "./subscription.resolver";
-import { chatRoomResolvers } from "./ChatRoom.resolvers";
-import { messageResolvers } from "./message.resolvers";
+import { chatRoomResolver } from "./ChatRoom.resolver";
+import { messageResolver } from "./message.resolver";
+import { commentResolver } from "./comment.resolver";
 
 export const resolvers = mergeResolvers([
-  userResolvers,
-  postResolvers,
-  friendRequestResolvers,
+  userResolver,
+  postResolver,
+  friendRequestResolver,
   subscriptionResolver,
-  chatRoomResolvers,
-  messageResolvers,
+  chatRoomResolver,
+  messageResolver,
+  commentResolver,
 ]);

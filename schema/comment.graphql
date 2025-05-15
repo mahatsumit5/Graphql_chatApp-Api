@@ -2,7 +2,6 @@
 type Comment {
   id: ID!
   content: String!
-  post: Post!
   postId: String!
   author: User!
   authorId: String!
@@ -21,6 +20,28 @@ type CommentReply {
 type CommentLikes {
   commentId: String!
   userId: String!
-  comment: Comment!
   user: User!
+}
+
+type Query {
+  # Get all comments
+  getComments(postId: String!): GetCommentResponse!
+  # Get a comment by ID
+  getComment(id: String!): Comment!
+}
+type Mutation {
+  # Create a comment
+  createComment(
+    content: String!
+    postId: String!
+    userId: String!
+  ): PostCommentResponse!
+  # Update a comment
+  updateComment(id: String!, content: String!): Comment!
+  # Delete a comment
+  deleteComment(id: String!): Boolean!
+  # Like a comment
+  likeComment(commentId: String!): CommentLikes!
+  # Unlike a comment
+  unlikeComment(commentId: String!): Boolean!
 }

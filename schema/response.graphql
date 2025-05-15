@@ -54,3 +54,15 @@ type UnlikePostResponse {
   message: String!
   data: String
 }
+
+type PostCommentResponse {
+  status: Boolean!
+  message: String!
+  data: Comment
+}
+type GetCommentResponse {
+  status: Boolean!
+  message: String!
+  data: [Comment!]!
+  count: Int
+}

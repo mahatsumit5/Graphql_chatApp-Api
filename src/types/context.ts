@@ -5,6 +5,7 @@ import { MessageApi } from "../dataSource/message.api";
 import { PostAPI } from "../dataSource/post.api";
 import { UserAPI } from "../dataSource/user.api";
 import { User } from "./types";
+import { CommentAPI } from "../dataSource/comment.api";
 
 export type DataSourceContext = {
   pubsub: PubSub<Record<string, never>>;
@@ -17,5 +18,6 @@ export type DataSourceContext = {
     user: User;
     chatRoom: ChatRoomApi;
     message: MessageApi;
+    commentApi: CommentAPI;
   } | null;
 };

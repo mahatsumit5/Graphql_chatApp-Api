@@ -6,6 +6,7 @@ import { PostAPI } from "../dataSource/post.api";
 import { ChatRoomApi } from "../dataSource/chatRoom.api";
 import { MessageApi } from "../dataSource/message.api";
 import { pubsub } from "..";
+import { CommentAPI } from "../dataSource/comment.api";
 
 export const createContext: (
   args: ExpressContextFunctionArgument,
@@ -28,6 +29,7 @@ export const createContext: (
         postAPI: new PostAPI({ cache }, user, token),
         chatRoom: new ChatRoomApi({ cache }, user, token),
         message: new MessageApi({ cache }, user, token),
+        commentApi: new CommentAPI({ cache }, user, token),
       },
     };
   } catch (error) {

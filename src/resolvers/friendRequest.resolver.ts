@@ -1,7 +1,7 @@
 import { getFriendRequestByUser } from "../database/friendRequest.query";
 import { Resolvers } from "../types/types";
 
-export const friendRequestResolvers: Resolvers = {
+export const friendRequestResolver: Resolvers = {
   Query: {
     getFriendRequest: (_, args, { dataSources }) => {
       return dataSources.friendReqAPI.getFriendRequest(dataSources.user.id);

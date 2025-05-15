@@ -1,7 +1,7 @@
 import { Resolvers } from "../types/types";
 import { updatePost } from "../database/post.query";
 
-export const postResolvers: Resolvers = {
+export const postResolver: Resolvers = {
   Query: {
     getAllPosts: (_, { args }, { dataSources }) => {
       const userId = dataSources.user.id;
