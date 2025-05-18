@@ -39,7 +39,7 @@ type Mutation {
   # Update a comment
   updateComment(id: String!, content: String!): Comment!
   # Delete a comment
-  deleteComment(id: String!): Boolean!
+  deleteComment(id: String!): DeleteCommentResponse!
   # Like a comment
   likeComment(commentId: String!): CommentLikes!
   # Unlike a comment

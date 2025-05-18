@@ -13,7 +13,11 @@ import { typeDefs } from "../typedefs";
 import { resolvers } from "../resolvers";
 import { createContext } from "../utils/context";
 import { WebSocketServer } from "ws";
-import { getCommentsByPostId, postComment } from "../database/comment.query";
+import {
+  deleteComment,
+  getCommentsByPostId,
+  postComment,
+} from "../database/comment.query";
 
 const schema = makeExecutableSchema({
   resolvers,
@@ -78,7 +82,6 @@ export async function startApolloServer() {
     ],
     formatError: (err) => formatError(err.extensions, err.message),
   });
-
   await server.start();
   await redisClient.connect();
   app.use(

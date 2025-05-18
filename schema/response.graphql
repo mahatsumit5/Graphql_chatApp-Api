@@ -66,3 +66,8 @@ type GetCommentResponse {
   data: [Comment!]!
   count: Int
 }
+type DeleteCommentResponse {
+  status: Boolean!
+  message: String!
+  data: Comment
+}

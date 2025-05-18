@@ -57,12 +57,11 @@ export function updateComment({
     })
   );
 }
-export function deleteComment(uid: string, commentId: string) {
-  return executeQuery(
+export function deleteComment(id: string) {
+  return executeQuery<Comment>(
     prisma.comment.delete({
       where: {
-        authorId: uid,
-        id: commentId,
+        id,
       },
     })
   );

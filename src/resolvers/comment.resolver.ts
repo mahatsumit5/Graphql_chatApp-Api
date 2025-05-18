@@ -10,5 +10,8 @@ export const commentResolver: Resolvers = {
     createComment: async (__, arg, { dataSources }) => {
       return dataSources.commentApi.postComment(arg);
     },
+    deleteComment: async (__, { id }, { dataSources }) => {
+      return dataSources.commentApi.deleteComment(id);
+    },
   },
 };

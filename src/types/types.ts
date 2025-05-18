@@ -73,6 +73,13 @@ export type CreateChatRoomResponse = {
   status: Scalars['Boolean']['output'];
 };
 
+export type DeleteCommentResponse = {
+  __typename?: 'DeleteCommentResponse';
+  data?: Maybe<Comment>;
+  message: Scalars['String']['output'];
+  status: Scalars['Boolean']['output'];
+};
+
 export type File = {
   __typename?: 'File';
   encoding: Scalars['String']['output'];
@@ -185,7 +192,7 @@ export type Mutation = {
   /** Accept incoming request */
   acceptFriendRequest?: Maybe<CreateChatRoomResponse>;
   createComment: PostCommentResponse;
-  deleteComment: Scalars['Boolean']['output'];
+  deleteComment: DeleteCommentResponse;
   /** Delete Friend Request */
   deleteFriendRequest?: Maybe<SentRequestResponse>;
   deleteMessage?: Maybe<Response>;
@@ -598,6 +605,7 @@ export type ResolversTypes = {
   CommentLikes: ResolverTypeWrapper<CommentLikes>;
   CommentReply: ResolverTypeWrapper<CommentReply>;
   CreateChatRoomResponse: ResolverTypeWrapper<CreateChatRoomResponse>;
+  DeleteCommentResponse: ResolverTypeWrapper<DeleteCommentResponse>;
   File: ResolverTypeWrapper<File>;
   Friend: ResolverTypeWrapper<Friend>;
   FriendRequest: ResolverTypeWrapper<FriendRequest>;
@@ -646,6 +654,7 @@ export type ResolversParentTypes = {
   CommentLikes: CommentLikes;
   CommentReply: CommentReply;
   CreateChatRoomResponse: CreateChatRoomResponse;
+  DeleteCommentResponse: DeleteCommentResponse;
   File: File;
   Friend: Friend;
   FriendRequest: FriendRequest;
@@ -734,6 +743,13 @@ export type CommentReplyResolvers<ContextType = DataSourceContext, ParentType ex
 
 export type CreateChatRoomResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['CreateChatRoomResponse'] = ResolversParentTypes['CreateChatRoomResponse']> = {
   data?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type DeleteCommentResponseResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['DeleteCommentResponse'] = ResolversParentTypes['DeleteCommentResponse']> = {
+  data?: Resolver<Maybe<ResolversTypes['Comment']>, ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -838,7 +854,7 @@ export type MessageResolvers<ContextType = DataSourceContext, ParentType extends
 export type MutationResolvers<ContextType = DataSourceContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   acceptFriendRequest?: Resolver<Maybe<ResolversTypes['CreateChatRoomResponse']>, ParentType, ContextType, RequireFields<MutationAcceptFriendRequestArgs, 'fromId' | 'toId'>>;
   createComment?: Resolver<ResolversTypes['PostCommentResponse'], ParentType, ContextType, RequireFields<MutationCreateCommentArgs, 'content' | 'postId' | 'userId'>>;
-  deleteComment?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteCommentArgs, 'id'>>;
+  deleteComment?: Resolver<ResolversTypes['DeleteCommentResponse'], ParentType, ContextType, RequireFields<MutationDeleteCommentArgs, 'id'>>;
   deleteFriendRequest?: Resolver<Maybe<ResolversTypes['SentRequestResponse']>, ParentType, ContextType, RequireFields<MutationDeleteFriendRequestArgs, 'fromId' | 'toId'>>;
   deleteMessage?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationDeleteMessageArgs, 'messageId'>>;
   deletePost?: Resolver<ResolversTypes['GetPostByUserIdResponse'], ParentType, ContextType, RequireFields<MutationDeletePostArgs, 'id'>>;
@@ -980,6 +996,7 @@ export type Resolvers<ContextType = DataSourceContext> = {
   CommentLikes?: CommentLikesResolvers<ContextType>;
   CommentReply?: CommentReplyResolvers<ContextType>;
   CreateChatRoomResponse?: CreateChatRoomResponseResolvers<ContextType>;
+  DeleteCommentResponse?: DeleteCommentResponseResolvers<ContextType>;
   File?: FileResolvers<ContextType>;
   Friend?: FriendResolvers<ContextType>;
   FriendRequest?: FriendRequestResolvers<ContextType>;
