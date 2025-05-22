@@ -1,5 +1,6 @@
 import { Resolvers } from "../types/types";
 import { updatePost } from "../database/post.query";
+import { pubsub } from "..";
 
 export const postResolver: Resolvers = {
   Query: {
@@ -14,12 +15,12 @@ export const postResolver: Resolvers = {
   Mutation: {
     uploadPost: async (_, { body }, { dataSources }) => {
       const userid = dataSources.user.id;
-      return dataSources.postAPI.createAPost({
+      const response = await dataSources.postAPI.createAPost({
         ...body,
         id: userid,
       });
-
-      // pubsub.publish("POST_CREATED", { newPost: response.result });
+      pubsub.publish("POST_CREATED", { newPost: response.result });
+      return response;
     },
     updatePost: async (_, arg, { dataSources }) => {
       const { data, error } = await updatePost(arg);

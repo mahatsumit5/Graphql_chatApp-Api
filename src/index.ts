@@ -11,7 +11,6 @@ import { PubSub } from "graphql-subscriptions";
 import { User } from "./types/types";
 import { startApolloServer } from "./config/apolloServer";
 import os from "os";
-import { G } from "graphql-ws/dist/common-DY-PBNYy";
 export const onlineUsers = new Map<string, User>();
 export const pubsub = new PubSub();
 export const app = express();
