@@ -13,7 +13,6 @@ import { typeDefs } from "../typedefs";
 import { resolvers } from "../resolvers";
 import { createContext } from "../utils/context";
 import { WebSocketServer } from "ws";
-
 const schema = makeExecutableSchema({
   resolvers,
   typeDefs,
