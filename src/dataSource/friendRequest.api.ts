@@ -1,4 +1,3 @@
-import { C } from "graphql-ws/dist/common-DY-PBNYy";
 import { BaseAPI } from ".";
 import {
   deleteSentRequest,

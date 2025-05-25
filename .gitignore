@@ -1,6 +1,6 @@
 node_modules
 .env
-dist
+
 
 prisma/gen-prisma-client
 prisma/migrations
