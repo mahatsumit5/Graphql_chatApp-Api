@@ -1,6 +1,6 @@
 import { AugmentedRequest, RESTDataSource } from "@apollo/datasource-rest";
 import { KeyValueCache } from "@apollo/utils.keyvaluecache";
-import { User } from "../types/types";
+import { User } from "../types/types.js";
 
 export class BaseAPI extends RESTDataSource {
   private token: string;

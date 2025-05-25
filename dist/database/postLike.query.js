@@ -1,10 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.likePost = likePost;
-exports.removeLike = removeLike;
-const script_1 = require("../script");
-function likePost(userId, postId) {
-    return (0, script_1.executeQuery)(script_1.prisma.postLike.create({
+import { executeQuery, prisma } from "../script.js";
+export function likePost(userId, postId) {
+    return executeQuery(prisma.postLike.create({
         data: {
             post: {
                 connect: {
@@ -19,8 +15,8 @@ function likePost(userId, postId) {
         },
     }));
 }
-async function removeLike(postId, userId) {
-    return await (0, script_1.executeQuery)(script_1.prisma.postLike.delete({
+export async function removeLike(postId, userId) {
+    return await executeQuery(prisma.postLike.delete({
         where: {
             postId_userId: {
                 postId: postId,

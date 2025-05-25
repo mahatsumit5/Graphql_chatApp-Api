@@ -3,13 +3,13 @@ config();
 import http from "http";
 import express from "express";
 import cors from "cors";
-import { ErrorHandler } from "./utils";
-import publicApi from "./restApi/router/public.router";
-import fileUploadApi from "./restApi/router/file.upload.router";
-import { loggedInUserAuth } from "./middleware/index";
+import { ErrorHandler } from "./utils/index.js";
+import publicApi from "./restApi/router/public.router.js";
+import fileUploadApi from "./restApi/router/file.upload.router.js";
+import { loggedInUserAuth } from "./middleware/index.js";
 import { PubSub } from "graphql-subscriptions";
-import { User } from "./types/types";
-import { startApolloServer } from "./config/apolloServer";
+import type { User } from "./types/types.js";
+import { startApolloServer } from "./config/apolloServer.js";
 import os from "os";
 export const onlineUsers = new Map<string, User>();
 export const pubsub = new PubSub();
@@ -51,5 +51,5 @@ function getLocalIPAddress() {
 
 const host = getLocalIPAddress();
 httpServer.listen(PORT, () => {
-  console.log(`Server is now running on http://${host}:${PORT}/graphql`);
+  console.log(`Server is now running on http://localhost:${PORT}/graphql`);
 });

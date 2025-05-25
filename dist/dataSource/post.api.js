@@ -1,14 +1,11 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.PostAPI = void 0;
-const _1 = require(".");
-const post_query_1 = require("../database/post.query");
-const redis_1 = require("../redis");
-const postLike_query_1 = require("../database/postLike.query");
-class PostAPI extends _1.BaseAPI {
+import { BaseAPI } from "./index.js";
+import { countTotalPost, createPost, getAllPost, } from "../database/post.query.js";
+import { getOrSetCache } from "../redis/index.js";
+import { likePost, removeLike } from "../database/postLike.query.js";
+export class PostAPI extends BaseAPI {
     async createAPost(arg) {
         try {
-            const { data, error } = await (0, post_query_1.createPost)(arg);
+            const { data, error } = await createPost(arg);
             if (!data.id)
                 throw new Error("Unable to create a post");
             return {
@@ -25,8 +22,8 @@ class PostAPI extends _1.BaseAPI {
         const key = `post-${arg.page}-${arg.userId}-${arg.take}`;
         const expiry = 1;
         try {
-            const posts = await (0, redis_1.getOrSetCache)(key, expiry, async () => await (0, post_query_1.getAllPost)(arg));
-            const { data: count, error } = await (0, post_query_1.countTotalPost)();
+            const posts = await getOrSetCache(key, expiry, async () => await getAllPost(arg));
+            const { data: count, error } = await countTotalPost();
             if (error)
                 throw new Error(error.message);
             if (!count)
@@ -51,7 +48,7 @@ class PostAPI extends _1.BaseAPI {
     async likePost(postId) {
         try {
             const { id } = this.getUser();
-            const { data, error } = await (0, postLike_query_1.likePost)(id, postId);
+            const { data, error } = await likePost(id, postId);
             if (error)
                 throw new Error(error.message);
             return {
@@ -67,7 +64,7 @@ class PostAPI extends _1.BaseAPI {
     async unlikePost(postId) {
         try {
             const user = this.getUser();
-            const { data, error } = await (0, postLike_query_1.removeLike)(postId, user.id);
+            const { data, error } = await removeLike(postId, user.id);
             if (error)
                 throw new Error(error.message);
             return {
@@ -81,4 +78,3 @@ class PostAPI extends _1.BaseAPI {
         }
     }
 }
-exports.PostAPI = PostAPI;

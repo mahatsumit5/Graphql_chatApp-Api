@@ -1,9 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateMessage = exports.deleteAllMessage = exports.deleteMessage = exports.getLastMessageByRoomId = exports.getMessageByRoomId = exports.sendMessage = void 0;
-const script_1 = require("../script");
-const sendMessage = ({ content, roomId, author }) => {
-    const result = (0, script_1.executeQuery)(script_1.prisma.message.create({
+import { executeQuery, prisma } from "../script.js";
+export const sendMessage = ({ content, roomId, author }) => {
+    const result = executeQuery(prisma.message.create({
         data: {
             content,
             author: {
@@ -27,9 +24,8 @@ const sendMessage = ({ content, roomId, author }) => {
     }));
     return result;
 };
-exports.sendMessage = sendMessage;
-const getMessageByRoomId = async ({ roomId: id, skip, take, }) => {
-    const result = await (0, script_1.executeQuery)(script_1.prisma.chatRoom.findFirst({
+export const getMessageByRoomId = async ({ roomId: id, skip, take, }) => {
+    const result = await executeQuery(prisma.chatRoom.findFirst({
         where: {
             id,
         },
@@ -58,9 +54,8 @@ const getMessageByRoomId = async ({ roomId: id, skip, take, }) => {
     console.log(result.data, "result");
     return result;
 };
-exports.getMessageByRoomId = getMessageByRoomId;
-const getLastMessageByRoomId = (roomid) => {
-    const result = (0, script_1.executeQuery)(script_1.prisma.chatRoom.findFirst({
+export const getLastMessageByRoomId = (roomid) => {
+    const result = executeQuery(prisma.chatRoom.findFirst({
         where: {
             id: roomid,
         },
@@ -75,18 +70,15 @@ const getLastMessageByRoomId = (roomid) => {
     }));
     return result;
 };
-exports.getLastMessageByRoomId = getLastMessageByRoomId;
-const deleteMessage = (messageId) => {
-    const result = (0, script_1.executeQuery)(script_1.prisma.message.deleteMany({ where: { id: messageId } }));
+export const deleteMessage = (messageId) => {
+    const result = executeQuery(prisma.message.deleteMany({ where: { id: messageId } }));
     return result;
 };
-exports.deleteMessage = deleteMessage;
-const deleteAllMessage = () => {
-    return (0, script_1.executeQuery)(script_1.prisma.message.deleteMany());
+export const deleteAllMessage = () => {
+    return executeQuery(prisma.message.deleteMany());
 };
-exports.deleteAllMessage = deleteAllMessage;
-const updateMessage = (messageId, content) => {
-    const result = (0, script_1.executeQuery)(script_1.prisma.message.update({
+export const updateMessage = (messageId, content) => {
+    const result = executeQuery(prisma.message.update({
         where: { id: messageId },
         data: {
             content: content,
@@ -94,4 +86,3 @@ const updateMessage = (messageId, content) => {
     }));
     return result;
 };
-exports.updateMessage = updateMessage;

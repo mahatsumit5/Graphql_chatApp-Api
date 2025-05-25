@@ -1,5 +1,5 @@
 import { PubSub } from "graphql-subscriptions";
-import { Resolvers, User } from "../types/types";
+import { Resolvers, User } from "../types/types.js";
 
 export const subscriptionResolver: Resolvers = {
   Subscription: {

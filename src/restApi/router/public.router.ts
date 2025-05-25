@@ -1,12 +1,12 @@
 import { Response, Request, Router } from "express";
-import { comparePassword, hashPass } from "../../utils/bcrypt";
-import { createAuth0Token } from "../../utils/auth0";
-import { createUser, getUserByEmail } from "../../database/user.query";
+import { comparePassword, hashPass } from "../../utils/bcrypt.js";
+import { createAuth0Token } from "../../utils/auth0.js";
+import { createUser, getUserByEmail } from "../../database/user.query.js";
 import {
   validateUserLogin,
   validateUserSignUp,
-} from "../../utils/data.validation";
-import { createSession } from "../../database/session.query";
+} from "../../utils/data.validation.js";
+import { createSession } from "../../database/session.query.js";
 
 const router = Router();
 

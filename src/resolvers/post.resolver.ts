@@ -1,6 +1,6 @@
-import { Resolvers } from "../types/types";
-import { updatePost } from "../database/post.query";
-import { pubsub } from "..";
+import { Resolvers } from "../types/types.js";
+import { updatePost } from "../database/post.query.js";
+import { pubsub } from "../index.js";
 
 export const postResolver: Resolvers = {
   Query: {

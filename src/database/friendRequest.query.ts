@@ -1,6 +1,6 @@
-import { executeQuery, prisma } from "../script";
-import { GetSentReqParams } from "../types";
-import { FriendRequest } from "../types/types";
+import { executeQuery, prisma } from "../script.js";
+import { GetSentReqParams } from "../types/index.js";
+import { FriendRequest } from "../types/types.js";
 const SELECT_FRIEND_REQ = {
   to: {
     select: {

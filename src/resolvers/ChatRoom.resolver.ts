@@ -1,4 +1,4 @@
-import { Resolvers } from "../types/types";
+import { Resolvers } from "../types/types.js";
 
 export const chatRoomResolver: Resolvers = {
   Query: {

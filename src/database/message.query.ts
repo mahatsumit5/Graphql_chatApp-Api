@@ -1,6 +1,6 @@
-import { executeQuery, prisma } from "../script";
-import { SendMessageParams } from "../types";
-import { Message, MessageByRoomIdParams } from "../types/types";
+import { executeQuery, prisma } from "../script.js";
+import { SendMessageParams } from "../types/index.js";
+import { Message, MessageByRoomIdParams } from "../types/types.js";
 
 export const sendMessage = ({ content, roomId, author }: SendMessageParams) => {
   const result = executeQuery<Message>(

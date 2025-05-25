@@ -1,8 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.updatePost = exports.deletePost = exports.getPostByUser = exports.getAllPost = exports.createPost = void 0;
-exports.countTotalPost = countTotalPost;
-const script_1 = require("../script");
+import { executeQuery, prisma } from "../script.js";
 const SELECT_USER_PROFILE = {
     email: true,
     fName: true,
@@ -11,8 +7,8 @@ const SELECT_USER_PROFILE = {
     profile: true,
     isActive: true,
 };
-const createPost = ({ id, ...rest }) => {
-    return (0, script_1.executeQuery)(script_1.prisma.post.create({
+export const createPost = ({ id, ...rest }) => {
+    return executeQuery(prisma.post.create({
         data: {
             ...rest,
             author: {
@@ -52,11 +48,10 @@ const createPost = ({ id, ...rest }) => {
         },
     }));
 };
-exports.createPost = createPost;
-const getAllPost = async ({ page, take, userId, }) => {
+export const getAllPost = async ({ page, take, userId, }) => {
     try {
         const skip = (page - 1) * take;
-        const { data, error } = await (0, script_1.executeQuery)(script_1.prisma.post.findMany({
+        const { data, error } = await executeQuery(prisma.post.findMany({
             select: {
                 id: true,
                 title: true,
@@ -83,7 +78,7 @@ const getAllPost = async ({ page, take, userId, }) => {
         if (error)
             throw new Error(error.message);
         const postIds = data?.map((post) => post.id);
-        const userLikes = await script_1.prisma.postLike.findMany({
+        const userLikes = await prisma.postLike.findMany({
             where: {
                 userId: userId,
                 postId: {
@@ -105,12 +100,11 @@ const getAllPost = async ({ page, take, userId, }) => {
         return error;
     }
 };
-exports.getAllPost = getAllPost;
-async function countTotalPost() {
-    return (0, script_1.executeQuery)(script_1.prisma.post.count());
+export async function countTotalPost() {
+    return executeQuery(prisma.post.count());
 }
-const getPostByUser = (authorId) => {
-    return (0, script_1.executeQuery)(script_1.prisma.post.findMany({
+export const getPostByUser = (authorId) => {
+    return executeQuery(prisma.post.findMany({
         where: {
             authorId,
         },
@@ -147,22 +141,19 @@ const getPostByUser = (authorId) => {
         },
     }));
 };
-exports.getPostByUser = getPostByUser;
-const deletePost = (id, authorId) => {
-    return (0, script_1.executeQuery)(script_1.prisma.post.delete({
+export const deletePost = (id, authorId) => {
+    return executeQuery(prisma.post.delete({
         where: {
             id,
             authorId,
         },
     }));
 };
-exports.deletePost = deletePost;
-const updatePost = ({ id, ...rest }) => {
-    return (0, script_1.executeQuery)(script_1.prisma.post.update({
+export const updatePost = ({ id, ...rest }) => {
+    return executeQuery(prisma.post.update({
         where: {
             id,
         },
         data: { ...rest },
     }));
 };
-exports.updatePost = updatePost;

@@ -1,8 +1,8 @@
-import { createContext } from "./context";
-import { hashPass, comparePassword } from "./bcrypt";
-import { createAuth0Token, verifyToken } from "./auth0";
-import sendResponse from "./sendResponse";
-import { ErrorHandler } from "./errorHandler";
+import { createContext } from "./context.js";
+import { hashPass, comparePassword } from "./bcrypt.js";
+import { createAuth0Token, verifyToken } from "./auth0.js";
+import sendResponse from "./sendResponse.js";
+import { ErrorHandler } from "./errorHandler.js";
 export {
   createContext,
   hashPass,

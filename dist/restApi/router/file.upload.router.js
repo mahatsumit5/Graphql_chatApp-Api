@@ -1,9 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = require("express");
-const index_1 = require("../../middleware/index");
-const router = (0, express_1.Router)();
-router.post("/", index_1.upload.array("images"), async (req, res, next) => {
+import { Router } from "express";
+import { upload } from "../../middleware/index.js";
+const router = Router();
+router.post("/", upload.array("images"), async (req, res, next) => {
     try {
         const file = req.files;
         file.length
@@ -21,4 +19,4 @@ router.post("/", index_1.upload.array("images"), async (req, res, next) => {
         next(error);
     }
 });
-exports.default = router;
+export default router;

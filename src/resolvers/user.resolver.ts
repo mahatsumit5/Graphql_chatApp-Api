@@ -1,5 +1,5 @@
-import { Resolvers } from "../types/types";
-import { hashPass } from "../utils";
+import { Resolvers } from "../types/types.js";
+import { hashPass } from "../utils/bcrypt.js";
 export const userResolver: Resolvers = {
   Mutation: {
     logout: (_, { email }, { dataSources }) => {

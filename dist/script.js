@@ -1,10 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.prisma = void 0;
-exports.executeQuery = executeQuery;
-const gen_prisma_client_1 = require("../prisma/gen-prisma-client");
-exports.prisma = new gen_prisma_client_1.PrismaClient();
-async function executeQuery(query) {
+import { Prisma, PrismaClient } from "../prisma/gen-prisma-client/client.js";
+export const prisma = new PrismaClient();
+export async function executeQuery(query) {
     let data;
     let err;
     try {
@@ -16,7 +12,7 @@ async function executeQuery(query) {
     }
     catch (error) {
         let message = "Unknown database operation failed";
-        if (error instanceof gen_prisma_client_1.Prisma.PrismaClientKnownRequestError) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
             const code = error.code;
             message = PrismaErrorCode[code] || message;
         }
@@ -29,7 +25,7 @@ async function executeQuery(query) {
         };
     }
     finally {
-        await exports.prisma.$disconnect();
+        await prisma.$disconnect();
     }
 }
 const PrismaErrorCode = {
@@ -89,4 +85,4 @@ const PrismaErrorCode = {
     P3002: "Migration rolled back",
     P3003: "Invalid migration format",
 };
-exports.default = PrismaErrorCode;
+export default PrismaErrorCode;

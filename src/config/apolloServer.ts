@@ -1,18 +1,18 @@
-import { useServer } from "graphql-ws/dist/use/ws";
-import { getSession } from "../database/session.query";
-import { app, onlineUsers, pubsub, httpServer } from "..";
+import { getSession } from "../database/session.query.js";
+import { app, onlineUsers, pubsub, httpServer } from "../index.js";
 import { ApolloServer } from "@apollo/server";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
-import { formatError } from "../utils/formatError";
-import { auth0Middleware, loggedInUserAuth } from "../middleware/index";
+import { formatError } from "../utils/formatError.js";
+import { auth0Middleware, loggedInUserAuth } from "../middleware/index.js";
 import { expressMiddleware } from "@apollo/server/express4";
-import { ErrorHandler } from "../utils";
-import { redisClient } from "../redis";
+import { ErrorHandler } from "../utils/index.js";
+import { redisClient } from "../redis/index.js";
 import { makeExecutableSchema } from "@graphql-tools/schema";
-import { typeDefs } from "../typedefs";
-import { resolvers } from "../resolvers";
-import { createContext } from "../utils/context";
+import { typeDefs } from "../typedefs/index.js";
+import { resolvers } from "../resolvers/index.js";
+import { createContext } from "../utils/context.js";
 import { WebSocketServer } from "ws";
+import { useServer } from "graphql-ws/use/ws";
 const schema = makeExecutableSchema({
   resolvers,
   typeDefs,
@@ -34,7 +34,7 @@ export async function startApolloServer() {
         const { data, error } = await getSession(
           `Bearer ${ctx.connectionParams.Authorization}`
         );
-        if (error) throw new Error("User not found!");
+        if (!data?.associate) throw new Error("User not found!");
 
         onlineUsers.set(data.associate?.id, data.associate);
         pubsub.publish("ONLINE_USERS", {

@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.commentResolver = void 0;
-exports.commentResolver = {
+export const commentResolver = {
     Query: {
         getComments: async (__, { postId }, { dataSources }) => {
             return dataSources.commentApi.getCommentByPostId(postId);

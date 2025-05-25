@@ -1,12 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.createSession = createSession;
-exports.findSessionAndDelete = findSessionAndDelete;
-exports.getAllSession = getAllSession;
-exports.getSession = getSession;
-const script_1 = require("../script");
-function createSession({ email, token, }) {
-    return (0, script_1.executeQuery)(script_1.prisma.session.create({
+import { executeQuery, prisma } from "../script.js";
+export function createSession({ email, token, }) {
+    return executeQuery(prisma.session.create({
         data: {
             token,
             associate: {
@@ -15,8 +9,8 @@ function createSession({ email, token, }) {
         },
     }));
 }
-function findSessionAndDelete(token, email) {
-    return (0, script_1.executeQuery)(script_1.prisma.session.delete({
+export function findSessionAndDelete(token, email) {
+    return executeQuery(prisma.session.delete({
         where: {
             userEmail_token: {
                 userEmail: email,
@@ -25,11 +19,11 @@ function findSessionAndDelete(token, email) {
         },
     }));
 }
-function getAllSession() {
-    return (0, script_1.executeQuery)(script_1.prisma.session.findMany());
+export function getAllSession() {
+    return executeQuery(prisma.session.findMany());
 }
-async function getSession(token) {
-    const result = await (0, script_1.executeQuery)(script_1.prisma.session.findFirst({
+export async function getSession(token) {
+    const result = await executeQuery(prisma.session.findFirst({
         where: {
             token,
         },

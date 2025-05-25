@@ -1,9 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.postResolver = void 0;
-const post_query_1 = require("../database/post.query");
-const __1 = require("..");
-exports.postResolver = {
+import { updatePost } from "../database/post.query.js";
+import { pubsub } from "../index.js";
+export const postResolver = {
     Query: {
         getAllPosts: (_, { args }, { dataSources }) => {
             const userId = dataSources.user.id;
@@ -20,11 +17,11 @@ exports.postResolver = {
                 ...body,
                 id: userid,
             });
-            __1.pubsub.publish("POST_CREATED", { newPost: response.result });
+            pubsub.publish("POST_CREATED", { newPost: response.result });
             return response;
         },
         updatePost: async (_, arg, { dataSources }) => {
-            const { data, error } = await (0, post_query_1.updatePost)(arg);
+            const { data, error } = await updatePost(arg);
             if (!data?.id)
                 throw new Error("Unable to updata post");
             return {

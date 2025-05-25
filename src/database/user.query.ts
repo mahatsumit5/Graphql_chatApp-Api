@@ -1,6 +1,6 @@
-import { executeQuery, prisma } from "../script";
-import { IUser } from "../types";
-import { AllUser, Friend, SignUpUserParams, User } from "../types/types";
+import { executeQuery, prisma } from "../script.js";
+import { IUser } from "../types/index.js";
+import { AllUser, Friend, SignUpUserParams, User } from "../types/types.js";
 
 export function createUser(obj: SignUpUserParams) {
   return executeQuery<User>(

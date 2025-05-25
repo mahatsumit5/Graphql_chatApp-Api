@@ -1,16 +1,13 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.messageResolver = void 0;
-const __1 = require("..");
-exports.messageResolver = {
+import { pubsub } from "../index.js";
+export const messageResolver = {
     Mutation: {
         sendMessage: async (_, args, { dataSources }) => {
             const response = await dataSources.message.sendMessage(args);
             if (response?.status) {
-                __1.pubsub.publish(`MESSAGE_CREATED_${args.roomId}`, {
+                pubsub.publish(`MESSAGE_CREATED_${args.roomId}`, {
                     messageInRoom: response.data,
                 });
-                __1.pubsub.publish(`SEND_MESSAGE_TO_${args.receiverId}`, {
+                pubsub.publish(`SEND_MESSAGE_TO_${args.receiverId}`, {
                     newMessageReceived: response.data,
                 });
             }

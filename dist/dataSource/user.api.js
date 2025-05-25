@@ -1,14 +1,11 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserAPI = void 0;
-const _1 = require(".");
-const user_query_1 = require("../database/user.query");
-const session_query_1 = require("../database/session.query");
-class UserAPI extends _1.BaseAPI {
+import { BaseAPI } from "./index.js";
+import { getAllUsers, getListOfFriends, updateUser, } from "../database/user.query.js";
+import { findSessionAndDelete } from "../database/session.query.js";
+export class UserAPI extends BaseAPI {
     async allUsers(arg) {
         try {
             const { email } = this.getUser();
-            const { totalUsers, users } = await (0, user_query_1.getAllUsers)({ ...arg, email });
+            const { totalUsers, users } = await getAllUsers({ ...arg, email });
             if (!users?.length)
                 throw new Error("No users found");
             return {
@@ -25,7 +22,7 @@ class UserAPI extends _1.BaseAPI {
     async logout(email) {
         try {
             const token = this.getToken();
-            const { data: response } = await (0, session_query_1.findSessionAndDelete)(token, email);
+            const { data: response } = await findSessionAndDelete(token, email);
             if (!response?.userEmail)
                 throw new Error("Unable to logout");
             return {
@@ -48,7 +45,7 @@ class UserAPI extends _1.BaseAPI {
     async updateUser(body) {
         try {
             const user = this.getUser();
-            const { data } = await (0, user_query_1.updateUser)(user.id, body);
+            const { data } = await updateUser(user.id, body);
             return {
                 status: true,
                 message: "User updated successfully",
@@ -62,7 +59,7 @@ class UserAPI extends _1.BaseAPI {
     async getListOfFriends() {
         try {
             const user = this.getUser();
-            const response = await (0, user_query_1.getListOfFriends)(user.id);
+            const response = await getListOfFriends(user.id);
             return {
                 status: true,
                 message: "List of friends",
@@ -87,4 +84,3 @@ class UserAPI extends _1.BaseAPI {
         }
     }
 }
-exports.UserAPI = UserAPI;

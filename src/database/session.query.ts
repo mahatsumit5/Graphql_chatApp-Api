@@ -1,5 +1,5 @@
-import { executeQuery, prisma } from "../script";
-import { Session } from "../types/types";
+import { executeQuery, prisma } from "../script.js";
+import { Session } from "../types/types.js";
 export function createSession({
   email,
   token,

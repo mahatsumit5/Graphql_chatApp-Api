@@ -1,7 +1,7 @@
-import { BaseAPI } from ".";
-import { getChatRoomByUserId } from "../database/ChatRoom.query";
-import { ChatRoomResponse, GetChatRoomParams } from "../types";
-import { GetChatRoomResponse, Message, User } from "../types/types";
+import { BaseAPI } from "./index.js";
+import { getChatRoomByUserId } from "../database/ChatRoom.query.js";
+import { ChatRoomResponse, GetChatRoomParams } from "../types/index.js";
+import { GetChatRoomResponse, Message, User } from "../types/types.js";
 
 export class ChatRoomApi extends BaseAPI {
   async getChatRoomByUserId(

@@ -1,5 +1,5 @@
-import { Resolvers } from "../types/types";
-import { pubsub } from "..";
+import { Resolvers } from "../types/types.js";
+import { pubsub } from "../index.js";
 export const messageResolver: Resolvers = {
   Mutation: {
     sendMessage: async (_, args, { dataSources }) => {

@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.chatRoomResolver = void 0;
-exports.chatRoomResolver = {
+export const chatRoomResolver = {
     Query: {
         getAllChatRooms: (_, args, { dataSources }) => {
             const userId = dataSources.user.id;

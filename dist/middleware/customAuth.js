@@ -1,7 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const session_query_1 = require("../database/session.query");
-const redis_1 = require("../redis");
+import { getSession } from "../database/session.query.js";
+import { getOrSetCache } from "../redis/index.js";
 const USER_EXPIRY = 60 * 30;
 const loggedInUserAuth = async (req, res, next) => {
     try {
@@ -13,7 +11,7 @@ const loggedInUserAuth = async (req, res, next) => {
                 message: "Please login and provide a token to continue",
             });
         }
-        const user = await (0, redis_1.getOrSetCache)(token, USER_EXPIRY, async () => await (0, session_query_1.getSession)(token));
+        const user = await getOrSetCache(token, USER_EXPIRY, async () => await getSession(token));
         req.userInfo = user.data.associate;
         return next();
     }
@@ -21,4 +19,4 @@ const loggedInUserAuth = async (req, res, next) => {
         next(error);
     }
 };
-exports.default = loggedInUserAuth;
+export default loggedInUserAuth;

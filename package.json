@@ -2,7 +2,7 @@
   "name": "graphql-server-chatapp",
   "version": "1.0.0",
   "main": "index.js",
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
     "dev": "nodemon",
     "compile": "tsc",

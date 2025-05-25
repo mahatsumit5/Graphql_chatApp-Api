@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.friendRequestResolver = void 0;
-exports.friendRequestResolver = {
+export const friendRequestResolver = {
     Query: {
         getFriendRequest: (_, args, { dataSources }) => {
             return dataSources.friendReqAPI.getFriendRequest(dataSources.user.id);

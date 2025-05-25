@@ -1,13 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.createChatRoom = createChatRoom;
-exports.deleteChatRoom = deleteChatRoom;
-exports.deleteAllChatRoom = deleteAllChatRoom;
-exports.getChatRoomByRoomId = getChatRoomByRoomId;
-exports.getChatRoomByUserId = getChatRoomByUserId;
-const script_1 = require("../script");
-function createChatRoom(from, to) {
-    const result = (0, script_1.executeQuery)(script_1.prisma.chatRoom.create({
+import { executeQuery, prisma } from "../script.js";
+export function createChatRoom(from, to) {
+    const result = executeQuery(prisma.chatRoom.create({
         data: {
             createdBy: {
                 connect: {
@@ -23,23 +16,23 @@ function createChatRoom(from, to) {
     }));
     return result;
 }
-function deleteChatRoom(roomId) {
-    (0, script_1.executeQuery)(script_1.prisma.message.deleteMany({
+export function deleteChatRoom(roomId) {
+    executeQuery(prisma.message.deleteMany({
         where: {
             chatRoomId: roomId,
         },
     }));
-    return (0, script_1.executeQuery)(script_1.prisma.chatRoom.delete({
+    return executeQuery(prisma.chatRoom.delete({
         where: {
             id: roomId,
         },
     }));
 }
-function deleteAllChatRoom() {
-    return (0, script_1.executeQuery)(script_1.prisma.chatRoom.deleteMany({}));
+export function deleteAllChatRoom() {
+    return executeQuery(prisma.chatRoom.deleteMany({}));
 }
-function getChatRoomByRoomId(id) {
-    return (0, script_1.executeQuery)(script_1.prisma.chatRoom.findFirst({
+export function getChatRoomByRoomId(id) {
+    return executeQuery(prisma.chatRoom.findFirst({
         where: {
             id,
         },
@@ -52,8 +45,8 @@ function getChatRoomByRoomId(id) {
         },
     }));
 }
-function getChatRoomByUserId({ userId, page, search, take, }) {
-    const data = (0, script_1.executeQuery)(script_1.prisma.chatRoom.findMany({
+export function getChatRoomByUserId({ userId, page, search, take, }) {
+    const data = executeQuery(prisma.chatRoom.findMany({
         where: {
             AND: [
                 {

@@ -1,12 +1,12 @@
 import { send } from "process";
-import { BaseAPI } from ".";
+import { BaseAPI } from "./index.js";
 import {
   GetMessageByRoomResponse,
   MessageByRoomIdParams,
   SendMessageResponse,
-} from "../types/types";
-import { getMessageByRoomId, sendMessage } from "../database/message.query";
-import { SendMessageParams } from "../types";
+} from "../types/types.js";
+import { getMessageByRoomId, sendMessage } from "../database/message.query.js";
+import { SendMessageParams } from "../types/index.js";
 
 export class MessageApi extends BaseAPI {
   /**

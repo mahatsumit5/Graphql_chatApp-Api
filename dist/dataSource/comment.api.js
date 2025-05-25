@@ -1,12 +1,9 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.CommentAPI = void 0;
-const _1 = require(".");
-const comment_query_1 = require("../database/comment.query");
-class CommentAPI extends _1.BaseAPI {
+import { BaseAPI } from "./index.js";
+import { deleteComment, getCommentsByPostId, postComment, } from "../database/comment.query.js";
+export class CommentAPI extends BaseAPI {
     async postComment(arg) {
         try {
-            const { data, error } = await (0, comment_query_1.postComment)(arg);
+            const { data, error } = await postComment(arg);
             if (!data || error)
                 throw new Error(error.message || "Unable to create a new comment");
             return {
@@ -21,7 +18,7 @@ class CommentAPI extends _1.BaseAPI {
     }
     async getCommentByPostId(postId) {
         try {
-            const { data, error } = await (0, comment_query_1.getCommentsByPostId)(postId);
+            const { data, error } = await getCommentsByPostId(postId);
             if (!data || error)
                 throw new Error(error.message || "Unable to fetch comments");
             return {
@@ -36,7 +33,7 @@ class CommentAPI extends _1.BaseAPI {
     }
     async deleteComment(id) {
         try {
-            const { data, error } = await (0, comment_query_1.deleteComment)(id);
+            const { data, error } = await deleteComment(id);
             if (!data || error)
                 throw new Error(error.message || "Unable to delete comment");
             return {
@@ -50,4 +47,3 @@ class CommentAPI extends _1.BaseAPI {
         }
     }
 }
-exports.CommentAPI = CommentAPI;

@@ -1,5 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 function sendResponse(status, message, data) {
     return {
         status,
@@ -7,4 +5,4 @@ function sendResponse(status, message, data) {
         data,
     };
 }
-exports.default = sendResponse;
+export default sendResponse;

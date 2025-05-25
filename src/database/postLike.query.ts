@@ -1,5 +1,5 @@
-import { executeQuery, prisma } from "../script";
-import { PostLike } from "../types/types";
+import { executeQuery, prisma } from "../script.js";
+import { PostLike } from "../types/types.js";
 
 export function likePost(userId: string, postId: string) {
   return executeQuery<PostLike>(

@@ -1,6 +1,5 @@
-import { executeQuery, prisma } from "../script";
-import { ChatRoomResponse, GetChatRoomParams } from "../types";
-import { ChatRoom } from "../types/types";
+import { executeQuery, prisma } from "../script.js";
+import { ChatRoomResponse, GetChatRoomParams } from "../types/index.js";
 
 export function createChatRoom(from: string, to: string) {
   const result = executeQuery<{ id: string }>(

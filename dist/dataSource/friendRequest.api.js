@@ -1,13 +1,10 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.FriendRequestAPI = void 0;
-const _1 = require(".");
-const friendRequest_query_1 = require("../database/friendRequest.query");
-const ChatRoom_query_1 = require("../database/ChatRoom.query");
-class FriendRequestAPI extends _1.BaseAPI {
+import { BaseAPI } from "./index.js";
+import { deleteSentRequest, getFriendRequestByUser, getYourSentRequest, sendFriendRequest, } from "../database/friendRequest.query.js";
+import { createChatRoom } from "../database/ChatRoom.query.js";
+export class FriendRequestAPI extends BaseAPI {
     async sendRequest({ fromId, toId, }) {
         try {
-            const { data, error } = await (0, friendRequest_query_1.sendFriendRequest)(fromId, toId);
+            const { data, error } = await sendFriendRequest(fromId, toId);
             if (error)
                 throw new Error(error.message);
             return {
@@ -23,8 +20,8 @@ class FriendRequestAPI extends _1.BaseAPI {
     async acceptFriendRequest({ fromId, toId, }) {
         try {
             const [response] = await Promise.all([
-                (0, ChatRoom_query_1.createChatRoom)(fromId, toId),
-                (0, friendRequest_query_1.deleteSentRequest)({ fromId, toId }),
+                createChatRoom(fromId, toId),
+                deleteSentRequest({ fromId, toId }),
             ]);
             if (response.error)
                 throw new Error(response.error.message);
@@ -40,7 +37,7 @@ class FriendRequestAPI extends _1.BaseAPI {
     }
     async getFriendRequest(userId) {
         try {
-            const { data, error } = await (0, friendRequest_query_1.getFriendRequestByUser)(userId);
+            const { data, error } = await getFriendRequestByUser(userId);
             if (!data?.length)
                 throw new Error("You do not have any friend request.");
             return {
@@ -56,7 +53,7 @@ class FriendRequestAPI extends _1.BaseAPI {
     }
     async getSentFriendRequest(arg) {
         try {
-            const { count, result } = (0, friendRequest_query_1.getYourSentRequest)(arg);
+            const { count, result } = getYourSentRequest(arg);
             const { error } = await result;
             if (error)
                 throw new Error(error.message);
@@ -73,7 +70,7 @@ class FriendRequestAPI extends _1.BaseAPI {
     }
     async deleteFriendRequest(params) {
         try {
-            const { data, error } = await (0, friendRequest_query_1.deleteSentRequest)(params);
+            const { data, error } = await deleteSentRequest(params);
             if (error)
                 throw new Error(error.message);
             return {
@@ -87,4 +84,3 @@ class FriendRequestAPI extends _1.BaseAPI {
         }
     }
 }
-exports.FriendRequestAPI = FriendRequestAPI;

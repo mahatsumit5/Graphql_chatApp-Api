@@ -1,4 +1,4 @@
-import { BaseAPI } from ".";
+import { BaseAPI } from "./index.js";
 import {
   GetAllPostResponse,
   GetLikedPostResponse,
@@ -6,10 +6,14 @@ import {
   PostInput,
   UnlikePostResponse,
   UploadAPostResponse,
-} from "../types/types";
-import { countTotalPost, createPost, getAllPost } from "../database/post.query";
-import { getOrSetCache } from "../redis";
-import { likePost, removeLike } from "../database/postLike.query";
+} from "../types/types.js";
+import {
+  countTotalPost,
+  createPost,
+  getAllPost,
+} from "../database/post.query.js";
+import { getOrSetCache } from "../redis/index.js";
+import { likePost, removeLike } from "../database/postLike.query.js";
 export class PostAPI extends BaseAPI {
   /**
    * Creates a new post.

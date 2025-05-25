@@ -1,12 +1,9 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ChatRoomApi = void 0;
-const _1 = require(".");
-const ChatRoom_query_1 = require("../database/ChatRoom.query");
-class ChatRoomApi extends _1.BaseAPI {
+import { BaseAPI } from "./index.js";
+import { getChatRoomByUserId } from "../database/ChatRoom.query.js";
+export class ChatRoomApi extends BaseAPI {
     async getChatRoomByUserId(arg) {
         try {
-            const { data, error } = await (0, ChatRoom_query_1.getChatRoomByUserId)(arg);
+            const { data, error } = await getChatRoomByUserId(arg);
             if (!data?.length)
                 throw new Error(error.message || "No chat rooms found");
             const chatRooms = data.map((room) => ({
@@ -45,4 +42,3 @@ class ChatRoomApi extends _1.BaseAPI {
         }
     }
 }
-exports.ChatRoomApi = ChatRoomApi;

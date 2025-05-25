@@ -1,19 +1,19 @@
-import { BaseAPI } from ".";
+import { BaseAPI } from "./index.js";
 import {
   deleteSentRequest,
   getFriendRequestByUser,
   getYourSentRequest,
   sendFriendRequest,
-} from "../database/friendRequest.query";
+} from "../database/friendRequest.query.js";
 import {
   CreateChatRoomResponse,
   FriendRequest,
   FriendRequestResponse,
   Response,
   SentRequestResponse,
-} from "../types/types";
-import { GetSentReqParams } from "../types";
-import { createChatRoom } from "../database/ChatRoom.query";
+} from "../types/types.js";
+import { GetSentReqParams } from "../types/index.js";
+import { createChatRoom } from "../database/ChatRoom.query.js";
 
 export class FriendRequestAPI extends BaseAPI {
   async sendRequest({

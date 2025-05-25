@@ -1,12 +1,6 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.verifyToken = exports.createAuth0Token = void 0;
-const jwks_rsa_1 = require("jwks-rsa");
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const createAuth0Token = async () => {
+import { JwksClient } from "jwks-rsa";
+import jwt from "jsonwebtoken";
+export const createAuth0Token = async () => {
     const requestBody = {
         client_id: process.env.client_id,
         client_secret: process.env.client_secret,
@@ -23,9 +17,8 @@ const createAuth0Token = async () => {
     const data = await res.json();
     return data;
 };
-exports.createAuth0Token = createAuth0Token;
-const verifyToken = async (token) => {
-    const client = new jwks_rsa_1.JwksClient({
+export const verifyToken = async (token) => {
+    const client = new JwksClient({
         jwksUri: process.env.jwksUri,
     });
     const getJwtsClientKey = (header, cb) => {
@@ -35,7 +28,7 @@ const verifyToken = async (token) => {
         });
     };
     return new Promise((resolve, reject) => {
-        jsonwebtoken_1.default.verify(token, getJwtsClientKey, {
+        jwt.verify(token, getJwtsClientKey, {
             audience: process.env.audience,
             issuer: `${process.env.issuerBaseURL}`,
             algorithms: ["RS256"],
@@ -49,4 +42,3 @@ const verifyToken = async (token) => {
         });
     });
 };
-exports.verifyToken = verifyToken;

@@ -1,14 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.postComment = postComment;
-exports.updateComment = updateComment;
-exports.deleteComment = deleteComment;
-exports.likeComment = likeComment;
-exports.unlikeComment = unlikeComment;
-exports.getCommentsByPostId = getCommentsByPostId;
-const script_1 = require("../script");
-function postComment({ content, postId, userId }) {
-    return (0, script_1.executeQuery)(script_1.prisma.comment.create({
+import { executeQuery, prisma } from "../script.js";
+export function postComment({ content, postId, userId }) {
+    return executeQuery(prisma.comment.create({
         data: {
             content,
             author: {
@@ -41,8 +33,8 @@ function postComment({ content, postId, userId }) {
         },
     }));
 }
-function updateComment({ commentId, content, uid, }) {
-    return (0, script_1.executeQuery)(script_1.prisma.comment.update({
+export function updateComment({ commentId, content, uid, }) {
+    return executeQuery(prisma.comment.update({
         where: {
             id: commentId,
             authorId: uid,
@@ -52,15 +44,15 @@ function updateComment({ commentId, content, uid, }) {
         },
     }));
 }
-function deleteComment(id) {
-    return (0, script_1.executeQuery)(script_1.prisma.comment.delete({
+export function deleteComment(id) {
+    return executeQuery(prisma.comment.delete({
         where: {
             id,
         },
     }));
 }
-function likeComment(commentId, uid) {
-    return (0, script_1.executeQuery)(script_1.prisma.commentLikes.create({
+export function likeComment(commentId, uid) {
+    return executeQuery(prisma.commentLikes.create({
         data: {
             comment: {
                 connect: {
@@ -78,8 +70,8 @@ function likeComment(commentId, uid) {
         },
     }));
 }
-function unlikeComment(commentId, userId) {
-    return (0, script_1.executeQuery)(script_1.prisma.commentLikes.delete({
+export function unlikeComment(commentId, userId) {
+    return executeQuery(prisma.commentLikes.delete({
         where: {
             commentId_userId: {
                 commentId,
@@ -88,8 +80,8 @@ function unlikeComment(commentId, userId) {
         },
     }));
 }
-function getCommentsByPostId(postId) {
-    return (0, script_1.executeQuery)(script_1.prisma.comment.findMany({
+export function getCommentsByPostId(postId) {
+    return executeQuery(prisma.comment.findMany({
         where: {
             postId,
         },

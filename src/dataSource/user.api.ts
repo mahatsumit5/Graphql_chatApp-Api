@@ -4,15 +4,15 @@ import {
   LoggedInUserResponse,
   Response,
   UpdateUserResponse,
-} from "../types/types";
-import { BaseAPI } from ".";
+} from "../types/types.js";
+import { BaseAPI } from "./index.js";
 import {
   getAllUsers,
   getListOfFriends,
   updateUser,
-} from "../database/user.query";
+} from "../database/user.query.js";
 
-import { findSessionAndDelete } from "../database/session.query";
+import { findSessionAndDelete } from "../database/session.query.js";
 
 export class UserAPI extends BaseAPI {
   async allUsers(arg: AllUser): Promise<AllUsersResponse> {

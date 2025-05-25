@@ -1,11 +1,11 @@
-import { UserAPI } from "../dataSource/user.api";
+import { UserAPI } from "../dataSource/user.api.js";
 import { ApolloServer, BaseContext } from "@apollo/server";
-import { FriendRequestAPI } from "../dataSource/friendRequest.api";
-import { PostAPI } from "../dataSource/post.api";
-import { ChatRoomApi } from "../dataSource/chatRoom.api";
-import { MessageApi } from "../dataSource/message.api";
-import { pubsub } from "..";
-import { CommentAPI } from "../dataSource/comment.api";
+import { FriendRequestAPI } from "../dataSource/friendRequest.api.js";
+import { PostAPI } from "../dataSource/post.api.js";
+import { ChatRoomApi } from "../dataSource/chatRoom.api.js";
+import { MessageApi } from "../dataSource/message.api.js";
+import { pubsub } from "../index.js";
+import { CommentAPI } from "../dataSource/comment.api.js";
 import { ExpressContextFunctionArgument } from "@apollo/server/express4";
 
 export const createContext: (

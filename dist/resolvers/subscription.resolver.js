@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.subscriptionResolver = void 0;
-exports.subscriptionResolver = {
+export const subscriptionResolver = {
     Subscription: {
         newPost: {
             subscribe: (parent, args, { pubsub }) => pubsub.asyncIterableIterator("POST_CREATED"),

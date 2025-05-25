@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ErrorHandler = void 0;
-const ErrorHandler = (error, req, res, next) => {
+export const ErrorHandler = (error, req, res, next) => {
     console.log("Error coming from the handler", error.message);
     if (error.message.includes(`"password" with value`)) {
         error.message = "Password must match the requirement";
@@ -13,4 +10,3 @@ const ErrorHandler = (error, req, res, next) => {
         message: msg,
     });
 };
-exports.ErrorHandler = ErrorHandler;

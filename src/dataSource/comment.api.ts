@@ -1,15 +1,15 @@
-import { BaseAPI } from ".";
+import { BaseAPI } from "./index.js";
 import {
   deleteComment,
   getCommentsByPostId,
   postComment,
-} from "../database/comment.query";
-import { CreateCommentParams } from "../types";
+} from "../database/comment.query.js";
+import { CreateCommentParams } from "../types/index.js";
 import {
   DeleteCommentResponse,
   GetCommentResponse,
   PostCommentResponse,
-} from "../types/types";
+} from "../types/types.js";
 
 export class CommentAPI extends BaseAPI {
   async postComment(arg: CreateCommentParams): Promise<PostCommentResponse> {

@@ -1,12 +1,9 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.MessageApi = void 0;
-const _1 = require(".");
-const message_query_1 = require("../database/message.query");
-class MessageApi extends _1.BaseAPI {
+import { BaseAPI } from "./index.js";
+import { getMessageByRoomId, sendMessage } from "../database/message.query.js";
+export class MessageApi extends BaseAPI {
     async sendMessage(body) {
         try {
-            const { data, error } = await (0, message_query_1.sendMessage)(body);
+            const { data, error } = await sendMessage(body);
             if (error)
                 throw new Error(error?.message || "Failed to send message");
             return {
@@ -20,7 +17,7 @@ class MessageApi extends _1.BaseAPI {
         }
     }
     async getMessages(body) {
-        const { data, error } = await (0, message_query_1.getMessageByRoomId)(body);
+        const { data, error } = await getMessageByRoomId(body);
         if (error)
             throw new Error(error.message);
         return {
@@ -33,4 +30,3 @@ class MessageApi extends _1.BaseAPI {
     async deleteMessage(messageId) {
     }
 }
-exports.MessageApi = MessageApi;

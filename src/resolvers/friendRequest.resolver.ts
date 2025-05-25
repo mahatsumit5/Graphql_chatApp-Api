@@ -1,5 +1,5 @@
-import { getFriendRequestByUser } from "../database/friendRequest.query";
-import { Resolvers } from "../types/types";
+import { getFriendRequestByUser } from "../database/friendRequest.query.js";
+import { Resolvers } from "../types/types.js";
 
 export const friendRequestResolver: Resolvers = {
   Query: {

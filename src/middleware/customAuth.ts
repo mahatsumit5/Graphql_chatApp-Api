@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { getSession } from "../database/session.query";
+import { getSession } from "../database/session.query.js";
 
-import { getOrSetCache } from "../redis";
+import { getOrSetCache } from "../redis/index.js";
 const USER_EXPIRY = 60 * 30; // 30 minutes
 const loggedInUserAuth = async (
   req: Request,

@@ -1,6 +1,6 @@
-import { executeQuery, prisma } from "../script";
-import { CreatePostParams, UpdataPostParams } from "../types";
-import { Post, PostInput } from "../types/types";
+import { executeQuery, prisma } from "../script.js";
+import { CreatePostParams, UpdataPostParams } from "../types/index.js";
+import { Post, PostInput } from "../types/types.js";
 const SELECT_USER_PROFILE = {
   email: true,
   fName: true,

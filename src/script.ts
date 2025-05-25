@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from "../prisma/gen-prisma-client";
+import { Prisma, PrismaClient } from "../prisma/gen-prisma-client/client.js";
 
 interface DataBaseReturnObj<T> {
   data: T | undefined;

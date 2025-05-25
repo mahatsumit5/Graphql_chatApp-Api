@@ -1,32 +1,19 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUser = createUser;
-exports.updateUser = updateUser;
-exports.changePassword = changePassword;
-exports.uploadProfileImage = uploadProfileImage;
-exports.getUserByEmailAndUpdate = getUserByEmailAndUpdate;
-exports.getUserByEmail = getUserByEmail;
-exports.getUserById = getUserById;
-exports.getAllUsers = getAllUsers;
-exports.deleteUser = deleteUser;
-exports.deleteUserByEmail = deleteUserByEmail;
-exports.getListOfFriends = getListOfFriends;
-const script_1 = require("../script");
-function createUser(obj) {
-    return (0, script_1.executeQuery)(script_1.prisma.user.create({
+import { executeQuery, prisma } from "../script.js";
+export function createUser(obj) {
+    return executeQuery(prisma.user.create({
         data: obj,
     }));
 }
-function updateUser(userId, data) {
-    return (0, script_1.executeQuery)(script_1.prisma.user.update({
+export function updateUser(userId, data) {
+    return executeQuery(prisma.user.update({
         where: {
             id: userId,
         },
         data,
     }));
 }
-function changePassword({ email, newPassword, }) {
-    return (0, script_1.executeQuery)(script_1.prisma.user.update({
+export function changePassword({ email, newPassword, }) {
+    return executeQuery(prisma.user.update({
         where: {
             email: email,
         },
@@ -35,8 +22,8 @@ function changePassword({ email, newPassword, }) {
         },
     }));
 }
-function uploadProfileImage(email, path) {
-    return (0, script_1.executeQuery)(script_1.prisma.user.update({
+export function uploadProfileImage(email, path) {
+    return executeQuery(prisma.user.update({
         where: {
             email: email,
         },
@@ -45,30 +32,30 @@ function uploadProfileImage(email, path) {
         },
     }));
 }
-function getUserByEmailAndUpdate(email, dataToUpdate) {
-    return (0, script_1.executeQuery)(script_1.prisma.user.update({
+export function getUserByEmailAndUpdate(email, dataToUpdate) {
+    return executeQuery(prisma.user.update({
         where: {
             email: email,
         },
         data: dataToUpdate,
     }));
 }
-function getUserByEmail(email) {
-    return (0, script_1.executeQuery)(script_1.prisma.user.findUnique({
+export function getUserByEmail(email) {
+    return executeQuery(prisma.user.findUnique({
         where: { email: email },
     }));
 }
-function getUserById(id) {
-    return (0, script_1.executeQuery)(script_1.prisma.user.findUnique({
+export function getUserById(id) {
+    return executeQuery(prisma.user.findUnique({
         where: { id: id },
         select: {
             id: true,
         },
     }));
 }
-async function getAllUsers({ order, page, take, search, email }) {
+export async function getAllUsers({ order, page, take, search, email }) {
     const skipAmount = (page - 1) * take;
-    const { data } = await (0, script_1.executeQuery)(script_1.prisma.user.findMany({
+    const { data } = await executeQuery(prisma.user.findMany({
         where: {
             NOT: {
                 OR: [
@@ -113,7 +100,7 @@ async function getAllUsers({ order, page, take, search, email }) {
         orderBy: { fName: order },
         skip: skipAmount,
     }));
-    const { data: totalUsers } = await (0, script_1.executeQuery)(script_1.prisma.user.count({
+    const { data: totalUsers } = await executeQuery(prisma.user.count({
         where: {
             NOT: {
                 chatRoomCreated: {
@@ -131,23 +118,23 @@ async function getAllUsers({ order, page, take, search, email }) {
     }));
     return { users: data, totalUsers };
 }
-function deleteUser(id) {
-    return (0, script_1.executeQuery)(script_1.prisma.user.delete({
+export function deleteUser(id) {
+    return executeQuery(prisma.user.delete({
         where: {
             id: id,
         },
     }));
 }
-function deleteUserByEmail(email) {
-    const data = (0, script_1.executeQuery)(script_1.prisma.user.delete({
+export function deleteUserByEmail(email) {
+    const data = executeQuery(prisma.user.delete({
         where: {
             email: email,
         },
     }));
     return data;
 }
-async function getListOfFriends(userId) {
-    const { data } = await (0, script_1.executeQuery)(script_1.prisma.chatRoom.findMany({
+export async function getListOfFriends(userId) {
+    const { data } = await executeQuery(prisma.chatRoom.findMany({
         where: {
             OR: [
                 {

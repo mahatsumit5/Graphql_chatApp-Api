@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.BaseAPI = void 0;
-const datasource_rest_1 = require("@apollo/datasource-rest");
-class BaseAPI extends datasource_rest_1.RESTDataSource {
+import { RESTDataSource } from "@apollo/datasource-rest";
+export class BaseAPI extends RESTDataSource {
     token;
     user;
     constructor(options, user, token) {
@@ -26,4 +23,3 @@ class BaseAPI extends datasource_rest_1.RESTDataSource {
         };
     }
 }
-exports.BaseAPI = BaseAPI;
