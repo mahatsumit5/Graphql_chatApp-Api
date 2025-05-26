@@ -16,12 +16,7 @@ export const app = express();
 export const httpServer = http.createServer(app);
 const PORT = Number(process.env.PORT) || 8000;
 const options = {
-    origin: [
-        process.env.WEB_DOMAIN,
-        "http://192.168.20.6:5173",
-        "http://localhost:5173",
-        "https://daisy-ui-chat-app.vercel.app/",
-    ],
+    origin: [process.env.WEB_DOMAIN],
     methods: ["GET", "PUT", "PATCH", "DELETE", "POST"],
     allowedHeaders: ["Authorization", "refreshjwt", "Content-Type", "test"],
     credentials: true,
@@ -31,6 +26,12 @@ app.use(cors(options));
 app.use("/api/v1/user", publicApi);
 app.use("/api/v1/post", loggedInUserAuth, fileUploadApi);
 app.use(ErrorHandler);
+app.get("/", (req, res) => {
+    res.status(200).json({
+        message: "Welcome to the Daisy UI Chat App API",
+        version: "1.0.0",
+    });
+});
 startApolloServer();
 function getLocalIPAddress() {
     const interfaces = os.networkInterfaces();
