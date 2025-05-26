@@ -25,23 +25,7 @@ const options = {
 
 app.use(express.json());
 // app.use(cors<cors.CorsRequest>(options));
-app.use(
-  cors({
-    origin: [
-      process.env.WEB_DOMAIN,
-      "http://localhost:5173",
-      "http://localhost:3000",
-    ],
-    methods: ["GET", "PUT", "PATCH", "DELETE", "POST"],
-    allowedHeaders: [
-      "Authorization",
-      "refreshjwt",
-      "Content-Type",
-      "test",
-      "Access-Control-Allow-Origin",
-    ],
-  })
-); // Enable CORS for all origins
+app.use(cors()); // Enable CORS for all origins
 
 app.use("/api/v1/user", publicApi);
 app.use("/api/v1/post", loggedInUserAuth, fileUploadApi);
