@@ -22,7 +22,21 @@ const options = {
     credentials: true,
 };
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: [
+        process.env.WEB_DOMAIN,
+        "http://localhost:5173",
+        "http://localhost:3000",
+    ],
+    methods: ["GET", "PUT", "PATCH", "DELETE", "POST"],
+    allowedHeaders: [
+        "Authorization",
+        "refreshjwt",
+        "Content-Type",
+        "test",
+        "Access-Control-Allow-Origin",
+    ],
+}));
 app.use("/api/v1/user", publicApi);
 app.use("/api/v1/post", loggedInUserAuth, fileUploadApi);
 app.use(ErrorHandler);
