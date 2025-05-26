@@ -24,7 +24,8 @@ const options = {
 };
 
 app.use(express.json());
-app.use(cors<cors.CorsRequest>(options));
+// app.use(cors<cors.CorsRequest>(options));
+app.use(cors()); // Enable CORS for all origins
 
 app.use("/api/v1/user", publicApi);
 app.use("/api/v1/post", loggedInUserAuth, fileUploadApi);

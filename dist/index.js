@@ -22,7 +22,7 @@ const options = {
     credentials: true,
 };
 app.use(express.json());
-app.use(cors(options));
+app.use(cors());
 app.use("/api/v1/user", publicApi);
 app.use("/api/v1/post", loggedInUserAuth, fileUploadApi);
 app.use(ErrorHandler);
