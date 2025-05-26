@@ -1,5 +1,5 @@
 # # Comment model
-type Comment {
+type PostComment {
   id: ID!
   content: String!
   postId: String!
@@ -13,7 +13,7 @@ type Comment {
 
 # # CommentReply model
 type CommentReply {
-  reply: Comment!
+  reply: PostComment!
   replyId: String!
 }
 # # CommentLikes model
@@ -27,7 +27,7 @@ type Query {
   # Get all comments
   getComments(postId: String!): GetCommentResponse!
   # Get a comment by ID
-  getComment(id: String!): Comment!
+  getComment(id: String!): PostComment!
 }
 type Mutation {
   # Create a comment
@@ -37,7 +37,7 @@ type Mutation {
     userId: String!
   ): PostCommentResponse!
   # Update a comment
-  updateComment(id: String!, content: String!): Comment!
+  updateComment(id: String!, content: String!): PostComment!
   # Delete a comment
   deleteComment(id: String!): DeleteCommentResponse!
   # Like a comment

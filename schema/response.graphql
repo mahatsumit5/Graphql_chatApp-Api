@@ -58,16 +58,16 @@ type UnlikePostResponse {
 type PostCommentResponse {
   status: Boolean!
   message: String!
-  data: Comment
+  data: PostComment
 }
 type GetCommentResponse {
   status: Boolean!
   message: String!
-  data: [Comment!]!
+  data: [PostComment!]!
   count: Int
 }
 type DeleteCommentResponse {
   status: Boolean!
   message: String!
-  data: Comment
+  data: PostComment
 }

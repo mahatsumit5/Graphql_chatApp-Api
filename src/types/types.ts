@@ -55,19 +55,6 @@ export type ChatRoom = {
   userId: Scalars["String"]["output"];
 };
 
-export type Comment = {
-  __typename?: "Comment";
-  author: User;
-  authorId: Scalars["String"]["output"];
-  content: Scalars["String"]["output"];
-  createdAt: Scalars["String"]["output"];
-  id: Scalars["ID"]["output"];
-  likes: Array<CommentLikes>;
-  postId: Scalars["String"]["output"];
-  replies: Array<CommentReply>;
-  updatedAt: Scalars["String"]["output"];
-};
-
 export type CommentLikes = {
   __typename?: "CommentLikes";
   commentId: Scalars["String"]["output"];
@@ -77,7 +64,7 @@ export type CommentLikes = {
 
 export type CommentReply = {
   __typename?: "CommentReply";
-  reply: Comment;
+  reply: PostComment;
   replyId: Scalars["String"]["output"];
 };
 
@@ -90,13 +77,13 @@ export type CreateChatRoomResponse = {
 
 export type DeleteCommentResponse = {
   __typename?: "DeleteCommentResponse";
-  data?: Maybe<Comment>;
+  data?: Maybe<PostComment>;
   message: Scalars["String"]["output"];
   status: Scalars["Boolean"]["output"];
 };
 
-export type File = {
-  __typename?: "File";
+export type FileType = {
+  __typename?: "FileType";
   encoding: Scalars["String"]["output"];
   fileName: Scalars["String"]["output"];
   mimeType: Scalars["String"]["output"];
@@ -150,7 +137,7 @@ export type GetChatRoomResponse = {
 export type GetCommentResponse = {
   __typename?: "GetCommentResponse";
   count?: Maybe<Scalars["Int"]["output"]>;
-  data: Array<Comment>;
+  data: Array<PostComment>;
   message: Scalars["String"]["output"];
   status: Scalars["Boolean"]["output"];
 };
@@ -220,7 +207,7 @@ export type Mutation = {
   sendRequest?: Maybe<SentRequestResponse>;
   unlikeComment: Scalars["Boolean"]["output"];
   unlikePost: UnlikePostResponse;
-  updateComment: Comment;
+  updateComment: PostComment;
   updatePost?: Maybe<UploadAPostResponse>;
   updateUser?: Maybe<UpdateUserResponse>;
   uploadPost: UploadAPostResponse;
@@ -328,9 +315,22 @@ export type Post = {
   updatedAt: Scalars["String"]["output"];
 };
 
+export type PostComment = {
+  __typename?: "PostComment";
+  author: User;
+  authorId: Scalars["String"]["output"];
+  content: Scalars["String"]["output"];
+  createdAt: Scalars["String"]["output"];
+  id: Scalars["ID"]["output"];
+  likes: Array<CommentLikes>;
+  postId: Scalars["String"]["output"];
+  replies: Array<CommentReply>;
+  updatedAt: Scalars["String"]["output"];
+};
+
 export type PostCommentResponse = {
   __typename?: "PostCommentResponse";
-  data?: Maybe<Comment>;
+  data?: Maybe<PostComment>;
   message: Scalars["String"]["output"];
   status: Scalars["Boolean"]["output"];
 };
@@ -359,7 +359,7 @@ export type Query = {
   getAllChatRooms: GetChatRoomResponse;
   getAllPosts?: Maybe<GetAllPostResponse>;
   getChatRoomById: ChatRoom;
-  getComment: Comment;
+  getComment: PostComment;
   getComments: GetCommentResponse;
   /** Get all incoming request */
   getFriendRequest?: Maybe<FriendRequestResponse>;
@@ -624,12 +624,11 @@ export type ResolversTypes = {
   AllUsersResponse: ResolverTypeWrapper<AllUsersResponse>;
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]["output"]>;
   ChatRoom: ResolverTypeWrapper<ChatRoom>;
-  Comment: ResolverTypeWrapper<Comment>;
   CommentLikes: ResolverTypeWrapper<CommentLikes>;
   CommentReply: ResolverTypeWrapper<CommentReply>;
   CreateChatRoomResponse: ResolverTypeWrapper<CreateChatRoomResponse>;
   DeleteCommentResponse: ResolverTypeWrapper<DeleteCommentResponse>;
-  File: ResolverTypeWrapper<File>;
+  FileType: ResolverTypeWrapper<FileType>;
   Friend: ResolverTypeWrapper<Friend>;
   FriendRequest: ResolverTypeWrapper<FriendRequest>;
   FriendRequestResponse: ResolverTypeWrapper<FriendRequestResponse>;
@@ -648,6 +647,7 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   Order: Order;
   Post: ResolverTypeWrapper<Post>;
+  PostComment: ResolverTypeWrapper<PostComment>;
   PostCommentResponse: ResolverTypeWrapper<PostCommentResponse>;
   PostInput: PostInput;
   PostLike: ResolverTypeWrapper<PostLike>;
@@ -673,12 +673,11 @@ export type ResolversParentTypes = {
   AllUsersResponse: AllUsersResponse;
   Boolean: Scalars["Boolean"]["output"];
   ChatRoom: ChatRoom;
-  Comment: Comment;
   CommentLikes: CommentLikes;
   CommentReply: CommentReply;
   CreateChatRoomResponse: CreateChatRoomResponse;
   DeleteCommentResponse: DeleteCommentResponse;
-  File: File;
+  FileType: FileType;
   Friend: Friend;
   FriendRequest: FriendRequest;
   FriendRequestResponse: FriendRequestResponse;
@@ -696,6 +695,7 @@ export type ResolversParentTypes = {
   MessageByRoomIdParams: MessageByRoomIdParams;
   Mutation: {};
   Post: Post;
+  PostComment: PostComment;
   PostCommentResponse: PostCommentResponse;
   PostInput: PostInput;
   PostLike: PostLike;
@@ -760,30 +760,6 @@ export type ChatRoomResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type CommentResolvers<
-  ContextType = DataSourceContext,
-  ParentType extends ResolversParentTypes["Comment"] = ResolversParentTypes["Comment"]
-> = {
-  author?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
-  authorId?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  content?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-  likes?: Resolver<
-    Array<ResolversTypes["CommentLikes"]>,
-    ParentType,
-    ContextType
-  >;
-  postId?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  replies?: Resolver<
-    Array<ResolversTypes["CommentReply"]>,
-    ParentType,
-    ContextType
-  >;
-  updatedAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type CommentLikesResolvers<
   ContextType = DataSourceContext,
   ParentType extends ResolversParentTypes["CommentLikes"] = ResolversParentTypes["CommentLikes"]
@@ -798,7 +774,7 @@ export type CommentReplyResolvers<
   ContextType = DataSourceContext,
   ParentType extends ResolversParentTypes["CommentReply"] = ResolversParentTypes["CommentReply"]
 > = {
-  reply?: Resolver<ResolversTypes["Comment"], ParentType, ContextType>;
+  reply?: Resolver<ResolversTypes["PostComment"], ParentType, ContextType>;
   replyId?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -817,15 +793,19 @@ export type DeleteCommentResponseResolvers<
   ContextType = DataSourceContext,
   ParentType extends ResolversParentTypes["DeleteCommentResponse"] = ResolversParentTypes["DeleteCommentResponse"]
 > = {
-  data?: Resolver<Maybe<ResolversTypes["Comment"]>, ParentType, ContextType>;
+  data?: Resolver<
+    Maybe<ResolversTypes["PostComment"]>,
+    ParentType,
+    ContextType
+  >;
   message?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   status?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type FileResolvers<
+export type FileTypeResolvers<
   ContextType = DataSourceContext,
-  ParentType extends ResolversParentTypes["File"] = ResolversParentTypes["File"]
+  ParentType extends ResolversParentTypes["FileType"] = ResolversParentTypes["FileType"]
 > = {
   encoding?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   fileName?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
@@ -905,7 +885,11 @@ export type GetCommentResponseResolvers<
   ParentType extends ResolversParentTypes["GetCommentResponse"] = ResolversParentTypes["GetCommentResponse"]
 > = {
   count?: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
-  data?: Resolver<Array<ResolversTypes["Comment"]>, ParentType, ContextType>;
+  data?: Resolver<
+    Array<ResolversTypes["PostComment"]>,
+    ParentType,
+    ContextType
+  >;
   message?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   status?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1065,7 +1049,7 @@ export type MutationResolvers<
     RequireFields<MutationUnlikePostArgs, "postId">
   >;
   updateComment?: Resolver<
-    ResolversTypes["Comment"],
+    ResolversTypes["PostComment"],
     ParentType,
     ContextType,
     RequireFields<MutationUpdateCommentArgs, "content" | "id">
@@ -1106,11 +1090,39 @@ export type PostResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type PostCommentResolvers<
+  ContextType = DataSourceContext,
+  ParentType extends ResolversParentTypes["PostComment"] = ResolversParentTypes["PostComment"]
+> = {
+  author?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
+  authorId?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  content?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  likes?: Resolver<
+    Array<ResolversTypes["CommentLikes"]>,
+    ParentType,
+    ContextType
+  >;
+  postId?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  replies?: Resolver<
+    Array<ResolversTypes["CommentReply"]>,
+    ParentType,
+    ContextType
+  >;
+  updatedAt?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type PostCommentResponseResolvers<
   ContextType = DataSourceContext,
   ParentType extends ResolversParentTypes["PostCommentResponse"] = ResolversParentTypes["PostCommentResponse"]
 > = {
-  data?: Resolver<Maybe<ResolversTypes["Comment"]>, ParentType, ContextType>;
+  data?: Resolver<
+    Maybe<ResolversTypes["PostComment"]>,
+    ParentType,
+    ContextType
+  >;
   message?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   status?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1162,7 +1174,7 @@ export type QueryResolvers<
     RequireFields<QueryGetChatRoomByIdArgs, "id">
   >;
   getComment?: Resolver<
-    ResolversTypes["Comment"],
+    ResolversTypes["PostComment"],
     ParentType,
     ContextType,
     RequireFields<QueryGetCommentArgs, "id">
@@ -1340,12 +1352,11 @@ export type _CountResolvers<
 export type Resolvers<ContextType = DataSourceContext> = {
   AllUsersResponse?: AllUsersResponseResolvers<ContextType>;
   ChatRoom?: ChatRoomResolvers<ContextType>;
-  Comment?: CommentResolvers<ContextType>;
   CommentLikes?: CommentLikesResolvers<ContextType>;
   CommentReply?: CommentReplyResolvers<ContextType>;
   CreateChatRoomResponse?: CreateChatRoomResponseResolvers<ContextType>;
   DeleteCommentResponse?: DeleteCommentResponseResolvers<ContextType>;
-  File?: FileResolvers<ContextType>;
+  FileType?: FileTypeResolvers<ContextType>;
   Friend?: FriendResolvers<ContextType>;
   FriendRequest?: FriendRequestResolvers<ContextType>;
   FriendRequestResponse?: FriendRequestResponseResolvers<ContextType>;
@@ -1359,6 +1370,7 @@ export type Resolvers<ContextType = DataSourceContext> = {
   Message?: MessageResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Post?: PostResolvers<ContextType>;
+  PostComment?: PostCommentResolvers<ContextType>;
   PostCommentResponse?: PostCommentResponseResolvers<ContextType>;
   PostLike?: PostLikeResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;

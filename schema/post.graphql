@@ -4,7 +4,7 @@ type _count {
   comments: Int!
 }
 
-type File {
+type FileType {
   fileName: String!
   mimeType: String!
   encoding: String!

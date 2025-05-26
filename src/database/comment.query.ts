@@ -1,8 +1,8 @@
 import { executeQuery, prisma } from "../script.js";
 import { CreateCommentParams, UpdateCommentParams } from "../types/index.js";
-import { Comment } from "../types/types.js";
+import { PostComment } from "../types/types.js";
 export function postComment({ content, postId, userId }: CreateCommentParams) {
-  return executeQuery<Comment>(
+  return executeQuery<PostComment>(
     prisma.comment.create({
       data: {
         content,
@@ -57,7 +57,7 @@ export function updateComment({
   );
 }
 export function deleteComment(id: string) {
-  return executeQuery<Comment>(
+  return executeQuery<PostComment>(
     prisma.comment.delete({
       where: {
         id,
@@ -101,7 +101,7 @@ export function unlikeComment(commentId: string, userId: string) {
 }
 
 export function getCommentsByPostId(postId: string) {
-  return executeQuery<Comment[]>(
+  return executeQuery<PostComment[]>(
     prisma.comment.findMany({
       where: {
         postId,
