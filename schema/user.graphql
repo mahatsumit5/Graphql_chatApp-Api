@@ -44,6 +44,7 @@ type Mutation {
     fName: String
     lName: String
   ): UpdateUserResponse
+  signUpUser(params: SignUpUserParams!): LoggedInUserResponse
 }
 # Input types
 # Input types

@@ -205,6 +205,7 @@ export type Mutation = {
   sendMessage?: Maybe<SendMessageResponse>;
   /** Send friend request to other user */
   sendRequest?: Maybe<SentRequestResponse>;
+  signUpUser?: Maybe<LoggedInUserResponse>;
   unlikeComment: Scalars["Boolean"]["output"];
   unlikePost: UnlikePostResponse;
   updateComment: PostComment;
@@ -262,6 +263,10 @@ export type MutationSendMessageArgs = {
 
 export type MutationSendRequestArgs = {
   toId: Scalars["String"]["input"];
+};
+
+export type MutationSignUpUserArgs = {
+  params: SignUpUserParams;
 };
 
 export type MutationUnlikeCommentArgs = {
@@ -1035,6 +1040,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationSendRequestArgs, "toId">
+  >;
+  signUpUser?: Resolver<
+    Maybe<ResolversTypes["LoggedInUserResponse"]>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationSignUpUserArgs, "params">
   >;
   unlikeComment?: Resolver<
     ResolversTypes["Boolean"],

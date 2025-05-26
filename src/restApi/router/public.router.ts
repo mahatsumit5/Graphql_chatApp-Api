@@ -13,7 +13,7 @@ const router = Router();
 router.post("/sign-up", validateUserSignUp, async (req, res, next) => {
   try {
     const userAlreadyExist = await getUserByEmail(req.body.email);
-    if (userAlreadyExist)
+    if (userAlreadyExist.data !== null)
       throw new Error("An account already exist with this email.");
     req.body.password = hashPass(req.body.password);
     const { data: user } = await createUser(req.body);
