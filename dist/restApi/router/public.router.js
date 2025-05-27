@@ -26,7 +26,7 @@ router.post("/sign-up", validateUserSignUp, async (req, res, next) => {
 router.post("/sign-in", validateUserLogin, async (req, res, next) => {
     try {
         const { data, error } = await getUserByEmail(req.body.email);
-        if (error) {
+        if (error || data === null) {
             throw new Error("User does not exist with that email");
         }
         const isPasswordCorrect = comparePassword(req.body.password, data.password);
@@ -34,6 +34,7 @@ router.post("/sign-in", validateUserLogin, async (req, res, next) => {
             next(new Error("Incorrect Password"));
         }
         const token = await createAuth0Token();
+        console.log(token);
         if (!token?.access_token)
             throw new Error("Unable to create token");
         const session = await createSession({

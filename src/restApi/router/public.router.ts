@@ -34,7 +34,7 @@ router.post(
   async (req: Request, res: Response, next) => {
     try {
       const { data, error } = await getUserByEmail(req.body.email);
-      if (error) {
+      if (error || data === null) {
         throw new Error("User does not exist with that email");
       }
       const isPasswordCorrect = comparePassword(
@@ -45,6 +45,7 @@ router.post(
         next(new Error("Incorrect Password"));
       }
       const token = await createAuth0Token();
+      console.log(token);
       if (!token?.access_token) throw new Error("Unable to create token");
       const session = await createSession({
         email: data.email,
