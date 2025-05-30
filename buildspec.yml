@@ -1,18 +1,15 @@
 version: 0.2
 
 phases:
-  pre_build:
+  install:
     commands:
       - npm install
-  prisma:
+  pre_build:
     commands:
       - npx prisma generate production
-  compile:
-    commands:
-      - npx tsc
   build:
     commands:
-      - npm run build
+      - npx tsc
 
 artifacts:
   files:
