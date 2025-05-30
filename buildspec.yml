@@ -4,7 +4,7 @@ phases:
   pre_build:
     commands:
       - npm install
-  prisma
+  prisma:
     commands:
       - npx prisma generate production
   compile:
