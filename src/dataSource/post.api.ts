@@ -10,6 +10,7 @@ import {
 import {
   countTotalPost,
   createPost,
+  deletePost,
   getAllPost,
 } from "../database/post.query.js";
 import { getOrSetCache } from "../redis/index.js";
@@ -84,7 +85,18 @@ export class PostAPI extends BaseAPI {
    * @returns {Promise<any>}
    */
   async deletePost(postId: string) {
-    // TO DO: implement logic to delete post
+    try {
+      const { data, error } = await deletePost(postId, this.getUser().id);
+      if (error) throw new Error(error.message);
+      if (!data) throw new Error("Post not found or already deleted");
+      return {
+        status: true,
+        message: "Post deleted successfully",
+        posts: data,
+      };
+    } catch (error) {
+      return this.handleError(error);
+    }
   }
 
   /**

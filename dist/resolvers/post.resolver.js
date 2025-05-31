@@ -36,5 +36,8 @@ export const postResolver = {
         unlikePost: async (__, arg, { dataSources }) => {
             return dataSources.postAPI.unlikePost(arg.postId);
         },
+        deletePost: async (__, arg, { dataSources }) => {
+            return dataSources.postAPI.deletePost(arg.id);
+        },
     },
 };

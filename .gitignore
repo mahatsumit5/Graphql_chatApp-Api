@@ -4,3 +4,4 @@ node_modules
 
 prisma/gen-prisma-client
 prisma/migrations
+

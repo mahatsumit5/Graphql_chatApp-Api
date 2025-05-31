@@ -1,5 +1,6 @@
 import { GraphQLResolveInfo } from "graphql";
 import { DataSourceContext } from "./context.js";
+
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -79,6 +80,13 @@ export type DeleteCommentResponse = {
   __typename?: "DeleteCommentResponse";
   data?: Maybe<PostComment>;
   message: Scalars["String"]["output"];
+  status: Scalars["Boolean"]["output"];
+};
+
+export type DeletePostResponse = {
+  __typename?: "DeletePostResponse";
+  message: Scalars["String"]["output"];
+  posts?: Maybe<Post>;
   status: Scalars["Boolean"]["output"];
 };
 
@@ -198,7 +206,7 @@ export type Mutation = {
   /** Delete Friend Request */
   deleteFriendRequest?: Maybe<SentRequestResponse>;
   deleteMessage?: Maybe<Response>;
-  deletePost: GetPostByUserIdResponse;
+  deletePost: DeletePostResponse;
   likeComment: CommentLikes;
   likePost: GetLikedPostResponse;
   logout?: Maybe<Response>;
@@ -633,6 +641,7 @@ export type ResolversTypes = {
   CommentReply: ResolverTypeWrapper<CommentReply>;
   CreateChatRoomResponse: ResolverTypeWrapper<CreateChatRoomResponse>;
   DeleteCommentResponse: ResolverTypeWrapper<DeleteCommentResponse>;
+  DeletePostResponse: ResolverTypeWrapper<DeletePostResponse>;
   FileType: ResolverTypeWrapper<FileType>;
   Friend: ResolverTypeWrapper<Friend>;
   FriendRequest: ResolverTypeWrapper<FriendRequest>;
@@ -682,6 +691,7 @@ export type ResolversParentTypes = {
   CommentReply: CommentReply;
   CreateChatRoomResponse: CreateChatRoomResponse;
   DeleteCommentResponse: DeleteCommentResponse;
+  DeletePostResponse: DeletePostResponse;
   FileType: FileType;
   Friend: Friend;
   FriendRequest: FriendRequest;
@@ -804,6 +814,16 @@ export type DeleteCommentResponseResolvers<
     ContextType
   >;
   message?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type DeletePostResponseResolvers<
+  ContextType = DataSourceContext,
+  ParentType extends ResolversParentTypes["DeletePostResponse"] = ResolversParentTypes["DeletePostResponse"]
+> = {
+  message?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  posts?: Resolver<Maybe<ResolversTypes["Post"]>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -1003,7 +1023,7 @@ export type MutationResolvers<
     RequireFields<MutationDeleteMessageArgs, "messageId">
   >;
   deletePost?: Resolver<
-    ResolversTypes["GetPostByUserIdResponse"],
+    ResolversTypes["DeletePostResponse"],
     ParentType,
     ContextType,
     RequireFields<MutationDeletePostArgs, "id">
@@ -1367,6 +1387,7 @@ export type Resolvers<ContextType = DataSourceContext> = {
   CommentReply?: CommentReplyResolvers<ContextType>;
   CreateChatRoomResponse?: CreateChatRoomResponseResolvers<ContextType>;
   DeleteCommentResponse?: DeleteCommentResponseResolvers<ContextType>;
+  DeletePostResponse?: DeletePostResponseResolvers<ContextType>;
   FileType?: FileTypeResolvers<ContextType>;
   Friend?: FriendResolvers<ContextType>;
   FriendRequest?: FriendRequestResolvers<ContextType>;

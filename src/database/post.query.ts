@@ -171,7 +171,7 @@ export const getPostByUser = (authorId: string) => {
 };
 
 export const deletePost = (id: string, authorId: string) => {
-  return executeQuery(
+  return executeQuery<Post>(
     prisma.post.delete({
       where: {
         id,

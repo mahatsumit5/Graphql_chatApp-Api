@@ -34,7 +34,7 @@ type PostLike {
 
 type Mutation {
   uploadPost(body: PostInput): UploadAPostResponse!
-  deletePost(id: String!): GetPostByUserIdResponse!
+  deletePost(id: String!): DeletePostResponse!
   updatePost(
     id: String!
     title: String
@@ -90,4 +90,9 @@ type GetPostByUserIdResponse {
   status: Boolean!
   message: String!
   posts: [Post!]
+}
+type DeletePostResponse {
+  status: Boolean!
+  message: String!
+  posts: Post
 }

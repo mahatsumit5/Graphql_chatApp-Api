@@ -1,5 +1,5 @@
 import { BaseAPI } from "./index.js";
-import { countTotalPost, createPost, getAllPost, } from "../database/post.query.js";
+import { countTotalPost, createPost, deletePost, getAllPost, } from "../database/post.query.js";
 import { getOrSetCache } from "../redis/index.js";
 import { likePost, removeLike } from "../database/postLike.query.js";
 export class PostAPI extends BaseAPI {
@@ -42,6 +42,21 @@ export class PostAPI extends BaseAPI {
     async getPostByUser(userId) {
     }
     async deletePost(postId) {
+        try {
+            const { data, error } = await deletePost(postId, this.getUser().id);
+            if (error)
+                throw new Error(error.message);
+            if (!data)
+                throw new Error("Post not found or already deleted");
+            return {
+                status: true,
+                message: "Post deleted successfully",
+                posts: data,
+            };
+        }
+        catch (error) {
+            return this.handleError(error);
+        }
     }
     async updatePost(postId, postUpdates) {
     }
